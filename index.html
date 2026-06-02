@@ -47,8 +47,8 @@
   .nav::before{content:'';position:absolute;inset:0;z-index:-1;border-bottom:1px solid transparent;transition:all .45s var(--ease);}
   header.scrolled .nav::before{border-bottom-color:var(--line);background:rgba(7,7,11,.6);backdrop-filter:blur(14px);}
   .wordmark{display:flex;align-items:center;gap:12px;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;letter-spacing:.02em;}
-  .mark{width:19px;height:19px;border:1.5px solid var(--glow);border-radius:50%;display:grid;place-items:center;box-shadow:0 0 14px var(--glow-soft);}
-  .mark::after{content:'';width:6px;height:6px;border-radius:50%;background:var(--glow);}
+  .cube{width:26px;height:26px;color:var(--glow);filter:drop-shadow(0 0 6px var(--glow-soft));flex:0 0 auto;}
+  .wordmark b{font-weight:700;letter-spacing:.04em;}
   .nav-links{display:flex;align-items:center;gap:40px;}
   .nav-links a{position:relative;font-size:14px;font-weight:500;color:var(--muted);transition:color .3s;}
   .nav-links a:hover{color:#fff;}
@@ -202,7 +202,7 @@
 
 <header id="hdr">
   <div class="shell nav">
-    <a href="#top" class="wordmark"><span class="mark"></span><b>SOLUTION.HOUSE</b></a>
+    <a href="#top" class="wordmark"><svg class="cube" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><polygon points="14,2 24.4,8 24.4,20 14,26 3.6,20 3.6,8"/><path d="M14 14 L3.6 8 M14 14 L24.4 8 M14 14 L14 26"/></svg><b>SOLUTION.HOUSE</b></a>
     <nav class="nav-links">
       <a href="#approach">הגישה</a>
       <a href="#how">איך זה עובד</a>
@@ -348,7 +348,7 @@
 </div></section>
 
 <footer><div class="shell in-f">
-  <div class="wordmark"><span class="mark"></span><b class="mono">SOLUTION.HOUSE · פתרונות טכנולוגיים</b></div>
+  <div class="wordmark"><svg class="cube" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><polygon points="14,2 24.4,8 24.4,20 14,26 3.6,20 3.6,8"/><path d="M14 14 L3.6 8 M14 14 L24.4 8 M14 14 L14 26"/></svg><b class="mono">SOLUTION.HOUSE · פתרונות טכנולוגיים</b></div>
   <span class="mono">© 2026</span>
 </div></footer>
 
