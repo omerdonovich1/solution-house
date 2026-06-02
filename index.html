@@ -49,6 +49,10 @@
   .wordmark{display:flex;align-items:center;gap:12px;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;letter-spacing:.02em;}
   .cube{width:26px;height:26px;color:var(--glow);filter:drop-shadow(0 0 6px var(--glow-soft));flex:0 0 auto;}
   .wordmark b{font-weight:700;letter-spacing:.04em;}
+  /* real logo auto-swaps in when present (drop logo.png in repo root) */
+  .logo-img{height:28px;width:auto;display:none;flex:0 0 auto;}
+  .wordmark.has-logo .logo-img{display:block;}
+  .wordmark.has-logo .cube{display:none;}
   .nav-links{display:flex;align-items:center;gap:40px;}
   .nav-links a{position:relative;font-size:14px;font-weight:500;color:var(--muted);transition:color .3s;}
   .nav-links a:hover{color:#fff;}
@@ -202,7 +206,7 @@
 
 <header id="hdr">
   <div class="shell nav">
-    <a href="#top" class="wordmark"><svg class="cube" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><polygon points="14,2 24.4,8 24.4,20 14,26 3.6,20 3.6,8"/><path d="M14 14 L3.6 8 M14 14 L24.4 8 M14 14 L14 26"/></svg><b>SOLUTION.HOUSE</b></a>
+    <a href="#top" class="wordmark"><img class="logo-img" src="logo.png" alt="Solution House" onload="this.closest('.wordmark').classList.add('has-logo')" onerror="this.remove()"><svg class="cube" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><polygon points="14,2 24.4,8 24.4,20 14,26 3.6,20 3.6,8"/><path d="M14 14 L3.6 8 M14 14 L24.4 8 M14 14 L14 26"/></svg><b>SOLUTION.HOUSE</b></a>
     <nav class="nav-links">
       <a href="#approach">הגישה</a>
       <a href="#how">איך זה עובד</a>
@@ -348,7 +352,7 @@
 </div></section>
 
 <footer><div class="shell in-f">
-  <div class="wordmark"><svg class="cube" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><polygon points="14,2 24.4,8 24.4,20 14,26 3.6,20 3.6,8"/><path d="M14 14 L3.6 8 M14 14 L24.4 8 M14 14 L14 26"/></svg><b class="mono">SOLUTION.HOUSE · פתרונות טכנולוגיים</b></div>
+  <div class="wordmark"><img class="logo-img" src="logo.png" alt="Solution House" onload="this.closest('.wordmark').classList.add('has-logo')" onerror="this.remove()"><svg class="cube" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><polygon points="14,2 24.4,8 24.4,20 14,26 3.6,20 3.6,8"/><path d="M14 14 L3.6 8 M14 14 L24.4 8 M14 14 L14 26"/></svg><b class="mono">SOLUTION.HOUSE · פתרונות טכנולוגיים</b></div>
   <span class="mono">© 2026</span>
 </div></footer>
 
