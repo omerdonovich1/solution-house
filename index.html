@@ -370,7 +370,6 @@
   <span class="mono">© 2026</span>
 </div></footer>
 
-<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
   /* ---------- chrome: nav + clock + reveals ---------- */
@@ -392,20 +391,9 @@
   },{threshold:.1,rootMargin:'-6% 0px -6% 0px'});
   document.querySelectorAll('section:not(.hero) .rv, .sec-rule').forEach(function(el){io.observe(el);});
 
-  /* ---------- Lenis smooth scroll ---------- */
+  /* ---------- native scroll drives the 3D parallax ---------- */
   window.__heroP=0;
-  var lenis=null;
-  try{
-    if(window.Lenis){
-      lenis=new Lenis({lerp:0.18,wheelMultiplier:1.35,smoothWheel:true});
-      var lraf=function(t){lenis.raf(t);requestAnimationFrame(lraf);}; requestAnimationFrame(lraf);
-      lenis.on('scroll',function(ev){ var y=(ev&&ev.scroll!=null)?ev.scroll:window.scrollY; window.__heroP=Math.min(1,y/window.innerHeight); });
-      document.querySelectorAll('a[href^="#"]').forEach(function(a){
-        a.addEventListener('click',function(e){ var id=a.getAttribute('href'); if(id&&id.length>1){ var el=document.querySelector(id); if(el){ e.preventDefault(); lenis.scrollTo(el,{offset:-10}); } } });
-      });
-    }
-  }catch(err){ lenis=null; }
-  if(!lenis){ addEventListener('scroll',function(){ window.__heroP=Math.min(1,scrollY/window.innerHeight); },{passive:true}); }
+  addEventListener('scroll',function(){ window.__heroP=Math.min(1,scrollY/window.innerHeight); },{passive:true});
 
   /* ---------- THREE.js spatial hero ---------- */
   (function(){
