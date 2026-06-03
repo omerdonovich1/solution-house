@@ -140,6 +140,11 @@
   .stage .div{height:1px;background:var(--line);margin-block:26px;}
   .stage .d{font-size:15px;color:var(--muted);margin-bottom:8px;}
   .stage .tag{margin-top:auto;padding-top:28px;font-family:'Rubik',sans-serif;font-size:13px;font-weight:500;letter-spacing:.02em;color:var(--text);}
+  .stage .stage-desc{font-size:14.5px;line-height:1.6;color:var(--muted);}
+  .stage .stage-insight{margin-top:auto;padding-top:22px;font-size:13px;line-height:1.55;color:var(--text);border-top:1px solid var(--line);}
+  .stage .stage-insight span{display:inline;font-family:'Rubik',sans-serif;font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--glow);margin-inline-end:8px;}
+  .stage.hi .stage-desc{color:var(--text);}
+  .stage.hi .stage-insight{border-top-color:var(--glow-soft);}
   .stage.hi{background:linear-gradient(160deg,rgba(255,255,255,.10),rgba(255,255,255,.02));border-color:var(--glow-soft);box-shadow:0 0 50px -20px var(--glow-soft);}
   .stage.hi .badge{color:var(--glow);}
   .stage.hi .tag{color:var(--glow);}
@@ -309,8 +314,8 @@
   <div class="sec-head">
     <div class="sec-rule"></div>
     <div class="sec-meta rv"><span class="idx">(01)</span><span>הגישה שלנו</span></div>
-    <h2 class="title rv d1">רוב הסטודיואים מוכרים מוצר. אנחנו פותרים בעיה.</h2>
-    <p class="lead offset rv d2">ההבדל פשוט: רוב החברות מתחילות מהכלי שלהן ומחפשות איפה לדחוף אותו אליך. <strong>אנחנו מתחילים מהבעיה שלך — ובוחרים את הכלי הנכון אחר כך.</strong> לפעמים זו אפליקציה. לפעמים אוטומציה של שעה. לפעמים סוכן AI. מה שבאמת יעבוד בשבילך.</p>
+    <h2 class="title rv d1">הגישה — הנדסה שמתחילה מהביזנס, לא מהקוד.</h2>
+    <p class="lead offset rv d2">אנחנו לא בונים פרויקטים – <strong>אנחנו מהנדסים את התשתית להצלחה שלכם</strong>. הגישה שלנו משלבת הנדסת תוכנה ללא פשרות עם אסתטיקה שקובעת סטנדרטים, כדי להעניק לכם <strong>יתרון תחרותי בשוק דינמי</strong>.</p>
   </div>
   <div class="ba rv d2">
     <div class="cell">
@@ -335,10 +340,10 @@
     <p class="lead offset rv d2">אתה לא מתחייב להר — אתה מתקדם צעד אחרי צעד. כל שלב עומד בפני עצמו, ואתה ממשיך הלאה רק אם זה משתלם לך.</p>
   </div>
   <div class="stages">
-    <div class="stage rv d1"><div class="badge">שלב 01</div><h3>שיחת אבחון</h3><div class="div"></div><div class="d">מבינים את הבעיה</div><div class="d">ממליצים על פתרון</div><div class="tag">ללא עלות</div></div>
-    <div class="stage rv d2"><div class="badge">שלב 02</div><h3>פיילוט</h3><div class="div"></div><div class="d">תוך כשבועיים</div><div class="d">פתרון לבעיה אחת</div><div class="tag">תוצאה מהירה</div></div>
-    <div class="stage rv d3"><div class="badge">שלב 03</div><h3>מערכת מלאה</h3><div class="div"></div><div class="d">פיתוח מקצה לקצה</div><div class="d">אינטגרציות + עיצוב</div><div class="tag">המוצר המלא</div></div>
-    <div class="stage hi rv d4"><div class="badge">שלב 04</div><h3>ליווי שוטף</h3><div class="div"></div><div class="d">תחזוקה ושיפורים</div><div class="d">תמיד יש למי לפנות</div><div class="tag">שקט נפשי</div></div>
+    <div class="stage rv d1"><div class="badge">שלב 01</div><h3>פיצוח האתגר</h3><div class="div"></div><p class="stage-desc">לפני שורת הקוד הראשונה אנחנו ממפים את הבעיה העסקית: יעדים, נקודות כאב והזדמנויות. כך כל החלטה טכנולוגית משרתת תוצאה מדידה — לא פיצ'ר מיותר.</p><div class="stage-insight"><span>Insight</span>רוב כשלי הפיתוח נולדים באפיון, לא בקוד. אנחנו סוגרים את הפער מראש.</div></div>
+    <div class="stage rv d2"><div class="badge">שלב 02</div><h3>הוכחת היתכנות</h3><div class="div"></div><p class="stage-desc">פתרון ממוקד שעולה לאוויר במהירות, כדי שתראו ערך אמיתי בסיכון מינימלי — עוד לפני התחייבות להשקעה מלאה. למידה מהירה, החלטות חכמות.</p><div class="stage-insight"><span>Insight</span>איטרציה מהירה מקצרת את ה-Time-to-Value ומורידה את סיכון הפיתוח דרמטית.</div></div>
+    <div class="stage rv d3"><div class="badge">שלב 03</div><h3>הנדסה לקנה מידה</h3><div class="div"></div><p class="stage-desc">פיתוח מקצה לקצה — ארכיטקטורה, אינטגרציות ועיצוב — שנבנה להחזיק ולגדול. מערכת שעובדת היום ומוכנה למחר, בלי חוב טכני שמאט אתכם.</p><div class="stage-insight"><span>Insight</span>ארכיטקטורה נכונה היום חוסכת חוב טכני יקר מחר. אנחנו בונים לעשור, לא לרבעון.</div></div>
+    <div class="stage hi rv d4"><div class="badge">שלב 04</div><h3>מנוע צמיחה</h3><div class="div"></div><p class="stage-desc">ההשקה היא ההתחלה, לא הסוף. ליווי שוטף, אופטימיזציה ושיפורים שממשיכים להחזיר על ההשקעה — שותף טכנולוגי שתמיד בשליטה.</p><div class="stage-insight"><span>Insight</span>עיקר ערך המוצר נוצר אחרי ההשקה. אנחנו נשארים כדי לממש אותו.</div></div>
   </div>
   <div class="statement rv"><p>מתחילים בשיחה אחת. <b>ממשיכים רק אם זה עובד לך.</b></p></div>
 </section>
