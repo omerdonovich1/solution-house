@@ -230,6 +230,25 @@
   .hud .dot{width:6px;height:6px;border-radius:50%;background:var(--glow);box-shadow:0 0 9px var(--glow-soft);animation:hudpulse 1.8s ease-in-out infinite;}
   @keyframes hudpulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.8)}}
   @media(max-width:680px){.hud{display:none;}}
+
+  /* ===== Projects / portfolio ===== */
+  .proj-grid{margin-top:clamp(64px,8vw,104px);display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+  @media(max-width:900px){.proj-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:600px){.proj-grid{grid-template-columns:1fr;}}
+  .proj{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:rgba(13,24,48,0.55);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 34px 80px -42px rgba(0,0,0,0.85);transition:transform .3s cubic-bezier(.22,1.12,.36,1),border-color .3s var(--ease),box-shadow .3s var(--ease);}
+  .proj:hover{transform:translateY(-8px);border-color:var(--glow-soft);box-shadow:0 48px 100px -40px rgba(0,0,0,0.95);}
+  .proj-img{position:relative;aspect-ratio:16/10;background:linear-gradient(140deg,#0D1830,#04060C);display:grid;place-items:center;overflow:hidden;border-bottom:1px solid var(--line);}
+  .proj-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease);}
+  .proj:hover .proj-img img{transform:scale(1.04);}
+  .proj-img .ph{font-family:'Rubik',sans-serif;font-weight:800;font-size:clamp(1.4rem,3vw,2rem);letter-spacing:.04em;color:var(--muted);opacity:.55;}
+  .proj-body{padding:24px 24px 26px;display:flex;flex-direction:column;gap:12px;}
+  .proj-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;}
+  .proj-top h3{font-size:1.5rem;font-weight:800;letter-spacing:-.03em;color:var(--text);}
+  .proj-go{font-family:'Rubik',sans-serif;font-size:12px;letter-spacing:.1em;color:var(--muted);white-space:nowrap;transition:color .3s,transform .3s;}
+  .proj:hover .proj-go{color:var(--glow);transform:translateX(-3px);}
+  .proj-body p{font-size:15px;color:var(--muted);line-height:1.6;}
+  .proj-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px;}
+  .proj-tags span{font-family:'Rubik',sans-serif;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:100px;padding:5px 12px;}
 </style>
 </head>
 <body>
@@ -248,6 +267,7 @@
     <nav class="nav-links">
       <a href="#approach">הגישה</a>
       <a href="#how">איך זה עובד</a>
+      <a href="#projects">פרויקטים</a>
       <a href="#team">צוות</a>
       <a href="#contact">צור קשר</a>
       <span class="clock" id="clock">IL · --:--:--</span>
@@ -323,11 +343,47 @@
   <div class="statement rv"><p>מתחילים בשיחה אחת. <b>ממשיכים רק אם זה עובד לך.</b></p></div>
 </section>
 
+<!-- PROJECTS -->
+<section class="block shell" id="projects">
+  <div class="sec-head">
+    <div class="sec-rule"></div>
+    <div class="sec-meta rv"><span class="idx">(03)</span><span>פרויקטים</span></div>
+    <h2 class="title rv d1">עבודות שכבר בנינו.</h2>
+    <p class="lead offset rv d2">מבחר מהפרויקטים האחרונים שלנו — אתרים, חנויות ומערכות שעלו לאוויר ועובדים.</p>
+  </div>
+  <div class="proj-grid">
+    <a class="proj rv d1" href="https://carman-s.vercel.app" target="_blank" rel="noopener">
+      <div class="proj-img"><span class="ph">CARMAN&nbsp;S</span><img src="proj1.png" alt="CARMAN S" onerror="this.style.display='none'"></div>
+      <div class="proj-body">
+        <div class="proj-top"><h3>CARMAN S</h3><span class="proj-go">צפה ←</span></div>
+        <p>מערכת ניהול צי רכב — דאשבורד פיקוד חי, ניהול נהגים, התראות ותוקפי רישיונות בזמן אמת.</p>
+        <div class="proj-tags"><span>SaaS</span><span>דאשבורד</span></div>
+      </div>
+    </a>
+    <a class="proj rv d2" href="#" target="_blank" rel="noopener">
+      <div class="proj-img"><span class="ph">SHADIEZ</span><img src="proj2.png" alt="SHADIEZ" onerror="this.style.display='none'"></div>
+      <div class="proj-body">
+        <div class="proj-top"><h3>SHADIEZ</h3><span class="proj-go">צפה ←</span></div>
+        <p>חנות אונליין לכיסאות חוף בעבודת יד מעץ ובד — בחירת סגנון, עגלה ותשלום.</p>
+        <div class="proj-tags"><span>E-commerce</span><span>מותג</span></div>
+      </div>
+    </a>
+    <a class="proj rv d3" href="#" target="_blank" rel="noopener">
+      <div class="proj-img"><span class="ph">SPINZ</span><img src="proj3.png" alt="SPINZ" onerror="this.style.display='none'"></div>
+      <div class="proj-body">
+        <div class="proj-top"><h3>SPINZ</h3><span class="proj-go">צפה ←</span></div>
+        <p>אתר מסחר לאופני עיר single-speed — גלריית דגמים, סיפור מותג וחנות מלאה.</p>
+        <div class="proj-tags"><span>E-commerce</span><span>Urban</span></div>
+      </div>
+    </a>
+  </div>
+</section>
+
 <!-- TEAM -->
 <section class="block shell" id="team">
   <div class="sec-head">
     <div class="sec-rule"></div>
-    <div class="sec-meta rv"><span class="idx">(03)</span><span>הצוות</span></div>
+    <div class="sec-meta rv"><span class="idx">(04)</span><span>הצוות</span></div>
     <h2 class="title rv d1">צוות קטן. תשומת לב מלאה.</h2>
     <p class="lead offset rv d2">אתה לא מספר תיק במערכת. שלושה אנשים מובילים את הפרויקט שלך מההתחלה ועד הסוף.</p>
   </div>
@@ -342,7 +398,7 @@
 <section class="block shell" id="value">
   <div class="sec-head">
     <div class="sec-rule"></div>
-    <div class="sec-meta rv"><span class="idx">(04)</span><span>למה זה משתלם</span></div>
+    <div class="sec-meta rv"><span class="idx">(05)</span><span>למה זה משתלם</span></div>
     <h2 class="title rv d1">אנחנו מתמחרים לפי ערך, לא לפי שעה.</h2>
     <p class="lead offset rv d2">פתרון טוב לא עולה כסף — הוא מחזיר אותו. אם המערכת חוסכת לך חצי משרה, <strong>היא מחזירה את עצמה תוך חודשים ספורים.</strong> כל הצעה מותאמת אישית לבעיה ולתקציב שלך — בלי הפתעות באמצע.</p>
   </div>
@@ -357,7 +413,7 @@
 <section class="block shell" id="contact" style="max-width:920px;margin-inline:auto">
   <div class="sec-head">
     <div class="sec-rule"></div>
-    <div class="sec-meta rv"><span class="idx">(05)</span><span>בואו נדבר</span></div>
+    <div class="sec-meta rv"><span class="idx">(06)</span><span>בואו נדבר</span></div>
     <h2 class="title rv d1">ספרו לנו על הבעיה.</h2>
     <p class="lead rv d2">השאירו פרטים ונחזור אליכם לשיחת אבחון ללא עלות — נבין מה אתם צריכים ונציע את הדרך הנכונה.</p>
   </div>
