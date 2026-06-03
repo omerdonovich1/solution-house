@@ -531,6 +531,20 @@
       var tx=new THREE.CanvasTexture(cv);if(THREE.sRGBEncoding!==undefined)tx.encoding=THREE.sRGBEncoding;tx.anisotropy=4;tx.needsUpdate=true;return tx;
     });
 
+    /* REAL project screenshots: drop proj1.png..proj8.png in the repo root and
+       they automatically replace the placeholder mockups on the laptop screen. */
+    var active=texs, real=[];
+    var rNames=['proj1.png','proj2.png','proj3.png','proj4.png','proj5.png','proj6.png','proj7.png','proj8.png'];
+    var loader=new THREE.TextureLoader();
+    rNames.forEach(function(nm,ri){
+      loader.load(nm,function(tex){
+        if(THREE.sRGBEncoding!==undefined) tex.encoding=THREE.sRGBEncoding;
+        tex.anisotropy=4; real[ri]=tex;
+        var list=[]; for(var j=0;j<real.length;j++){ if(real[j]) list.push(real[j]); }
+        if(list.length){ active=list; idx=0; nextIdx=list.length>1?1:0; fading=false; timer=0; matB.opacity=0; matA.map=active[0]; matA.needsUpdate=true; }
+      });
+    });
+
     /* ===== REALISTIC LAPTOP ===== */
     var laptop=new THREE.Group(); scene.add(laptop);
     var alu=new THREE.MeshStandardMaterial({color:0x53585f,metalness:0.55,roughness:0.32});
@@ -611,9 +625,9 @@
         trails.children.forEach(function(ln){ ln.position.x-=ln.userData.sp*dt*6; if(ln.position.x<-34) ln.position.x=34; });
         /* project screen crossfade */
         timer+=dt;
-        if(!fading && timer>3.4){ fading=true; fade=0; matB.map=texs[nextIdx]; matB.needsUpdate=true; }
+        if(!fading && active.length>1 && timer>3.4){ fading=true; fade=0; matB.map=active[nextIdx]; matB.needsUpdate=true; }
         if(fading){ fade+=dt/0.7; matB.opacity=Math.min(fade,1);
-          if(fade>=1){ fading=false; timer=0; idx=nextIdx; nextIdx=(nextIdx+1)%texs.length; matA.map=texs[idx]; matA.needsUpdate=true; matB.opacity=0; }
+          if(fade>=1){ fading=false; timer=0; idx=nextIdx; nextIdx=(nextIdx+1)%active.length; matA.map=active[idx]; matA.needsUpdate=true; matB.opacity=0; }
         }
       }
       camera.position.x += (tx*1.2 - camera.position.x)*0.05;
