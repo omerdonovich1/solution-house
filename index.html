@@ -399,11 +399,12 @@
       camera.aspect=w/h;camera.updateProjectionMatrix();
     }
 
-    /* lighting for the realistic laptop */
-    scene.add(new THREE.HemisphereLight(0xbfd4ff,0x0a0c12,0.7));
-    var key=new THREE.DirectionalLight(0xffffff,1.25); key.position.set(5,7,6); scene.add(key);
-    var rim=new THREE.DirectionalLight(GLOW,1.8); rim.position.set(-7,2,-3); scene.add(rim);
-    var fill=new THREE.PointLight(VIOLET,0.7,50); fill.position.set(4,-2,5); scene.add(fill);
+    /* soft studio lighting — clean product look */
+    scene.add(new THREE.HemisphereLight(0xcfe0ff,0x0a0c12,0.62));
+    var key=new THREE.DirectionalLight(0xffffff,1.15); key.position.set(4,7,7); scene.add(key);
+    var fillTop=new THREE.DirectionalLight(0xdfe8ff,0.5); fillTop.position.set(-3,5,3); scene.add(fillTop);
+    var rim=new THREE.DirectionalLight(GLOW,0.9); rim.position.set(-7,1,-4); scene.add(rim);
+    var fill=new THREE.PointLight(VIOLET,0.4,50); fill.position.set(4,-2,5); scene.add(fill);
 
     /* particle field (subtle) */
     var N=1100, pos=new Float32Array(N*3);
@@ -532,49 +533,48 @@
 
     /* ===== REALISTIC LAPTOP ===== */
     var laptop=new THREE.Group(); scene.add(laptop);
-    var alu=new THREE.MeshStandardMaterial({color:0x3a4049,metalness:0.55,roughness:0.4});
-    var aluDark=new THREE.MeshStandardMaterial({color:0x1c1f26,metalness:0.45,roughness:0.5});
-    var bezelMat=new THREE.MeshStandardMaterial({color:0x0c0d11,metalness:0.3,roughness:0.55});
-    var keyMat=new THREE.MeshStandardMaterial({color:0x3a3f4a,metalness:0.25,roughness:0.62});
-    var tpMat=new THREE.MeshStandardMaterial({color:0x252a33,metalness:0.4,roughness:0.35});
+    var alu=new THREE.MeshStandardMaterial({color:0x53585f,metalness:0.55,roughness:0.32});
+    var aluDark=new THREE.MeshStandardMaterial({color:0x34383e,metalness:0.5,roughness:0.4});
+    var bezelMat=new THREE.MeshStandardMaterial({color:0x060608,metalness:0.1,roughness:0.45});
+    var keyMat=new THREE.MeshStandardMaterial({color:0x191b1f,metalness:0.15,roughness:0.6});
+    var tpMat=new THREE.MeshStandardMaterial({color:0x4a4f56,metalness:0.5,roughness:0.28});
 
-    var baseW=4.74, baseD=3.2, baseH=0.20;
+    var baseW=4.8, baseD=3.25, baseH=0.14;
     var deckTop=baseH/2;
     var base=new THREE.Mesh(new THREE.BoxGeometry(baseW,baseH,baseD),alu); laptop.add(base);
-    var bottom=new THREE.Mesh(new THREE.BoxGeometry(baseW-0.3,0.08,baseD-0.3),aluDark); bottom.position.y=-0.13; laptop.add(bottom);
-    /* keyboard well */
-    var well=new THREE.Mesh(new THREE.BoxGeometry(4.1,0.02,1.9),aluDark); well.position.set(0,deckTop+0.002,-0.35); laptop.add(well);
-    /* keys */
+    var bottom=new THREE.Mesh(new THREE.BoxGeometry(baseW-0.26,0.05,baseD-0.26),aluDark); bottom.position.y=-0.092; laptop.add(bottom);
+    /* recessed keyboard well */
+    var well=new THREE.Mesh(new THREE.BoxGeometry(4.18,0.02,1.72),aluDark); well.position.set(0,deckTop-0.004,-0.36); laptop.add(well);
+    /* low-profile keys */
     var keys=new THREE.Group(); laptop.add(keys);
-    var cols=15, rows=5, kw=0.22, kd=0.22, gx=0.05, gz=0.05;
-    var startX=-(cols*(kw+gx)-gx)/2+kw/2, startZ=-0.35-(rows*(kd+gz)-gz)/2+kd/2;
-    var keyGeo=new THREE.BoxGeometry(kw,0.06,kd);
+    var cols=13, rows=5, kw=0.245, kd=0.2, gx=0.06, gz=0.06;
+    var startX=-(cols*(kw+gx)-gx)/2+kw/2, startZ=-0.36-(rows*(kd+gz)-gz)/2+kd/2;
+    var keyGeo=new THREE.BoxGeometry(kw,0.028,kd);
     for(var r=0;r<rows;r++)for(var ccol=0;ccol<cols;ccol++){
-      var kk=new THREE.Mesh(keyGeo,keyMat); kk.position.set(startX+ccol*(kw+gx),deckTop+0.04,startZ+r*(kd+gz)); keys.add(kk);
+      var kk=new THREE.Mesh(keyGeo,keyMat); kk.position.set(startX+ccol*(kw+gx),deckTop+0.02,startZ+r*(kd+gz)); keys.add(kk);
     }
-    /* trackpad */
-    var tp=new THREE.Mesh(new THREE.BoxGeometry(1.5,0.012,0.95),tpMat); tp.position.set(0,deckTop+0.004,0.95); laptop.add(tp);
+    /* large glass trackpad */
+    var tp=new THREE.Mesh(new THREE.BoxGeometry(1.75,0.01,1.08),tpMat); tp.position.set(0,deckTop+0.006,0.98); laptop.add(tp);
 
     /* screen lid (hinged at back, leaning back slightly) */
     var hinge=new THREE.Group(); hinge.position.set(0,deckTop,-baseD/2+0.06); laptop.add(hinge);
     hinge.rotation.x=-0.18;
-    var lidW=4.74, lidH=3.0, lidT=0.13;
+    var lidW=4.8, lidH=3.0, lidT=0.085;
     var lid=new THREE.Mesh(new THREE.BoxGeometry(lidW,lidH,lidT),alu); lid.position.set(0,lidH/2,0); hinge.add(lid);
-    var bezel=new THREE.Mesh(new THREE.BoxGeometry(lidW-0.16,lidH-0.16,0.02),bezelMat); bezel.position.set(0,lidH/2,lidT/2+0.012); hinge.add(bezel);
-    /* glow halo behind the display */
-    var halo=new THREE.Mesh(new THREE.PlaneGeometry(lidW+0.5,lidH+0.5),new THREE.MeshBasicMaterial({color:GLOW,transparent:true,opacity:0.05,blending:THREE.AdditiveBlending,depthWrite:false}));
-    halo.position.set(0,lidH/2,lidT/2+0.015); hinge.add(halo);
-    /* display planes (A back, B crossfade) */
-    var DW=lidW-0.34, DH=lidH-0.34;
-    var matA=new THREE.MeshBasicMaterial({map:texs[0],toneMapped:false});
-    var matB=new THREE.MeshBasicMaterial({map:texs[1],transparent:true,opacity:0,toneMapped:false});
+    /* thin uniform black bezel, proud of the lid face */
+    var bezel=new THREE.Mesh(new THREE.PlaneGeometry(lidW-0.07,lidH-0.07),bezelMat); bezel.position.set(0,lidH/2,lidT/2+0.014); hinge.add(bezel);
+    /* subtle glow halo (edges beyond the lid only) */
+    var halo=new THREE.Mesh(new THREE.PlaneGeometry(lidW+0.5,lidH+0.5),new THREE.MeshBasicMaterial({color:GLOW,transparent:true,opacity:0.035,blending:THREE.AdditiveBlending,depthWrite:false}));
+    halo.position.set(0,lidH/2,lidT/2+0.006); hinge.add(halo);
+    /* display: A opaque (pulled forward via polygonOffset), B is the crossfade overlay (no depth test) */
+    var DW=lidW-0.2, DH=lidH-0.22;
     var dispGeo=new THREE.PlaneGeometry(DW,DH);
-    var scrA=new THREE.Mesh(dispGeo,matA); scrA.position.set(0,lidH/2,lidT/2+0.022); hinge.add(scrA);
-    var scrB=new THREE.Mesh(dispGeo,matB); scrB.position.set(0,lidH/2,lidT/2+0.024); hinge.add(scrB);
-    /* small camera notch */
-    var notch=new THREE.Mesh(new THREE.CircleGeometry(0.03,16),new THREE.MeshStandardMaterial({color:0x05060a,metalness:0.2,roughness:0.4})); notch.position.set(0,lidH-0.12,lidT/2+0.025); hinge.add(notch);
-    /* brand glow dot on lid back */
-    var badge=new THREE.Mesh(new THREE.CircleGeometry(0.12,24),new THREE.MeshBasicMaterial({color:GLOW,transparent:true,opacity:0.5,blending:THREE.AdditiveBlending})); badge.position.set(0,lidH/2,-lidT/2-0.01); badge.rotation.y=Math.PI; hinge.add(badge);
+    var matA=new THREE.MeshBasicMaterial({map:texs[0],toneMapped:false,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2});
+    var matB=new THREE.MeshBasicMaterial({map:texs[1],transparent:true,opacity:0,toneMapped:false,depthWrite:false,depthTest:false});
+    var scrA=new THREE.Mesh(dispGeo,matA); scrA.position.set(0,lidH/2,lidT/2+0.016); scrA.renderOrder=1; hinge.add(scrA);
+    var scrB=new THREE.Mesh(dispGeo,matB); scrB.position.set(0,lidH/2,lidT/2+0.016); scrB.renderOrder=2; hinge.add(scrB);
+    /* tiny camera dot in the top bezel */
+    var notch=new THREE.Mesh(new THREE.CircleGeometry(0.022,16),new THREE.MeshStandardMaterial({color:0x05060a,metalness:0.2,roughness:0.4})); notch.position.set(0,lidH-0.08,lidT/2+0.02); hinge.add(notch);
 
     laptop.position.y=-0.55;
 
