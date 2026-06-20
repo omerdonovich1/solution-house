@@ -27,14 +27,14 @@ export function CTA() {
           variants={fadeUp}
           className="mx-auto mt-7 max-w-xl text-lg text-steel sm:text-xl"
         >
-          שיחת אבחון ללא עלות וללא התחייבות. נראה ביחד מה הדרך הנכונה בשבילכם.
+          שיחה אחת כדי להבין את הבעיה, הדרך קדימה והעלות. ללא הבטחות שלא נוכל להעמיד בהן.
         </motion.p>
         <motion.div
           variants={fadeUp}
           className="mt-11 flex flex-wrap items-center justify-center gap-3.5"
         >
           <MagneticButton href="#contact" variant="solid">
-            קבעו שיחת אבחון
+            בואו נדבר
           </MagneticButton>
           <MagneticButton
             href={`https://wa.me/${WHATSAPP}`}

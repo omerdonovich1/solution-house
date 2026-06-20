@@ -37,7 +37,7 @@ export function Hero() {
       <div className="relative z-10 shell">
         {/* meta row */}
         <div className="mb-12 flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.16em] text-steel">
-          <span>בית פתרונות טכנולוגיים</span>
+          <span>שותפות לפתרון</span>
           <span className="hidden gap-6 sm:flex">
             <span>תל אביב</span>
             <span>—</span>
@@ -52,11 +52,11 @@ export function Hero() {
           variants={stagger}
           className="font-black leading-[0.9] tracking-tightest text-[clamp(3.2rem,12vw,11rem)] text-bright"
         >
-          <HeadlineLine>יש לך בעיה.</HeadlineLine>
+          <HeadlineLine>יש לך בעיה עסקית.</HeadlineLine>
           <HeadlineLine>
-            אנחנו בונים <span className="text-steel">את</span>{" "}
+            אנחנו מוצאים את <span className="text-steel">הדרך</span>{" "}
             <span className="relative inline-block">
-              הפתרון.
+              הנכונה.
               <motion.span
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
@@ -78,15 +78,15 @@ export function Hero() {
             variants={fadeUp}
             className="max-w-xl text-lg leading-relaxed text-steel sm:text-xl"
           >
-            אתרים, אפליקציות, מערכות ניהול, אוטומציות וסוכני AI —{" "}
+            מערכות חדשות, אוטומציה חכמה, אתרים, AI —{" "}
             <strong className="font-semibold text-bright">
-              אנחנו בוחרים את מה שיפתור לך את הבעיה, לא את מה שנוח לנו למכור.
+              תמיד בוחרים את הדרך שתעבוד הכי טוב. לא את מה שנוח לנו למכור.
             </strong>
           </motion.p>
 
           <motion.div variants={fadeUp} className="flex flex-wrap items-center gap-3.5">
             <MagneticButton href="#contact" variant="solid">
-              קבעו שיחת אבחון
+              בואו נדבר
               <ArrowLeft className="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-1" />
             </MagneticButton>
             <MagneticButton href="#process" variant="ghost" strength={8}>
