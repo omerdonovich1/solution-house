@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --shell-pad: clamp(20px, 5vw, 80px);
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: theme("colors.bg");
+  color: theme("colors.text");
+  overflow-x: hidden;
+}
+
+::selection {
+  background: theme("colors.bright");
+  color: theme("colors.bg");
+}
+
+@layer components {
+  /* Page gutter */
+  .shell {
+    width: 100%;
+    max-width: theme("maxWidth.shell");
+    margin-inline: auto;
+    padding-inline: var(--shell-pad);
+  }
+
+  /* Mono kicker label used above section titles */
+  .kicker {
+    @apply inline-flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-[0.18em] text-steel;
+  }
+  .kicker::before {
+    content: "";
+    width: 30px;
+    height: 1px;
+    background: linear-gradient(90deg, theme("colors.glow"), transparent);
+  }
+}
+
+@layer utilities {
+  /* 1px border that glows along the top edge — section separator */
+  .glow-divider {
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(91, 124, 255, 0.5),
+      transparent
+    );
+  }
+
+  /* Tactile, atmospheric grain overlay */
+  .grain::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    pointer-events: none;
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .animate-marquee,
+  .animate-mesh-a,
+  .animate-mesh-b,
+  .animate-shimmer {
+    animation: none !important;
+  }
+}
