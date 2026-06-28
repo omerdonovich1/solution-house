@@ -4,7 +4,6 @@ import { useState } from "react";
 import { SectionHeader } from "@/components/SectionHeader";
 import { cn } from "@/lib/utils";
 
-// TODO: replace placeholders before launch.
 const WHATSAPP = "972500000000";
 const EMAIL = "hello@solution.house";
 
@@ -51,9 +50,9 @@ export function Contact() {
       <div className="shell">
         <SectionHeader
           index="(05)"
-          label="בואו נדבר"
-          title="ספרו לנו על הבעיה."
-          lead="השאירו פרטים ונחזור אליכם — שיחה אחת כדי להבין את הצוק, הדרך קדימה, והעלות."
+          label="בואו נפתור את זה"
+          title="ספרו לנו על האתגר שלכם."
+          lead="שיחה אחת כדי להבין את הבעיה, לבנות את הדרך קדימה ולהעריך עלויות. בלי הבטחות שלא נוכל לעמוד בהן."
         />
 
         <form onSubmit={onSubmit} className="mt-12 grid gap-5 sm:grid-cols-2">
@@ -70,7 +69,7 @@ export function Contact() {
             <input id="email" name="email" type="email" placeholder="you@example.com" className={field} />
           </div>
           <div className="sm:col-span-2">
-            <label className={label} htmlFor="message">מה הבעיה שתרצו לפתור?</label>
+            <label className={label} htmlFor="message">מה הבעיה שלכם?</label>
             <textarea id="message" name="message" rows={5} placeholder="כמה מילים..." className={cn(field, "resize-y")} />
           </div>
           <button

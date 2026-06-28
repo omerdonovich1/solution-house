@@ -7,10 +7,9 @@ import { MeshGradient } from "@/components/ui/MeshGradient";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 
 const TOOLS = [
+  "מערכות מתקדמות",
+  "אוטומציות חכמות",
   "אתרים",
-  "אפליקציות",
-  "מערכות ניהול",
-  "אוטומציות",
   "סוכני AI",
   "אינטגרציות",
   "דאשבורדים",
@@ -37,7 +36,7 @@ export function Hero() {
       <div className="relative z-10 shell">
         {/* meta row */}
         <div className="mb-12 flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.16em] text-steel">
-          <span>שותפות לפתרון</span>
+          <span>Solution House</span>
           <span className="hidden gap-6 sm:flex">
             <span>תל אביב</span>
             <span>—</span>
@@ -52,18 +51,9 @@ export function Hero() {
           variants={stagger}
           className="font-black leading-[0.9] tracking-tightest text-[clamp(3.2rem,12vw,11rem)] text-bright"
         >
-          <HeadlineLine>יש לך בעיה עסקית.</HeadlineLine>
+          <HeadlineLine>בונים את התשתית</HeadlineLine>
           <HeadlineLine>
-            אנחנו מוצאים את <span className="text-steel">הדרך</span>{" "}
-            <span className="relative inline-block">
-              הנכונה.
-              <motion.span
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ duration: 1, ease: EASE, delay: 0.9 }}
-                className="absolute bottom-[0.04em] right-0 h-[0.05em] w-full origin-right bg-bright shadow-[0_0_20px_2px_rgba(238,242,255,0.5)]"
-              />
-            </span>
+            להצלחה <span className="text-steel">שלכם.</span>
           </HeadlineLine>
         </motion.h1>
 
@@ -78,9 +68,9 @@ export function Hero() {
             variants={fadeUp}
             className="max-w-xl text-lg leading-relaxed text-steel sm:text-xl"
           >
-            מערכות חדשות, אוטומציה חכמה, אתרים, AI —{" "}
+            יש לך אתגר עסקי. אנחנו בונים את הפתרון המדויק עבורו.{" "}
             <strong className="font-semibold text-bright">
-              תמיד בוחרים את הדרך שתעבוד הכי טוב. לא את מה שנוח לנו למכור.
+              אנחנו תמיד נבחר את הטכנולוגיה והדרך שיעבדו הכי טוב עבור העסק שלך.
             </strong>
           </motion.p>
 
