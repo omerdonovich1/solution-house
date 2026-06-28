@@ -1,7 +1,7 @@
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/sections/Hero";
 import { Approach } from "@/components/sections/Approach";
-import { BentoProjects } from "@/components/sections/BentoProjects";
+import { ProjectsCarousel } from "@/components/sections/ProjectsCarousel";
 import { Process } from "@/components/sections/Process";
 import { Team } from "@/components/sections/Team";
 import { Contact } from "@/components/sections/Contact";
@@ -15,7 +15,7 @@ export default function Home() {
       <main>
         <Hero />
         <Approach />
-        <BentoProjects />
+        <ProjectsCarousel />
         <Process />
         <Team />
         <Contact />
