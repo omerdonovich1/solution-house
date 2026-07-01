@@ -140,7 +140,7 @@ export const TEAM: readonly TeamMember[] = [
 ] as const;
 
 export const NAV_LINKS: readonly { href: string; label: string }[] = [
-  { href: "#approach", label: "הגישה" },
+  { href: "#build", label: "מה אנחנו בונים" },
   { href: "#projects", label: "פרויקטים" },
   { href: "#process", label: "איך זה עובד" },
   { href: "#contact", label: "צור קשר" },
