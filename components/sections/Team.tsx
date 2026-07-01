@@ -11,7 +11,7 @@ export function Team() {
     <section id="team" className="py-32 sm:py-48">
       <div className="shell">
         <SectionHeader
-          index="(04)"
+          index="04"
           label="הצוות"
           title="שלושה אנשים. שש עיניים על הפרויקט שלכם."
           lead="אתם לא עוד מספר תיק. שלושה תפקידים, שליטה מלאה בכל פרט — מההתחלה ועד היום שבו זה משתלם."

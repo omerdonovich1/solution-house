@@ -58,15 +58,19 @@ body {
     padding-inline: var(--shell-pad);
   }
 
-  /* Mono kicker label used above section titles — volt signal square */
+  /* Mono kicker label — nudot-style ( parenthesized ) */
   .kicker {
-    @apply inline-flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.22em] text-mist;
+    @apply inline-flex items-baseline font-mono text-[11px] uppercase tracking-[0.22em] text-mist;
   }
   .kicker::before {
-    content: "";
-    width: 6px;
-    height: 6px;
-    background: theme("colors.volt");
+    content: "( ";
+    white-space: pre;
+    color: theme("colors.mist / 60%");
+  }
+  .kicker::after {
+    content: " )";
+    white-space: pre;
+    color: theme("colors.mist / 60%");
   }
 }
 

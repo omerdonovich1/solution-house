@@ -8,10 +8,13 @@ import {
   useScroll,
   useSpring,
 } from "framer-motion";
+import { Mail } from "lucide-react";
 import { EASE } from "@/lib/motion";
 import { NAV_LINKS } from "@/lib/data";
 import { LogoMark } from "@/components/ui/Logo";
 import { cn } from "@/lib/utils";
+
+const EMAIL = "hello@solution.house";
 
 const menuStagger = {
   hidden: {},
@@ -23,8 +26,12 @@ const menuItem = {
   show: { y: 0, transition: { duration: 0.8, ease: EASE } },
 } as const;
 
+/**
+ * nudot-style floating command pill: mail · mark · menu. All navigation
+ * lives behind the fullscreen overlay, on every viewport. The pill dives
+ * away on scroll-down and resurfaces on scroll-up.
+ */
 export function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -35,10 +42,8 @@ export function Navbar() {
     mass: 0.4,
   });
 
-  // Hide on scroll-down, resurface on scroll-up — keeps the canvas clean.
   useMotionValueEvent(scrollY, "change", (y) => {
     const prev = scrollY.getPrevious() ?? 0;
-    setScrolled(y > 24);
     setHidden(y > prev && y > 160 && !open);
   });
 
@@ -52,72 +57,61 @@ export function Navbar() {
 
   return (
     <>
+      {/* reading progress — amber hairline pinned to the top edge */}
+      <motion.div
+        aria-hidden
+        style={{ scaleX: progress }}
+        className="fixed inset-x-0 top-0 z-[60] h-px origin-right bg-dot/90"
+      />
+
       <motion.header
-        initial={{ y: -24, opacity: 0 }}
-        animate={{ y: hidden ? "-100%" : 0, opacity: 1 }}
+        initial={{ y: -32, opacity: 0 }}
+        animate={{ y: hidden ? -110 : 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: EASE }}
-        className="fixed inset-x-0 top-0 z-50"
+        className="fixed inset-x-0 top-5 z-50 flex justify-center"
       >
-        <div className="relative shell flex items-center justify-between py-4">
-          <div
-            className={cn(
-              "pointer-events-none absolute inset-0 -z-10 border-b transition-all duration-500",
-              scrolled && !open
-                ? "border-white/[0.08] bg-ink/75 backdrop-blur-xl"
-                : "border-transparent"
-            )}
-          />
-          <a href="#top" className="group flex items-center gap-3">
-            <LogoMark className="h-9 w-9 text-ivory transition-transform duration-500 group-hover:scale-105" />
-            <span className="font-mono text-[13px] font-medium tracking-[0.04em] text-ivory">
-              SOLUTION.HOUSE
-            </span>
+        <div className="relative z-[95] flex items-center gap-2 rounded-2xl border border-white/[0.08] bg-white/[0.05] p-2 backdrop-blur-xl">
+          <a
+            href={`mailto:${EMAIL}`}
+            aria-label="אימייל"
+            className="grid h-11 w-14 place-items-center rounded-xl text-mist transition-colors duration-300 hover:bg-white/[0.06] hover:text-ivory"
+          >
+            <Mail className="h-[18px] w-[18px]" strokeWidth={1.6} />
           </a>
-
-          <nav className="hidden items-center gap-9 md:flex">
-            {NAV_LINKS.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                className="group relative text-sm font-medium text-mist transition-colors duration-300 hover:text-ivory"
-              >
-                {l.label}
-                <span className="absolute -bottom-1.5 right-0 block h-px w-0 bg-volt transition-all duration-300 group-hover:w-full" />
-              </a>
-            ))}
-          </nav>
-
-          {/* hamburger — mobile only */}
+          <a
+            href="#top"
+            aria-label="לראש הדף"
+            onClick={() => setOpen(false)}
+            className="grid h-11 w-16 place-items-center rounded-xl transition-colors duration-300 hover:bg-white/[0.06]"
+          >
+            <LogoMark className="h-8 w-8 text-ivory" />
+          </a>
           <button
             type="button"
             aria-label={open ? "סגירת תפריט" : "פתיחת תפריט"}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className="relative z-[95] flex h-10 w-10 flex-col items-center justify-center gap-[7px] md:hidden"
+            className="grid h-11 w-14 place-items-center rounded-xl transition-colors duration-300 hover:bg-white/[0.06]"
           >
-            <span
-              className={cn(
-                "h-px w-6 bg-ivory transition-transform duration-300",
-                open && "translate-y-[4px] rotate-45"
-              )}
-            />
-            <span
-              className={cn(
-                "h-px w-6 bg-ivory transition-transform duration-300",
-                open && "-translate-y-[4px] -rotate-45"
-              )}
-            />
+            <span className="relative flex h-4 w-6 flex-col items-center justify-center gap-[6px]">
+              <span
+                className={cn(
+                  "h-px w-6 bg-ivory transition-transform duration-300",
+                  open && "translate-y-[3.5px] rotate-45"
+                )}
+              />
+              <span
+                className={cn(
+                  "h-px w-6 bg-ivory transition-transform duration-300",
+                  open && "-translate-y-[3.5px] -rotate-45"
+                )}
+              />
+            </span>
           </button>
         </div>
-        {/* reading progress — hairline volt */}
-        <motion.div
-          aria-hidden
-          style={{ scaleX: progress }}
-          className="h-px origin-right bg-volt/80"
-        />
       </motion.header>
 
-      {/* fullscreen menu */}
+      {/* fullscreen menu — every viewport */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -125,13 +119,13 @@ export function Navbar() {
             animate={{ clipPath: "inset(0 0 0% 0)" }}
             exit={{ clipPath: "inset(0 0 100% 0)" }}
             transition={{ duration: 0.7, ease: EASE }}
-            className="fixed inset-0 z-40 flex flex-col justify-center bg-ink md:hidden"
+            className="fixed inset-0 z-40 flex flex-col justify-center bg-ink"
           >
             <motion.nav
               variants={menuStagger}
               initial="hidden"
               animate="show"
-              className="shell flex flex-col gap-2"
+              className="shell flex flex-col gap-1"
             >
               {NAV_LINKS.map((l, i) => (
                 <span key={l.href} className="overflow-hidden">
@@ -139,10 +133,10 @@ export function Navbar() {
                     variants={menuItem}
                     href={l.href}
                     onClick={() => setOpen(false)}
-                    className="flex items-baseline gap-5 py-2 text-5xl font-black tracking-tightest text-ivory active:text-volt"
+                    className="group flex items-baseline gap-6 py-2 text-5xl font-black tracking-tightest text-ivory transition-colors duration-300 hover:text-mist active:text-dot sm:text-7xl"
                   >
-                    <span className="font-mono text-xs font-normal tracking-[0.22em] text-volt">
-                      0{i + 1}
+                    <span dir="ltr" className="font-mono text-xs font-normal tracking-[0.22em] text-mist">
+                      0{i + 1} <span className="text-mist/50">//</span>
                     </span>
                     {l.label}
                   </motion.a>
@@ -150,7 +144,7 @@ export function Navbar() {
               ))}
             </motion.nav>
             <div className="shell absolute bottom-10 flex w-full items-center justify-between font-mono text-[11px] uppercase tracking-[0.22em] text-mist">
-              <span>Solution House</span>
+              <span className="kicker">Solution House</span>
               <span>תל אביב — 2026</span>
             </div>
           </motion.div>

@@ -55,8 +55,12 @@ export function SectionHeader({
         variants={fadeUp}
         className="mb-12 mt-6 flex items-baseline justify-between font-mono text-[11px] uppercase tracking-[0.22em] text-mist"
       >
-        <span className="text-volt">{index}</span>
-        <span>{label}</span>
+        <span dir="ltr">
+          <span className="text-dot">{index}</span>
+          <span className="text-mist/50"> // </span>
+          <span>05</span>
+        </span>
+        <span className="kicker">{label}</span>
       </motion.div>
       <h2 className="max-w-[20ch] text-[clamp(2.6rem,6.5vw,5.5rem)] font-black leading-[1.02] tracking-tightest text-ivory">
         {typeof title === "string" ? (

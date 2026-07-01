@@ -46,11 +46,11 @@ export function Preloader() {
           className="fixed inset-0 z-[100]"
           exit={{ pointerEvents: "none" }}
         >
-          {/* volt chaser — revealed for a beat as the ink curtain lifts */}
+          {/* white chaser — revealed for a beat as the ink curtain lifts */}
           <motion.div
             exit={{ y: "-100%" }}
             transition={{ duration: 0.8, ease: CURTAIN_EASE, delay: 0.14 }}
-            className="absolute inset-0 bg-volt"
+            className="absolute inset-0 bg-ivory"
           />
           {/* ink curtain with the mark + counter */}
           <motion.div
@@ -65,8 +65,12 @@ export function Preloader() {
             >
               <LogoMark className="h-20 w-20 text-ivory sm:h-24 sm:w-24" />
             </motion.div>
-            <div dir="ltr" className="absolute bottom-10 left-1/2 -translate-x-1/2 font-mono text-[12px] tracking-[0.3em] text-mist">
-              <span className="text-volt">{String(count).padStart(3, "0")}</span> / 100
+            <div className="absolute bottom-10 inset-x-0 flex flex-col items-center gap-3">
+              <span className="kicker animate-blink">בית פתרונות טכנולוגיים</span>
+              <span dir="ltr" className="font-mono text-[12px] tracking-[0.3em] text-mist">
+                <span className="text-dot">{String(count).padStart(3, "0")}</span>
+                <span className="text-mist/50"> // </span>100
+              </span>
             </div>
           </motion.div>
         </motion.div>

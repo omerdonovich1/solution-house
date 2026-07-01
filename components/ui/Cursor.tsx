@@ -86,7 +86,7 @@ export function Cursor() {
           className={cn(
             "grid -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border transition-colors duration-300",
             state === "view"
-              ? "border-transparent bg-volt"
+              ? "border-transparent bg-ivory"
               : "border-ivory/30 bg-transparent"
           )}
         >

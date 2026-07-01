@@ -15,7 +15,7 @@ import { ArrowLeft } from "lucide-react";
 import { EASE, blurIn, fadeUp, maskRise } from "@/lib/motion";
 import { MeshGradient } from "@/components/ui/MeshGradient";
 import { MagneticButton } from "@/components/ui/MagneticButton";
-import { LogoMark } from "@/components/ui/Logo";
+import { DotMatrix } from "@/components/ui/DotMatrix";
 
 const TOOLS = [
   "מערכות מתקדמות",
@@ -25,6 +25,10 @@ const TOOLS = [
   "אינטגרציות",
   "דאשבורדים",
 ] as const;
+
+// Ghost word-cascades flanking the composition (nudot's ambient type).
+const CASCADE_A = TOOLS.slice(0, 3);
+const CASCADE_B = TOOLS.slice(3);
 
 // Choreographed to land as the preloader curtain clears.
 const heroStagger = {
@@ -51,6 +55,39 @@ function Words({ text, className }: { text: string; className?: string }) {
         </span>
       ))}
     </>
+  );
+}
+
+/** Drifting stack of ghost service-words, indented diagonally. */
+function Cascade({
+  words,
+  className,
+  slow = false,
+}: {
+  words: readonly string[];
+  className?: string;
+  slow?: boolean;
+}) {
+  return (
+    <motion.div
+      aria-hidden
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1.4, ease: EASE, delay: 2.2 }}
+      className={className}
+    >
+      <div className={slow ? "animate-drift-slow" : "animate-drift"}>
+        {words.map((w, i) => (
+          <div
+            key={w}
+            className="whitespace-nowrap font-mono text-[11px] uppercase tracking-[0.2em] text-mist/40"
+            style={{ paddingInlineStart: i * 18, paddingBlock: 7 }}
+          >
+            {w}
+          </div>
+        ))}
+      </div>
+    </motion.div>
   );
 }
 
@@ -88,7 +125,7 @@ function VelocityMarquee() {
                 className="flex items-center gap-10 ps-10 font-mono text-sm uppercase tracking-[0.06em] text-mist"
               >
                 {t}
-                <span className="text-volt">/</span>
+                <span className="text-dot">/</span>
               </span>
             ))}
           </div>
@@ -105,30 +142,28 @@ export function Hero() {
     target: ref,
     offset: ["start start", "end start"],
   });
-  // Slow editorial parallax — the headline recedes as you scroll past.
+  // Slow editorial parallax — the composition recedes as you scroll past.
   const y = useTransform(scrollYProgress, [0, 1], [0, reduced ? 0 : 140]);
   const fade = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
-  const markY = useTransform(scrollYProgress, [0, 1], [0, reduced ? 0 : -80]);
 
   return (
     <section
       ref={ref}
       id="top"
-      className="relative flex min-h-svh flex-col justify-center overflow-hidden pb-12 pt-36"
+      className="relative flex min-h-svh flex-col justify-center overflow-hidden pb-10 pt-36"
     >
       <MeshGradient />
 
-      {/* the mark, monumental — an outline watermark anchoring the composition */}
-      <motion.div
-        aria-hidden
-        style={{ y: markY }}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.6, ease: EASE, delay: 1.6 }}
-        className="pointer-events-none absolute -left-[8%] top-1/2 -translate-y-1/2 text-ivory/[0.16]"
-      >
-        <LogoMark outline className="h-[78vh] w-[78vh]" />
-      </motion.div>
+      {/* ambient ghost cascades */}
+      <Cascade
+        words={CASCADE_A}
+        className="absolute right-[4%] top-[24%] z-0 hidden lg:block"
+      />
+      <Cascade
+        words={CASCADE_B}
+        slow
+        className="absolute bottom-[30%] left-[4%] z-0 hidden lg:block"
+      />
 
       <motion.div style={{ y, opacity: fade }} className="relative z-10 shell">
         {/* meta row */}
@@ -136,7 +171,7 @@ export function Hero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, ease: EASE, delay: 1.2 }}
-          className="mb-14 flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.22em] text-mist"
+          className="mb-12 flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.22em] text-mist"
         >
           <span className="kicker">Solution House</span>
           <span className="hidden gap-6 sm:flex">
@@ -146,15 +181,24 @@ export function Hero() {
           </span>
         </motion.div>
 
-        {/* word-staggered, masked headline */}
+        {/* monumental, word-staggered headline — nudot edge-bleed scale */}
         <motion.h1
           initial="hidden"
           animate="show"
           variants={heroStagger}
-          className="font-black leading-[0.98] tracking-tightest text-[clamp(3rem,9.8vw,9.5rem)] text-ivory"
+          className="font-black leading-[0.94] tracking-tightest text-[clamp(3.2rem,11.5vw,11rem)] text-ivory"
         >
           <span className="block">
-            <Words text="בונים את התשתית" />
+            <Words text="בונים את" />
+          </span>
+          <span className="flex flex-wrap items-center gap-x-8">
+            <Words text="התשתית" />
+            <motion.span
+              variants={blurIn}
+              className="kicker hidden pb-[0.5em] md:inline-flex"
+            >
+              בית פתרונות טכנולוגיים
+            </motion.span>
           </span>
           <span className="block">
             <Words text="להצלחה" />
@@ -162,13 +206,17 @@ export function Hero() {
           </span>
         </motion.h1>
 
-        {/* sub + magnetic CTA */}
+        {/* sub + magnetic CTA + dot-matrix anchor */}
         <motion.div
           initial="hidden"
           animate="show"
           variants={heroStagger}
-          className="mt-14 grid items-end gap-10 md:grid-cols-[1fr_auto]"
+          className="mt-14 grid items-end gap-10 md:grid-cols-[auto_1fr_auto]"
         >
+          <motion.div variants={blurIn} className="hidden md:block">
+            <DotMatrix size={10} gap={5} />
+          </motion.div>
+
           <motion.p
             variants={blurIn}
             className="max-w-xl text-lg font-light leading-relaxed text-mist sm:text-xl"

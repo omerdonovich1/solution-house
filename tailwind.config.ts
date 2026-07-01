@@ -1,21 +1,21 @@
 import type { Config } from "tailwindcss";
 
 /**
- * "Ink & Ivory" design system — hyper-premium monochrome.
- * Warm near-black ink, gallery-white ivory type, hairline borders,
- * and a single volt accent reserved for signals only.
+ * "DOT" design system — nudot-grade typographic monochrome.
+ * Pure black canvas, white display type, neutral grays — and a single
+ * amber "dot" (from the brand mark) as the only color on the site.
  *
- * Legacy token names (bg, card, text, bright, steel, glow) are kept as
- * aliases into the new palette so older components stay coherent.
+ * Legacy token names (bg, card, text, bright, steel, glow, volt) are kept
+ * as aliases into the new palette so older components stay coherent.
  */
 const palette = {
-  ink: "#0A0A0B", // page base — warm near-black
-  surface: "#121214", // raised panel
-  elevated: "#1A1A1D", // hover / second-level panel
-  ivory: "#F2F1EC", // primary type — warm gallery white
-  body: "#C9C8C2", // long-form text
-  mist: "#8A8A85", // secondary / meta
-  volt: "#D9FF3F", // the single accent — signals only
+  ink: "#050505", // page base — pure-ish black
+  surface: "#0D0D0D", // raised panel
+  elevated: "#161616", // hover / second-level panel
+  ivory: "#F4F4F2", // primary type — near-white
+  body: "#C7C7C5", // long-form text
+  mist: "#8B8B89", // secondary / meta
+  dot: "#D9A13B", // THE dot — the site's only color
 } as const;
 
 const config: Config = {
@@ -28,13 +28,14 @@ const config: Config = {
       colors: {
         ...palette,
         // legacy aliases
+        volt: palette.dot,
         bg: palette.ink,
         "bg-2": palette.surface,
         card: palette.surface,
         text: palette.body,
         bright: palette.ivory,
         steel: palette.mist,
-        glow: palette.volt,
+        glow: palette.dot,
       },
       fontFamily: {
         sans: ["var(--font-rubik)", "system-ui", "sans-serif"],
@@ -54,13 +55,13 @@ const config: Config = {
           from: { transform: "translateX(0)" },
           to: { transform: "translateX(-50%)" },
         },
-        meshA: {
-          "0%,100%": { transform: "translate3d(-4%,-3%,0) scale(1.05)" },
-          "50%": { transform: "translate3d(4%,4%,0) scale(1.18)" },
+        blink: {
+          "0%,100%": { opacity: "1" },
+          "50%": { opacity: "0.15" },
         },
-        meshB: {
-          "0%,100%": { transform: "translate3d(6%,2%,0) scale(1.12)" },
-          "50%": { transform: "translate3d(-6%,-4%,0) scale(1)" },
+        drift: {
+          "0%,100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-28px)" },
         },
         shimmer: {
           from: { backgroundPosition: "0 0" },
@@ -69,8 +70,9 @@ const config: Config = {
       },
       animation: {
         marquee: "marquee 42s linear infinite",
-        "mesh-a": "meshA 22s ease-in-out infinite",
-        "mesh-b": "meshB 26s ease-in-out infinite",
+        blink: "blink 1.6s steps(1) infinite",
+        drift: "drift 16s ease-in-out infinite",
+        "drift-slow": "drift 22s ease-in-out infinite",
         shimmer: "shimmer 3s linear infinite",
       },
     },

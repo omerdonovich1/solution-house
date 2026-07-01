@@ -12,7 +12,7 @@ export function Approach() {
     <section id="approach" className="py-32 sm:py-48">
       <div className="shell">
         <SectionHeader
-          index="(01)"
+          index="01"
           label="הגישה שלנו"
           title="ההבדל — תמיד מתחילים מהבעיה, לא מהפתרון."
           lead={

@@ -63,7 +63,7 @@ export function MagneticButton({
       className={cn(
         "group relative inline-flex items-center justify-center gap-2 rounded-pill px-8 py-4 text-[15px] font-semibold transition-[background-color,border-color,color] duration-300 will-change-transform",
         variant === "solid"
-          ? "bg-volt text-ink hover:bg-ivory"
+          ? "bg-ivory text-ink hover:bg-dot"
           : "border border-white/15 bg-transparent text-ivory hover:border-ivory/60",
         className
       )}

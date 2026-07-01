@@ -6,8 +6,10 @@ import { ArrowUpLeft, ChevronLeft, ChevronRight } from "lucide-react";
 import { SectionHeader } from "@/components/SectionHeader";
 import { PROJECTS, type Project } from "@/lib/data";
 import { fadeUp, viewportOnce } from "@/lib/motion";
+import { cn } from "@/lib/utils";
 
 const TILT = 5; // deg
+const TICKS = 48; // scrubber ruler density
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   const external = project.href.startsWith("http");
@@ -54,7 +56,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           onError={(e) => {
             (e.currentTarget as HTMLImageElement).style.display = "none";
           }}
-          className="relative h-full w-full object-cover grayscale-[45%] transition-[transform,filter] duration-700 ease-out group-hover:scale-[1.05] group-hover:grayscale-0"
+          className="relative h-full w-full object-cover grayscale transition-[transform,filter] duration-700 ease-out group-hover:scale-[1.05] group-hover:grayscale-0"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/5 to-transparent" />
         {/* index figure */}
@@ -131,7 +133,7 @@ export function ProjectsCarousel() {
     <section id="projects" className="py-32 sm:py-48">
       <div className="shell">
         <SectionHeader
-          index="(02)"
+          index="02"
           label="פרויקטים"
           title="עבודות שכבר בנינו."
           lead="בכל פרויקט זיהינו בעיה עסקית, בחרנו את הדרך הישירה אליה — והמשכנו לפתח את הפתרון גם אחרי ההשקה."
@@ -178,15 +180,25 @@ export function ProjectsCarousel() {
           </div>
 
           <div className="flex flex-1 items-center gap-6">
-            <div className="relative h-px flex-1 bg-white/10">
-              <span
-                className="absolute inset-y-0 right-0 bg-volt transition-[width] duration-200"
-                style={{ width: `${Math.max(progress * 100, 2)}%` }}
-              />
+            {/* tick scrubber — the nudot filmstrip ruler */}
+            <div className="flex flex-1 items-end justify-between gap-[2px]" aria-hidden>
+              {Array.from({ length: TICKS }, (_, i) => {
+                const filled = i / (TICKS - 1) <= progress;
+                const head = Math.round(progress * (TICKS - 1)) === i;
+                return (
+                  <span
+                    key={i}
+                    className={cn(
+                      "w-px transition-all duration-200",
+                      head ? "h-5 bg-dot" : filled ? "h-3 bg-ivory/70" : "h-2.5 bg-white/15"
+                    )}
+                  />
+                );
+              })}
             </div>
-            <span className="font-mono text-[11px] tracking-[0.22em] text-mist">
-              {String(page + 1).padStart(2, "0")}
-              <span className="mx-1 text-mist/50">/</span>
+            <span dir="ltr" className="font-mono text-[11px] tracking-[0.22em] text-mist">
+              <span className="text-ivory">{String(page + 1).padStart(2, "0")}</span>
+              <span className="mx-1 text-mist/50">//</span>
               {String(PROJECTS.length).padStart(2, "0")}
             </span>
           </div>

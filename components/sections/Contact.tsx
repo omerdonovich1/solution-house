@@ -50,7 +50,7 @@ export function Contact() {
     <section id="contact" className="mx-auto max-w-3xl py-32 sm:py-48">
       <div className="shell">
         <SectionHeader
-          index="(05)"
+          index="05"
           label="בואו נפתור את זה"
           title="ספרו לנו על האתגר שלכם."
           lead="שיחה אחת כדי להבין את הבעיה, לבנות את הדרך קדימה ולהעריך עלויות. בלי הבטחות שלא נוכל לעמוד בהן."
@@ -76,7 +76,7 @@ export function Contact() {
           <button
             type="submit"
             disabled={status === "loading"}
-            className="sm:col-span-2 mt-2 rounded-pill bg-volt px-6 py-4 text-base font-bold text-ink transition-[transform,background-color] duration-300 hover:-translate-y-0.5 hover:bg-ivory disabled:opacity-60"
+            className="sm:col-span-2 mt-2 rounded-pill bg-ivory px-6 py-4 text-base font-bold text-ink transition-[transform,background-color] duration-300 hover:-translate-y-0.5 hover:bg-dot disabled:opacity-60"
           >
             {button}
           </button>
