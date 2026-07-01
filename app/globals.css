@@ -11,8 +11,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-html {
-  scroll-behavior: smooth;
+/* Lenis drives scrolling; native smooth-behavior would fight it. */
+html.has-cursor,
+html.has-cursor * {
+  cursor: none !important;
 }
 
 body {
@@ -98,12 +100,15 @@ body {
     -webkit-text-stroke: 1px rgba(242, 241, 236, 0.22);
     color: transparent;
   }
+
+  /* Ink outline variant — for display type on the volt block */
+  .text-stroke-ink {
+    -webkit-text-stroke: 2px rgba(10, 10, 11, 0.85);
+    color: transparent;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
   .animate-marquee,
   .animate-mesh-a,
   .animate-mesh-b,

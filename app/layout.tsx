@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { Rubik, JetBrains_Mono } from "next/font/google";
 import { cn } from "@/lib/utils";
+import { SmoothScroll } from "@/components/providers/SmoothScroll";
+import { Cursor } from "@/components/ui/Cursor";
+import { Preloader } from "@/components/Preloader";
+import "lenis/dist/lenis.css";
 import "./globals.css";
 
 // Rubik = clean geometric sans with full Hebrew support (Geist/Inter equivalent).
@@ -13,7 +17,7 @@ const rubik = Rubik({
 
 const mono = JetBrains_Mono({
   subsets: ["latin"],
-  weight: ["400", "500"],
+  weight: ["400", "500", "700"],
   variable: "--font-mono",
   display: "swap",
 });
@@ -35,7 +39,12 @@ export default function RootLayout({
       dir="rtl"
       className={cn(rubik.variable, mono.variable, "grain")}
     >
-      <body className="font-sans antialiased">{children}</body>
+      <body className="font-sans antialiased">
+        <Preloader />
+        <Cursor />
+        <SmoothScroll />
+        {children}
+      </body>
     </html>
   );
 }

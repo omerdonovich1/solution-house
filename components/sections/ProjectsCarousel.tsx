@@ -1,22 +1,44 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 import { ArrowUpLeft, ChevronLeft, ChevronRight } from "lucide-react";
 import { SectionHeader } from "@/components/SectionHeader";
 import { PROJECTS, type Project } from "@/lib/data";
 import { fadeUp, viewportOnce } from "@/lib/motion";
-import { cn } from "@/lib/utils";
+
+const TILT = 5; // deg
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   const external = project.href.startsWith("http");
+  const rx = useMotionValue(0);
+  const ry = useMotionValue(0);
+  const srx = useSpring(rx, { stiffness: 180, damping: 18, mass: 0.4 });
+  const sry = useSpring(ry, { stiffness: 180, damping: 18, mass: 0.4 });
+
+  function onMove(e: React.MouseEvent<HTMLAnchorElement>) {
+    const r = e.currentTarget.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width - 0.5;
+    const py = (e.clientY - r.top) / r.height - 0.5;
+    rx.set(-py * TILT * 2);
+    ry.set(px * TILT * 2);
+  }
+  function onLeave() {
+    rx.set(0);
+    ry.set(0);
+  }
+
   return (
-    <a
+    <motion.a
       href={project.href}
       target={external ? "_blank" : undefined}
       rel={external ? "noopener noreferrer" : undefined}
       draggable={false}
-      className="group relative flex w-[82vw] shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-white/[0.08] bg-surface transition-[border-color,transform] duration-500 hover:border-white/25 sm:w-[440px] lg:w-[520px]"
+      data-cursor="view"
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
+      style={{ rotateX: srx, rotateY: sry, transformPerspective: 1100 }}
+      className="group relative flex w-[82vw] shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-white/[0.08] bg-surface transition-[border-color] duration-500 will-change-transform hover:border-white/25 sm:w-[440px] lg:w-[520px]"
     >
       {/* media */}
       <div className="relative aspect-[16/10] overflow-hidden">
@@ -32,7 +54,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           onError={(e) => {
             (e.currentTarget as HTMLImageElement).style.display = "none";
           }}
-          className="relative h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+          className="relative h-full w-full object-cover grayscale-[45%] transition-[transform,filter] duration-700 ease-out group-hover:scale-[1.05] group-hover:grayscale-0"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/5 to-transparent" />
         {/* index figure */}
@@ -66,7 +88,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         </div>
         <ArrowUpLeft className="mt-1.5 h-5 w-5 shrink-0 text-mist transition-all duration-500 group-hover:-translate-x-1 group-hover:translate-y-[-2px] group-hover:text-volt" />
       </div>
-    </a>
+    </motion.a>
   );
 }
 
@@ -112,7 +134,7 @@ export function ProjectsCarousel() {
           index="(02)"
           label="פרויקטים"
           title="עבודות שכבר בנינו."
-          lead="בכל פרויקט, כיצבנו בעיה עסקית, בחרנו את הדרך הישירה, וגדלנו את הפתרון אחרי ההשקה."
+          lead="בכל פרויקט זיהינו בעיה עסקית, בחרנו את הדרך הישירה אליה — והמשכנו לפתח את הפתרון גם אחרי ההשקה."
         />
       </div>
 
