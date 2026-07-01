@@ -58,7 +58,7 @@ export function SectionHeader({
         <span dir="ltr">
           <span className="text-dot">{index}</span>
           <span className="text-mist/50"> // </span>
-          <span>05</span>
+          <span>04</span>
         </span>
         <span className="kicker">{label}</span>
       </motion.div>

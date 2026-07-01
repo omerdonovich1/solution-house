@@ -50,7 +50,7 @@ export function Contact() {
     <section id="contact" className="mx-auto max-w-3xl py-32 sm:py-48">
       <div className="shell">
         <SectionHeader
-          index="05"
+          index="04"
           label="בואו נפתור את זה"
           title="ספרו לנו על האתגר שלכם."
           lead="שיחה אחת כדי להבין את הבעיה, לבנות את הדרך קדימה ולהעריך עלויות. בלי הבטחות שלא נוכל לעמוד בהן."

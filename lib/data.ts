@@ -143,6 +143,5 @@ export const NAV_LINKS: readonly { href: string; label: string }[] = [
   { href: "#approach", label: "הגישה" },
   { href: "#projects", label: "פרויקטים" },
   { href: "#process", label: "איך זה עובד" },
-  { href: "#team", label: "צוות" },
   { href: "#contact", label: "צור קשר" },
 ] as const;
