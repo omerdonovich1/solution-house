@@ -114,6 +114,7 @@ function VelocityMarquee() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1.2, ease: EASE, delay: 2 }}
+      dir="ltr"
       className="relative z-10 mt-24 select-none overflow-hidden border-y border-white/[0.08] py-5 [mask-image:linear-gradient(90deg,transparent,#000_12%,#000_88%,transparent)]"
     >
       <motion.div style={{ x, skewX: skew }} className="flex w-max">
@@ -145,6 +146,9 @@ export function Hero() {
   // Slow editorial parallax — the composition recedes as you scroll past.
   const y = useTransform(scrollYProgress, [0, 1], [0, reduced ? 0 : 140]);
   const fade = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+  // Headline rows shear apart in opposite directions on scroll.
+  const rowShift = useTransform(scrollYProgress, [0, 1], [0, reduced ? 0 : 90]);
+  const rowShiftBack = useTransform(rowShift, (v) => -v);
 
   return (
     <section
@@ -188,9 +192,9 @@ export function Hero() {
           variants={heroStagger}
           className="font-black leading-[0.94] tracking-tightest text-[clamp(3.2rem,11.5vw,11rem)] text-ivory"
         >
-          <span className="block">
+          <motion.span style={{ x: rowShift }} className="block">
             <Words text="בונים את" />
-          </span>
+          </motion.span>
           <span className="flex flex-wrap items-center gap-x-8">
             <Words text="התשתית" />
             <motion.span
@@ -200,10 +204,10 @@ export function Hero() {
               בית פתרונות טכנולוגיים
             </motion.span>
           </span>
-          <span className="block">
+          <motion.span style={{ x: rowShiftBack }} className="block">
             <Words text="להצלחה" />
             <Words text="שלכם." className="text-mist" />
-          </span>
+          </motion.span>
         </motion.h1>
 
         {/* sub + magnetic CTA + dot-matrix anchor */}

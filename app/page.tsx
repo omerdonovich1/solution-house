@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/sections/Hero";
+import { ShowcaseScene } from "@/components/sections/ShowcaseScene";
 import { Approach } from "@/components/sections/Approach";
 import { ProjectsCarousel } from "@/components/sections/ProjectsCarousel";
 import { Process } from "@/components/sections/Process";
@@ -14,6 +15,7 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
+        <ShowcaseScene />
         <Approach />
         <ProjectsCarousel />
         <Process />

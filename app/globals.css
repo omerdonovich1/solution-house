@@ -110,6 +110,17 @@ body {
     -webkit-text-stroke: 2px rgba(10, 10, 11, 0.85);
     color: transparent;
   }
+
+  /* LED dot-matrix type — letters sampled through a dot grid (nudot ticker) */
+  .led-text {
+    --led: rgba(244, 244, 242, 0.92);
+    background-image: radial-gradient(circle, var(--led) 30%, transparent 34%);
+    background-size: 0.13em 0.13em;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
