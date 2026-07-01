@@ -6,15 +6,15 @@ import { cn } from "@/lib/utils";
 interface GlowingCardProps {
   children: ReactNode;
   className?: string;
-  /** Emphasised card — persistent glowing border + lifted depth. */
+  /** Emphasised card — inverted ivory panel, the system's loudest statement. */
   highlight?: boolean;
 }
 
 /**
- * Premium surface: solid Navy card, 1px border, ambient shadow, and a
- * cursor-following radial glow on hover. The glow position is written to a CSS
- * variable on pointer-move (no React re-render churn, no backdrop-filter → no
- * flicker). Compose inside an <a> for clickable cards.
+ * Minimal premium surface: hairline border, quiet lift on hover, and a
+ * cursor-following spotlight written to CSS variables on pointer-move
+ * (no React re-render churn). `highlight` inverts the panel to ivory —
+ * pair it with ink-toned content.
  */
 export function GlowingCard({
   children,
@@ -36,20 +36,21 @@ export function GlowingCard({
       ref={ref}
       onPointerMove={onMove}
       className={cn(
-        "group relative h-full overflow-hidden rounded-2xl border bg-card transition-[transform,border-color,box-shadow] duration-300 will-change-transform",
+        "group relative h-full overflow-hidden rounded-2xl border transition-[transform,border-color,box-shadow] duration-500 will-change-transform",
         highlight
-          ? "border-glow/40 shadow-[0_40px_90px_-40px_rgba(0,0,0,0.9),0_0_60px_-30px_rgba(91,124,255,0.5)]"
-          : "border-white/10 shadow-[0_34px_80px_-42px_rgba(0,0,0,0.85)] hover:-translate-y-1 hover:border-white/25",
+          ? "border-transparent bg-ivory shadow-[0_50px_100px_-40px_rgba(0,0,0,0.9)]"
+          : "border-white/[0.08] bg-surface shadow-[0_40px_90px_-48px_rgba(0,0,0,0.9)] hover:-translate-y-1.5 hover:border-white/20",
         className
       )}
     >
-      {/* cursor-following radial glow */}
+      {/* cursor-following spotlight */}
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
         style={{
-          background:
-            "radial-gradient(300px circle at var(--mx) var(--my), rgba(91,124,255,0.14), transparent 70%)",
+          background: highlight
+            ? "radial-gradient(320px circle at var(--mx) var(--my), rgba(10,10,11,0.05), transparent 70%)"
+            : "radial-gradient(320px circle at var(--mx) var(--my), rgba(242,241,236,0.06), transparent 70%)",
         }}
       />
       <div className="relative z-[1] h-full">{children}</div>

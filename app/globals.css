@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --shell-pad: clamp(20px, 5vw, 80px);
+  --shell-pad: clamp(20px, 5vw, 88px);
 }
 
 * {
@@ -16,14 +16,35 @@ html {
 }
 
 body {
-  background-color: theme("colors.bg");
-  color: theme("colors.text");
+  background-color: theme("colors.ink");
+  color: theme("colors.body");
   overflow-x: hidden;
 }
 
 ::selection {
-  background: theme("colors.bright");
-  color: theme("colors.bg");
+  background: theme("colors.volt");
+  color: theme("colors.ink");
+}
+
+/* Hairline gallery scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: theme("colors.ink");
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(242, 241, 236, 0.14);
+  border-radius: 100px;
+  border: 3px solid theme("colors.ink");
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(242, 241, 236, 0.28);
+}
+
+:focus-visible {
+  outline: 1px solid theme("colors.volt");
+  outline-offset: 3px;
 }
 
 @layer components {
@@ -35,28 +56,29 @@ body {
     padding-inline: var(--shell-pad);
   }
 
-  /* Mono kicker label used above section titles */
+  /* Mono kicker label used above section titles — volt signal square */
   .kicker {
-    @apply inline-flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-[0.18em] text-steel;
+    @apply inline-flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.22em] text-mist;
   }
   .kicker::before {
     content: "";
-    width: 30px;
-    height: 1px;
-    background: linear-gradient(90deg, theme("colors.glow"), transparent);
+    width: 6px;
+    height: 6px;
+    background: theme("colors.volt");
   }
 }
 
 @layer utilities {
-  /* 1px border that glows along the top edge — section separator */
+  /* 1px neutral hairline — the system's only divider */
+  .hairline {
+    height: 1px;
+    background: rgba(242, 241, 236, 0.1);
+  }
+
+  /* legacy name kept for older components */
   .glow-divider {
     height: 1px;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(91, 124, 255, 0.5),
-      transparent
-    );
+    background: rgba(242, 241, 236, 0.1);
   }
 
   /* Tactile, atmospheric grain overlay */
@@ -66,9 +88,15 @@ body {
     inset: 0;
     z-index: 60;
     pointer-events: none;
-    opacity: 0.05;
+    opacity: 0.04;
     mix-blend-mode: overlay;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Ghost display figures — outlined type for oversized numerals */
+  .text-stroke {
+    -webkit-text-stroke: 1px rgba(242, 241, 236, 0.22);
+    color: transparent;
   }
 }
 

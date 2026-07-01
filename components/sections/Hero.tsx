@@ -1,8 +1,14 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import { ArrowLeft } from "lucide-react";
-import { EASE, fadeUp, maskRise, stagger } from "@/lib/motion";
+import { EASE, blurIn, fadeUp, maskRise, stagger } from "@/lib/motion";
 import { MeshGradient } from "@/components/ui/MeshGradient";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 
@@ -17,7 +23,7 @@ const TOOLS = [
 
 function HeadlineLine({ children }: { children: React.ReactNode }) {
   return (
-    <span className="block overflow-hidden pb-[0.05em]">
+    <span className="block overflow-hidden pb-[0.06em]">
       <motion.span variants={maskRise} className="block">
         {children}
       </motion.span>
@@ -26,34 +32,50 @@ function HeadlineLine({ children }: { children: React.ReactNode }) {
 }
 
 export function Hero() {
+  const ref = useRef<HTMLElement>(null);
+  const reduced = useReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"],
+  });
+  // Slow editorial parallax — the headline recedes as you scroll past.
+  const y = useTransform(scrollYProgress, [0, 1], [0, reduced ? 0 : 140]);
+  const fade = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+
   return (
     <section
+      ref={ref}
       id="top"
       className="relative flex min-h-svh flex-col justify-center overflow-hidden pb-12 pt-36"
     >
       <MeshGradient />
 
-      <div className="relative z-10 shell">
+      <motion.div style={{ y, opacity: fade }} className="relative z-10 shell">
         {/* meta row */}
-        <div className="mb-12 flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.16em] text-steel">
-          <span>Solution House</span>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, ease: EASE, delay: 0.2 }}
+          className="mb-14 flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.22em] text-mist"
+        >
+          <span className="kicker">Solution House</span>
           <span className="hidden gap-6 sm:flex">
             <span>תל אביב</span>
             <span>—</span>
             <span>2026</span>
           </span>
-        </div>
+        </motion.div>
 
         {/* staggered, masked headline */}
         <motion.h1
           initial="hidden"
           animate="show"
           variants={stagger}
-          className="font-black leading-[0.9] tracking-tightest text-[clamp(3.2rem,12vw,11rem)] text-bright"
+          className="font-black leading-[0.92] tracking-tightest text-[clamp(3.2rem,11.5vw,10.5rem)] text-ivory"
         >
           <HeadlineLine>בונים את התשתית</HeadlineLine>
           <HeadlineLine>
-            להצלחה <span className="text-steel">שלכם.</span>
+            להצלחה <span className="text-mist">שלכם.</span>
           </HeadlineLine>
         </motion.h1>
 
@@ -62,14 +84,14 @@ export function Hero() {
           initial="hidden"
           animate="show"
           variants={stagger}
-          className="mt-12 grid items-end gap-10 md:grid-cols-[1fr_auto]"
+          className="mt-14 grid items-end gap-10 md:grid-cols-[1fr_auto]"
         >
           <motion.p
-            variants={fadeUp}
-            className="max-w-xl text-lg leading-relaxed text-steel sm:text-xl"
+            variants={blurIn}
+            className="max-w-xl text-lg font-light leading-relaxed text-mist sm:text-xl"
           >
             יש לך אתגר עסקי. אנחנו בונים את הפתרון המדויק עבורו.{" "}
-            <strong className="font-semibold text-bright">
+            <strong className="font-semibold text-ivory">
               אנחנו תמיד נבחר את הטכנולוגיה והדרך שיעבדו הכי טוב עבור העסק שלך.
             </strong>
           </motion.p>
@@ -84,14 +106,14 @@ export function Hero() {
             </MagneticButton>
           </motion.div>
         </motion.div>
-      </div>
+      </motion.div>
 
       {/* tools marquee */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 1, ease: EASE, delay: 1.2 }}
-        className="relative z-10 mt-20 select-none overflow-hidden border-y border-white/10 py-5 [mask-image:linear-gradient(90deg,transparent,#000_12%,#000_88%,transparent)]"
+        transition={{ duration: 1.2, ease: EASE, delay: 1.3 }}
+        className="relative z-10 mt-24 select-none overflow-hidden border-y border-white/[0.08] py-5 [mask-image:linear-gradient(90deg,transparent,#000_12%,#000_88%,transparent)]"
       >
         <div className="flex w-max animate-marquee">
           {[0, 1].map((dup) => (
@@ -99,10 +121,10 @@ export function Hero() {
               {TOOLS.map((t) => (
                 <span
                   key={t}
-                  className="flex items-center gap-10 ps-10 font-mono text-sm uppercase tracking-[0.05em] text-steel"
+                  className="flex items-center gap-10 ps-10 font-mono text-sm uppercase tracking-[0.06em] text-mist"
                 >
                   {t}
-                  <span className="text-glow">/</span>
+                  <span className="text-volt">/</span>
                 </span>
               ))}
             </div>

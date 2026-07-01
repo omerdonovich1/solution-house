@@ -9,10 +9,11 @@ const EMAIL = "hello@solution.house";
 
 type Status = "idle" | "loading" | "done" | "error";
 
+/* Underline-only fields — gallery-minimal, focus warms to volt. */
 const field =
-  "w-full rounded-xl border border-white/10 bg-card px-4 py-3.5 text-[15px] text-bright outline-none transition-[border-color,box-shadow] placeholder:text-steel/50 focus:border-glow/60 focus:shadow-[0_0_0_3px_rgba(91,124,255,0.12)]";
+  "w-full border-0 border-b border-white/[0.12] bg-transparent px-0 py-3.5 text-base text-ivory outline-none transition-[border-color] duration-300 placeholder:text-mist/40 focus:border-volt";
 const label =
-  "mb-2 block font-mono text-[11px] uppercase tracking-[0.1em] text-steel";
+  "mb-1 block font-mono text-[11px] uppercase tracking-[0.18em] text-mist";
 
 export function Contact() {
   const [status, setStatus] = useState<Status>("idle");
@@ -46,7 +47,7 @@ export function Contact() {
       : "שליחה";
 
   return (
-    <section id="contact" className="mx-auto max-w-3xl py-32 sm:py-44">
+    <section id="contact" className="mx-auto max-w-3xl py-32 sm:py-48">
       <div className="shell">
         <SectionHeader
           index="(05)"
@@ -55,7 +56,7 @@ export function Contact() {
           lead="שיחה אחת כדי להבין את הבעיה, לבנות את הדרך קדימה ולהעריך עלויות. בלי הבטחות שלא נוכל לעמוד בהן."
         />
 
-        <form onSubmit={onSubmit} className="mt-12 grid gap-5 sm:grid-cols-2">
+        <form onSubmit={onSubmit} className="mt-14 grid gap-9 sm:grid-cols-2">
           <div>
             <label className={label} htmlFor="name">שם מלא</label>
             <input id="name" name="name" required placeholder="השם שלך" className={field} />
@@ -75,18 +76,18 @@ export function Contact() {
           <button
             type="submit"
             disabled={status === "loading"}
-            className="sm:col-span-2 rounded-pill bg-bright px-6 py-4 text-base font-semibold text-bg transition-transform duration-300 hover:-translate-y-0.5 disabled:opacity-60"
+            className="sm:col-span-2 mt-2 rounded-pill bg-volt px-6 py-4 text-base font-bold text-ink transition-[transform,background-color] duration-300 hover:-translate-y-0.5 hover:bg-ivory disabled:opacity-60"
           >
             {button}
           </button>
         </form>
 
-        <div className="mt-9 flex flex-wrap items-center gap-x-8 gap-y-3 text-[15px] text-steel">
+        <div className="mt-11 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-white/[0.08] pt-8 text-[15px] text-mist">
           <span>או ישירות:</span>
-          <a href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noopener noreferrer" className="font-medium text-bright hover:text-glow">
+          <a href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noopener noreferrer" className="font-medium text-ivory transition-colors duration-300 hover:text-volt">
             וואטסאפ ›
           </a>
-          <a href={`mailto:${EMAIL}`} className="font-medium text-bright hover:text-glow">
+          <a href={`mailto:${EMAIL}`} className="font-medium text-ivory transition-colors duration-300 hover:text-volt">
             {EMAIL} ›
           </a>
         </div>

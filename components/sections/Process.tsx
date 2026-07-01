@@ -15,43 +15,48 @@ function StepBlock({ step }: { step: ProcessStep }) {
     <div
       ref={ref}
       className={cn(
-        "relative grid grid-cols-[auto_1fr] gap-7 py-10 transition-all duration-500",
-        active ? "opacity-100" : "opacity-35"
+        "relative grid grid-cols-[auto_1fr] gap-8 py-12 transition-opacity duration-700 sm:gap-12",
+        active ? "opacity-100" : "opacity-30"
       )}
     >
-      {/* index + progress node */}
-      <div className="relative flex flex-col items-center">
+      {/* oversized ghost numeral + progress spine */}
+      <div className="relative flex w-[72px] flex-col items-center sm:w-[110px]">
         <span
           className={cn(
-            "grid h-12 w-12 shrink-0 place-items-center rounded-full border font-mono text-sm transition-all duration-500",
-            active
-              ? "border-glow/60 bg-glow/10 text-bright shadow-[0_0_30px_-6px_rgba(91,124,255,0.7)]"
-              : "border-white/12 text-steel"
+            "font-mono text-[clamp(2.6rem,6vw,4.5rem)] font-bold leading-none transition-all duration-700",
+            active ? "text-volt" : "text-stroke"
           )}
         >
           {step.index}
         </span>
-        <span className="mt-2 w-px flex-1 bg-white/10" />
+        <span className="relative mt-4 w-px flex-1 overflow-hidden bg-white/10">
+          <span
+            className={cn(
+              "absolute inset-x-0 top-0 h-full origin-top bg-volt/70 transition-transform duration-700 ease-out",
+              active ? "scale-y-100" : "scale-y-0"
+            )}
+          />
+        </span>
       </div>
 
       {/* content */}
       <div className="pb-2">
         <h3
           className={cn(
-            "text-[clamp(1.7rem,3.4vw,2.6rem)] font-extrabold tracking-tightest transition-colors duration-500",
-            active ? "text-bright" : "text-steel"
+            "text-[clamp(1.8rem,3.6vw,2.8rem)] font-black tracking-tightest transition-colors duration-700",
+            active ? "text-ivory" : "text-mist"
           )}
         >
           {step.title}
         </h3>
-        <p className="mt-4 max-w-xl text-base leading-relaxed text-steel">
+        <p className="mt-4 max-w-xl text-base font-light leading-relaxed text-mist">
           {step.description}
         </p>
-        <div className="mt-6 flex max-w-xl items-start gap-3 border-t border-white/10 pt-5">
-          <span className="mt-[2px] shrink-0 font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-glow">
+        <div className="mt-7 flex max-w-xl items-start gap-3 border-t border-white/[0.08] pt-5">
+          <span className="mt-[2px] shrink-0 font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-volt">
             Insight
           </span>
-          <p className="text-[15px] leading-relaxed text-text">{step.insight}</p>
+          <p className="text-[15px] leading-relaxed text-body">{step.insight}</p>
         </div>
       </div>
     </div>
@@ -60,7 +65,7 @@ function StepBlock({ step }: { step: ProcessStep }) {
 
 export function Process() {
   return (
-    <section id="process" className="py-32 sm:py-44">
+    <section id="process" className="py-32 sm:py-48">
       <div className="shell">
         <SectionHeader
           index="(03)"
@@ -73,8 +78,8 @@ export function Process() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mt-12 md:mt-16"
+          transition={{ duration: 0.8 }}
+          className="mt-12 md:mt-20"
         >
           {STEPS.map((s) => (
             <StepBlock key={s.index} step={s} />

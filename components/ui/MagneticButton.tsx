@@ -12,15 +12,16 @@ import { cn } from "@/lib/utils";
 interface MagneticButtonProps extends HTMLMotionProps<"a"> {
   href: string;
   children: ReactNode;
-  /** Filled bright-platinum CTA vs. ghost outline. */
+  /** Volt-filled primary CTA vs. hairline ghost. */
   variant?: "solid" | "ghost";
   /** Strength of the magnetic pull in px. */
   strength?: number;
 }
 
 /**
- * A magnetic, glowing CTA. The button (and its glow halo) lean toward the
- * cursor, then spring back. GPU-only transforms — no layout shift.
+ * A magnetic CTA. The button leans toward the cursor, then springs back.
+ * GPU-only transforms — no layout shift. Solid = the single volt accent;
+ * ghost = hairline outline that warms to ivory.
  */
 export function MagneticButton({
   href,
@@ -60,21 +61,14 @@ export function MagneticButton({
       style={{ x: sx, y: sy }}
       whileTap={{ scale: 0.97 }}
       className={cn(
-        "group relative inline-flex items-center justify-center gap-2 rounded-pill px-8 py-4 text-[15px] font-semibold transition-colors duration-300 will-change-transform",
+        "group relative inline-flex items-center justify-center gap-2 rounded-pill px-8 py-4 text-[15px] font-semibold transition-[background-color,border-color,color] duration-300 will-change-transform",
         variant === "solid"
-          ? "bg-bright text-bg"
-          : "border border-white/15 bg-white/[0.02] text-bright hover:border-glow/60",
+          ? "bg-volt text-ink hover:bg-ivory"
+          : "border border-white/15 bg-transparent text-ivory hover:border-ivory/60",
         className
       )}
       {...rest}
     >
-      {/* glow halo — only on the solid CTA */}
-      {variant === "solid" && (
-        <span
-          aria-hidden
-          className="absolute inset-0 -z-10 rounded-pill bg-glow opacity-40 blur-xl transition-opacity duration-300 group-hover:opacity-70"
-        />
-      )}
       {children}
     </motion.a>
   );

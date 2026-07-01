@@ -1,7 +1,9 @@
 /**
- * Sophisticated animated "deep space" mesh background:
- * two slow-drifting blurred gradient blobs + a masked grid.
- * Pure CSS transforms — hardware accelerated, zero layout shift.
+ * Gallery-light atmosphere: a soft ivory key light from above, a fine
+ * architectural grid fading out radially, and one whisper of volt drifting
+ * at the edge. Soft masses are pre-faded radial gradients (not filter blur),
+ * so the whole layer composites for free. Pure CSS transforms — hardware
+ * accelerated, zero layout shift.
  */
 export function MeshGradient() {
   return (
@@ -9,10 +11,13 @@ export function MeshGradient() {
       aria-hidden
       className="pointer-events-none absolute inset-0 overflow-hidden"
     >
-      <div className="absolute -top-1/3 right-[-10%] h-[70vh] w-[70vh] rounded-full bg-glow/20 blur-[120px] animate-mesh-a" />
-      <div className="absolute bottom-[-25%] left-[-8%] h-[60vh] w-[60vh] rounded-full bg-[#7C5BFF]/15 blur-[130px] animate-mesh-b" />
-      <div className="absolute inset-0 bg-[radial-gradient(60%_50%_at_50%_-10%,rgba(91,124,255,0.12),transparent_70%)]" />
-      <div className="absolute inset-0 opacity-[0.04] [background-image:linear-gradient(rgba(200,212,240,0.5)_1px,transparent_1px),linear-gradient(90deg,rgba(200,212,240,0.5)_1px,transparent_1px)] [background-size:62px_62px] [mask-image:radial-gradient(70%_60%_at_50%_28%,#000,transparent)]" />
+      {/* key light */}
+      <div className="absolute inset-0 bg-[radial-gradient(55%_45%_at_50%_-8%,rgba(242,241,236,0.09),transparent_70%)]" />
+      {/* drifting ambient masses — monochrome ivory + a whisper of volt */}
+      <div className="absolute -top-1/3 right-[-12%] h-[80vh] w-[80vh] animate-mesh-a bg-[radial-gradient(closest-side,rgba(242,241,236,0.05),transparent)]" />
+      <div className="absolute bottom-[-30%] left-[-12%] h-[65vh] w-[65vh] animate-mesh-b bg-[radial-gradient(closest-side,rgba(217,255,63,0.06),transparent)]" />
+      {/* architectural grid */}
+      <div className="absolute inset-0 opacity-[0.035] [background-image:linear-gradient(rgba(242,241,236,0.6)_1px,transparent_1px),linear-gradient(90deg,rgba(242,241,236,0.6)_1px,transparent_1px)] [background-size:72px_72px] [mask-image:radial-gradient(72%_58%_at_50%_24%,#000,transparent)]" />
     </div>
   );
 }
