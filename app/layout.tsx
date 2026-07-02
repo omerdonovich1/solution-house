@@ -48,6 +48,11 @@ export default function RootLayout({
       className={cn(rubik.variable, mono.variable, heebo.variable, "grain")}
     >
       <body className="font-sans antialiased">
+        {/* deep-space canvas — a fixed radial wash so nothing sits on flat black */}
+        <div
+          aria-hidden
+          className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(120%_90%_at_50%_-10%,#151515_0%,#0B0B0B_45%,#050505_100%)]"
+        />
         <Preloader />
         <Cursor />
         <SmoothScroll />

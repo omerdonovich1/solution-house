@@ -9,9 +9,9 @@ const EMAIL = "hello@solution.house";
 
 type Status = "idle" | "loading" | "done" | "error";
 
-/* Underline-only fields — gallery-minimal, focus warms to volt. */
+/* Underline-only fields — gallery-minimal, focus warms to amber. */
 const field =
-  "w-full border-0 border-b border-white/[0.12] bg-transparent px-0 py-3.5 text-base text-ivory outline-none transition-[border-color] duration-300 placeholder:text-mist/40 focus:border-volt";
+  "w-full border-0 border-b border-white/[0.12] bg-transparent px-2 py-3.5 text-base text-ivory outline-none transition-[border-color,background-color] duration-300 placeholder:text-mist/40 focus:border-dot focus:bg-white/[0.02] focus-visible:outline-none";
 const label =
   "mb-1 block font-mono text-[11px] uppercase tracking-[0.18em] text-mist";
 
@@ -70,8 +70,8 @@ export function Contact() {
             <input id="email" name="email" type="email" placeholder="you@example.com" className={field} />
           </div>
           <div className="sm:col-span-2">
-            <label className={label} htmlFor="message">מה הבעיה שלכם?</label>
-            <textarea id="message" name="message" rows={5} placeholder="כמה מילים..." className={cn(field, "resize-y")} />
+            <label className={label} htmlFor="message">ספרו לנו על הפרויקט</label>
+            <textarea id="message" name="message" rows={5} placeholder="מה האתגר שעומד בפניכם?" className={cn(field, "resize-y")} />
           </div>
           <button
             type="submit"

@@ -12,7 +12,7 @@ const palette = {
   ink: "#050505", // page base — pure-ish black
   surface: "#0D0D0D", // raised panel
   elevated: "#161616", // hover / second-level panel
-  ivory: "#F4F4F2", // primary type — near-white
+  ivory: "#E9E9E5", // primary type — soft off-white, never glaring
   body: "#C7C7C5", // long-form text
   mist: "#8B8B89", // secondary / meta
   dot: "#D9A13B", // THE dot — the primary accent

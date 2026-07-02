@@ -109,12 +109,16 @@ function LedTicker() {
       dir="ltr"
       className="pointer-events-none absolute inset-x-0 top-1/2 z-0 -translate-y-1/2 select-none overflow-hidden"
     >
-      <motion.div style={{ x }} className="flex w-max whitespace-nowrap">
+      <motion.div
+        style={{ x }}
+        transformTemplate={(_, generated) => `translate3d(0,0,0) ${generated}`}
+        className="flex w-max whitespace-nowrap will-change-transform"
+      >
         {[0, 1].map((dup) => (
           <span
             key={dup}
             aria-hidden={dup === 1}
-            className="led-text pe-24 text-[clamp(7rem,17vw,16rem)] font-black leading-none tracking-tight"
+            className="led-text pe-24 text-[clamp(7rem,17vw,16rem)] font-black leading-none tracking-[0.05em]"
           >
             {line}
             {"  //  "}

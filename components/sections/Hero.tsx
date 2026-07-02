@@ -15,10 +15,10 @@ import { MagneticButton } from "@/components/ui/MagneticButton";
 import { MacBook } from "@/components/ui/MacBook";
 import { LogoMark } from "@/components/ui/Logo";
 
-// Choreographed to land as the preloader curtain clears.
+// Choreographed to land as the (fast) preloader curtain clears.
 const heroStagger = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.1, delayChildren: 1.15 } },
+  show: { transition: { staggerChildren: 0.1, delayChildren: 0.5 } },
 } as const;
 
 /** Words rise out of individual overflow masks, staggered across lines. */
@@ -41,18 +41,18 @@ function Words({ text, className }: { text: string; className?: string }) {
 /** The brand lockup on the MacBook screen: the mark, big, name beneath. */
 function MiniSite() {
   return (
-    <div className="relative flex h-full flex-col items-center justify-center bg-ink text-center">
+    <div className="relative flex h-full flex-col items-center justify-center bg-[radial-gradient(120%_100%_at_50%_0%,#161616_0%,#0A0A0A_55%,#050505_100%)] text-center">
       <motion.div
         initial={{ opacity: 0, scale: 0.9, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 1, ease: EASE, delay: 1.9 }}
+        transition={{ duration: 1, ease: EASE, delay: 0.9 }}
       >
         <LogoMark className="mx-auto h-[clamp(72px,13vw,150px)] w-[clamp(72px,13vw,150px)] text-ivory" />
       </motion.div>
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.9, ease: EASE, delay: 2.25 }}
+        transition={{ duration: 0.9, ease: EASE, delay: 1.2 }}
         dir="ltr"
         className="mt-[4%] font-heebo text-[clamp(15px,2.6vw,30px)] font-light uppercase tracking-[0.38em] text-ivory"
       >
@@ -99,7 +99,7 @@ export function Hero() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1, ease: EASE, delay: 1.1 }}
+            transition={{ duration: 1, ease: EASE, delay: 0.5 }}
             className="mx-auto mb-9 flex max-w-shell items-center justify-between font-mono text-[11px] uppercase tracking-[0.22em] text-mist"
           >
             <span className="kicker">Solution House</span>
@@ -114,7 +114,7 @@ export function Hero() {
             initial="hidden"
             animate="show"
             variants={heroStagger}
-            className="mx-auto max-w-[16ch] font-black leading-[0.94] tracking-tightest text-[clamp(2.7rem,8.5vw,8rem)]"
+            className="mx-auto max-w-[16ch] font-black leading-[1.02] tracking-tightest text-[clamp(2.7rem,8.5vw,8rem)]"
           >
             <span className="block text-gradient">
               <Words text="בונים את התשתית" />
@@ -132,11 +132,11 @@ export function Hero() {
           >
             <motion.span
               variants={blurIn}
-              className="block text-lg font-light leading-relaxed text-mist sm:text-xl"
+              className="block text-lg font-light leading-[1.75] text-mist sm:text-xl"
             >
-              יש לכם אתגר עסקי? אנחנו בונים את הפתרון המדויק עבורו —{" "}
+              אנחנו מפתחים מערכות אוטומטיות, סוכני AI ו-SaaS שדוחפים עסקים קדימה.{" "}
               <strong className="font-semibold text-ivory">
-                בדיוק למידות של העסק שלכם.
+                הפתרון הטכנולוגי הישיר לאתגר שלכם.
               </strong>
             </motion.span>
           </motion.p>
@@ -169,7 +169,7 @@ export function Hero() {
           <motion.div
             initial={{ opacity: 0, y: 46, scale: 0.94 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 1.1, ease: EASE, delay: 1.15 }}
+            transition={{ duration: 1, ease: EASE, delay: 0.45 }}
           >
             <MacBook className="w-[min(88vw,940px)]">
               <MiniSite />
