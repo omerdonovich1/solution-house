@@ -15,7 +15,11 @@ const palette = {
   ivory: "#F4F4F2", // primary type — near-white
   body: "#C7C7C5", // long-form text
   mist: "#8B8B89", // secondary / meta
-  dot: "#D9A13B", // THE dot — the site's only color
+  dot: "#D9A13B", // THE dot — the primary accent
+  // scene accents — reserved for the live line-art illustrations
+  aqua: "#6FD9CE",
+  iris: "#8F85FF",
+  rose: "#FF7A88",
 } as const;
 
 const config: Config = {

@@ -3,43 +3,20 @@
 import { useRef } from "react";
 import {
   motion,
-  useAnimationFrame,
-  useMotionValue,
   useReducedMotion,
   useScroll,
-  useSpring,
   useTransform,
-  useVelocity,
 } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import { EASE, blurIn, fadeUp, maskRise } from "@/lib/motion";
 import { MeshGradient } from "@/components/ui/MeshGradient";
 import { MagneticButton } from "@/components/ui/MagneticButton";
-import { DotMatrix } from "@/components/ui/DotMatrix";
-
-const TOOLS = [
-  "מערכות מתקדמות",
-  "אוטומציות חכמות",
-  "אתרים",
-  "סוכני AI",
-  "אינטגרציות",
-  "דאשבורדים",
-] as const;
-
-// Ghost word-cascades flanking the composition (nudot's ambient type).
-const CASCADE_A = TOOLS.slice(0, 3);
-const CASCADE_B = TOOLS.slice(3);
 
 // Choreographed to land as the preloader curtain clears.
 const heroStagger = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.09, delayChildren: 1.15 } },
+  show: { transition: { staggerChildren: 0.1, delayChildren: 1.15 } },
 } as const;
-
-const wrap = (min: number, max: number, v: number) => {
-  const range = max - min;
-  return ((((v - min) % range) + range) % range) + min;
-};
 
 /** Words rise out of individual overflow masks, staggered across lines. */
 function Words({ text, className }: { text: string; className?: string }) {
@@ -47,7 +24,7 @@ function Words({ text, className }: { text: string; className?: string }) {
     <>
       {text.split(" ").map((word, i) => (
         <span key={`${word}-${i}`}>
-          <span className="inline-block overflow-hidden pb-[0.09em] -mb-[0.09em] align-top">
+          <span className="inline-block overflow-hidden pb-[0.12em] -mb-[0.12em] align-top">
             <motion.span variants={maskRise} className={`inline-block ${className ?? ""}`}>
               {word}
             </motion.span>
@@ -55,84 +32,6 @@ function Words({ text, className }: { text: string; className?: string }) {
         </span>
       ))}
     </>
-  );
-}
-
-/** Drifting stack of ghost service-words, indented diagonally. */
-function Cascade({
-  words,
-  className,
-  slow = false,
-}: {
-  words: readonly string[];
-  className?: string;
-  slow?: boolean;
-}) {
-  return (
-    <motion.div
-      aria-hidden
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1.4, ease: EASE, delay: 2.2 }}
-      className={className}
-    >
-      <div className={slow ? "animate-drift-slow" : "animate-drift"}>
-        {words.map((w, i) => (
-          <div
-            key={w}
-            className="whitespace-nowrap font-mono text-[11px] uppercase tracking-[0.2em] text-mist/40"
-            style={{ paddingInlineStart: i * 18, paddingBlock: 7 }}
-          >
-            {w}
-          </div>
-        ))}
-      </div>
-    </motion.div>
-  );
-}
-
-/** Tools strip whose speed and skew react to scroll velocity. */
-function VelocityMarquee() {
-  const baseX = useMotionValue(0);
-  const { scrollY } = useScroll();
-  const velocity = useVelocity(scrollY);
-  const smooth = useSpring(velocity, { damping: 50, stiffness: 400 });
-  const factor = useTransform(smooth, [-2500, 0, 2500], [4, 0, 4]);
-  const skew = useTransform(smooth, [-2500, 2500], [3.5, -3.5]);
-  const reduced = useReducedMotion();
-
-  useAnimationFrame((_, delta) => {
-    if (reduced) return;
-    const speed = 2.6 * (1 + factor.get());
-    baseX.set(wrap(-50, 0, baseX.get() - speed * (delta / 1000)));
-  });
-
-  const x = useTransform(baseX, (v) => `${v}%`);
-
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1.2, ease: EASE, delay: 2 }}
-      dir="ltr"
-      className="relative z-10 mt-24 select-none overflow-hidden border-y border-white/[0.08] py-5 [mask-image:linear-gradient(90deg,transparent,#000_12%,#000_88%,transparent)]"
-    >
-      <motion.div style={{ x, skewX: skew }} className="flex w-max">
-        {[0, 1].map((dup) => (
-          <div key={dup} aria-hidden={dup === 1} className="flex shrink-0">
-            {TOOLS.map((t) => (
-              <span
-                key={t}
-                className="flex items-center gap-10 ps-10 font-mono text-sm uppercase tracking-[0.06em] text-mist"
-              >
-                {t}
-                <span className="text-dot">/</span>
-              </span>
-            ))}
-          </div>
-        ))}
-      </motion.div>
-    </motion.div>
   );
 }
 
@@ -144,38 +43,24 @@ export function Hero() {
     offset: ["start start", "end start"],
   });
   // Slow editorial parallax — the composition recedes as you scroll past.
-  const y = useTransform(scrollYProgress, [0, 1], [0, reduced ? 0 : 140]);
-  const fade = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
-  // Headline rows shear apart in opposite directions on scroll.
-  const rowShift = useTransform(scrollYProgress, [0, 1], [0, reduced ? 0 : 90]);
-  const rowShiftBack = useTransform(rowShift, (v) => -v);
+  const y = useTransform(scrollYProgress, [0, 1], [0, reduced ? 0 : 120]);
+  const fade = useTransform(scrollYProgress, [0, 0.75], [1, 0]);
 
   return (
     <section
       ref={ref}
       id="top"
-      className="relative flex min-h-svh flex-col justify-center overflow-hidden pb-10 pt-36"
+      className="relative flex min-h-svh flex-col items-center justify-center overflow-hidden px-[var(--shell-pad)] pb-20 pt-32 text-center"
     >
       <MeshGradient />
 
-      {/* ambient ghost cascades */}
-      <Cascade
-        words={CASCADE_A}
-        className="absolute right-[4%] top-[24%] z-0 hidden lg:block"
-      />
-      <Cascade
-        words={CASCADE_B}
-        slow
-        className="absolute bottom-[30%] left-[4%] z-0 hidden lg:block"
-      />
-
-      <motion.div style={{ y, opacity: fade }} className="relative z-10 shell">
+      <motion.div style={{ y, opacity: fade }} className="relative z-10 w-full">
         {/* meta row */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1, ease: EASE, delay: 1.2 }}
-          className="mb-12 flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.22em] text-mist"
+          transition={{ duration: 1, ease: EASE, delay: 1.1 }}
+          className="mx-auto mb-10 flex max-w-shell items-center justify-between font-mono text-[11px] uppercase tracking-[0.22em] text-mist"
         >
           <span className="kicker">Solution House</span>
           <span className="hidden gap-6 sm:flex">
@@ -185,65 +70,82 @@ export function Hero() {
           </span>
         </motion.div>
 
-        {/* monumental, word-staggered headline — nudot edge-bleed scale */}
+        {/* monumental, centered, gradient headline */}
         <motion.h1
           initial="hidden"
           animate="show"
           variants={heroStagger}
-          className="font-black leading-[0.94] tracking-tightest text-[clamp(3.2rem,11.5vw,11rem)] text-ivory"
+          className="mx-auto max-w-[16ch] font-black leading-[0.94] tracking-tightest text-[clamp(3rem,10vw,9.5rem)]"
         >
-          <motion.span style={{ x: rowShift }} className="block">
-            <Words text="בונים את" />
-          </motion.span>
-          <span className="flex flex-wrap items-center gap-x-8">
-            <Words text="התשתית" />
-            <motion.span
-              variants={blurIn}
-              className="kicker hidden pb-[0.5em] md:inline-flex"
-            >
-              בית פתרונות טכנולוגיים
-            </motion.span>
+          <span className="block text-gradient">
+            <Words text="בונים את התשתית" />
           </span>
-          <motion.span style={{ x: rowShiftBack }} className="block">
-            <Words text="להצלחה" />
-            <Words text="שלכם." className="text-mist" />
-          </motion.span>
+          <span className="block text-gradient">
+            <Words text="להצלחה שלכם." />
+          </span>
         </motion.h1>
 
-        {/* sub + magnetic CTA + dot-matrix anchor */}
+        {/* subtitle */}
+        <motion.p
+          initial="hidden"
+          animate="show"
+          variants={heroStagger}
+          className="mx-auto mt-9 max-w-2xl"
+        >
+          <motion.span
+            variants={blurIn}
+            className="block text-lg font-light leading-relaxed text-mist sm:text-xl"
+          >
+            יש לכם אתגר עסקי? אנחנו בונים את הפתרון המדויק עבורו —{" "}
+            <strong className="font-semibold text-ivory">
+              בדיוק למידות של העסק שלכם.
+            </strong>
+          </motion.span>
+        </motion.p>
+
+        {/* CTAs */}
         <motion.div
           initial="hidden"
           animate="show"
           variants={heroStagger}
-          className="mt-14 grid items-end gap-10 md:grid-cols-[auto_1fr_auto]"
+          className="mt-11 flex flex-wrap items-center justify-center gap-3.5"
         >
-          <motion.div variants={blurIn} className="hidden md:block">
-            <DotMatrix size={10} gap={5} />
-          </motion.div>
-
-          <motion.p
-            variants={blurIn}
-            className="max-w-xl text-lg font-light leading-relaxed text-mist sm:text-xl"
-          >
-            יש לכם אתגר עסקי? אנחנו בונים את הפתרון המדויק עבורו.{" "}
-            <strong className="font-semibold text-ivory">
-              תמיד נבחר את הטכנולוגיה ואת הדרך שיעבדו הכי טוב עבור העסק שלכם.
-            </strong>
-          </motion.p>
-
-          <motion.div variants={fadeUp} className="flex flex-wrap items-center gap-3.5">
+          <motion.div variants={fadeUp}>
             <MagneticButton href="#contact" variant="solid">
               בואו נדבר
               <ArrowLeft className="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-1" />
             </MagneticButton>
-            <MagneticButton href="#process" variant="ghost" strength={8}>
-              איך זה עובד
+          </motion.div>
+          <motion.div variants={fadeUp}>
+            <MagneticButton href="#build" variant="ghost" strength={8}>
+              מה אנחנו בונים
             </MagneticButton>
           </motion.div>
         </motion.div>
       </motion.div>
 
-      <VelocityMarquee />
+      {/* scroll indicator — double chevron, gently bobbing */}
+      <motion.a
+        href="#build"
+        aria-label="גלול למטה"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, ease: EASE, delay: 2 }}
+        style={{ opacity: fade }}
+        className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2 text-mist transition-colors duration-300 hover:text-dot"
+      >
+        <motion.svg
+          width="26"
+          height="34"
+          viewBox="0 0 26 34"
+          fill="none"
+          animate={reduced ? {} : { y: [0, 8, 0] }}
+          transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
+        >
+          <path d="M4 8 L13 16 L22 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M4 18 L13 26 L22 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </motion.svg>
+      </motion.a>
     </section>
   );
 }
