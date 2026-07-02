@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Rubik, JetBrains_Mono, Heebo } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
-import { Cursor } from "@/components/ui/Cursor";
 import { Preloader } from "@/components/Preloader";
 import "lenis/dist/lenis.css";
 import "./globals.css";
@@ -54,7 +53,6 @@ export default function RootLayout({
           className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(120%_90%_at_50%_-10%,#151515_0%,#0B0B0B_45%,#050505_100%)]"
         />
         <Preloader />
-        <Cursor />
         <SmoothScroll />
         {children}
       </body>

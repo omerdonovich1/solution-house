@@ -11,12 +11,6 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Lenis drives scrolling; native smooth-behavior would fight it. */
-html.has-cursor,
-html.has-cursor * {
-  cursor: none !important;
-}
-
 body {
   background-color: theme("colors.ink");
   color: theme("colors.body");
