@@ -30,7 +30,12 @@ export function Preloader() {
       if (p < 1) raf = requestAnimationFrame(tick);
       else setTimeout(() => setDone(true), 420);
     });
-    return () => cancelAnimationFrame(raf);
+    // watchdog — never trap the user if rAF is throttled (hidden tab)
+    const bail = setTimeout(() => setDone(true), DURATION + 1600);
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(bail);
+    };
   }, []);
 
   const progress = count / 100;
