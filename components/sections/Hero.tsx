@@ -38,39 +38,26 @@ function Words({ text, className }: { text: string; className?: string }) {
   );
 }
 
-/** The first page of the site itself, replicated on the MacBook screen. */
+/** The brand lockup on the MacBook screen: the mark, big, name beneath. */
 function MiniSite() {
   return (
-    <div dir="rtl" className="relative flex h-full flex-col items-center justify-center bg-ink text-center">
-      {/* mini pill navbar */}
-      <div className="absolute left-1/2 top-[4%] flex -translate-x-1/2 items-center gap-2 rounded-md border border-white/[0.1] bg-white/[0.05] px-2 py-1">
-        <span className="flex h-2 w-3 flex-col justify-center gap-[2px]">
-          <span className="h-px w-3 bg-ivory/80" />
-          <span className="h-px w-3 bg-ivory/80" />
-        </span>
-        <LogoMark className="h-3.5 w-3.5 text-ivory" />
-        <span className="h-2 w-3 rounded-[2px] border border-white/25" />
-      </div>
-
-      <div dir="ltr" className="mb-[3%] font-mono text-[max(5px,0.9vw)] uppercase tracking-[0.2em] text-mist">
-        ( Solution House )
-      </div>
-      <div className="text-gradient font-black leading-[0.96] tracking-tightest text-[max(14px,3.1vw)]">
-        בונים את התשתית
-        <br />
-        להצלחה שלכם.
-      </div>
-      <div className="mt-[2.5%] max-w-[70%] text-[max(5px,0.95vw)] font-light leading-relaxed text-mist">
-        יש לכם אתגר עסקי? אנחנו בונים את הפתרון המדויק עבורו.
-      </div>
-      <div className="mt-[3%] flex items-center gap-[6px]">
-        <span className="rounded-full bg-ivory px-[1.6em] py-[0.55em] text-[max(5px,0.85vw)] font-bold text-ink">
-          בואו נדבר
-        </span>
-        <span className="rounded-full border border-white/20 px-[1.6em] py-[0.55em] text-[max(5px,0.85vw)] font-semibold text-ivory">
-          מה אנחנו בונים
-        </span>
-      </div>
+    <div className="relative flex h-full flex-col items-center justify-center bg-ink text-center">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9, y: 10 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 1, ease: EASE, delay: 1.9 }}
+      >
+        <LogoMark className="mx-auto h-[clamp(72px,13vw,150px)] w-[clamp(72px,13vw,150px)] text-ivory" />
+      </motion.div>
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.9, ease: EASE, delay: 2.25 }}
+        dir="ltr"
+        className="mt-[4%] font-heebo text-[clamp(15px,2.6vw,30px)] font-light uppercase tracking-[0.38em] text-ivory"
+      >
+        Solution House
+      </motion.div>
     </div>
   );
 }

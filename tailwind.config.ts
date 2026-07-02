@@ -44,6 +44,7 @@ const config: Config = {
       fontFamily: {
         sans: ["var(--font-rubik)", "system-ui", "sans-serif"],
         mono: ["var(--font-mono)", "monospace"],
+        heebo: ["var(--font-heebo)", "system-ui", "sans-serif"],
       },
       letterSpacing: {
         tightest: "-0.045em",

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Rubik, JetBrains_Mono } from "next/font/google";
+import { Rubik, JetBrains_Mono, Heebo } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { Cursor } from "@/components/ui/Cursor";
@@ -22,6 +22,14 @@ const mono = JetBrains_Mono({
   display: "swap",
 });
 
+// Heebo — the brand wordmark face (logo lockup on the laptop screen).
+const heebo = Heebo({
+  subsets: ["hebrew", "latin"],
+  weight: ["300", "400", "600", "800"],
+  variable: "--font-heebo",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Solution House — מהנדסים את התשתית להצלחה שלכם",
   description:
@@ -37,7 +45,7 @@ export default function RootLayout({
     <html
       lang="he"
       dir="rtl"
-      className={cn(rubik.variable, mono.variable, "grain")}
+      className={cn(rubik.variable, mono.variable, heebo.variable, "grain")}
     >
       <body className="font-sans antialiased">
         <Preloader />
