@@ -84,6 +84,26 @@ export const STEPS: readonly ProcessStep[] = [
 
 export const PROJECTS: readonly Project[] = [
   {
+    id: "qc-system",
+    name: "DYNAMICA QC",
+    description:
+      "מערכת בקרת איכות לרצפת ייצור. סריקת ברקוד בעמדות, ניהול NCR, השלמת הזמנות אוטומטית ודאשבורד ניהול בזמן אמת.",
+    tags: ["מערכת", "Industry"],
+    href: "/mockups/qc-system.html",
+    image: "/proj-qc.png",
+    span: "lg:col-span-1 lg:row-span-1",
+  },
+  {
+    id: "vanguard-fleet",
+    name: "VANGUARD FLEET",
+    description:
+      "מערכת ניהול צי רכבים. הזמנות ותחזוקה, התראות טסט וביטוח, בוט WhatsApp לנהגים וסריקת מסמכים אוטומטית ב-AI.",
+    tags: ["SaaS", "AI"],
+    href: "/mockups/vanguard-fleet.html",
+    image: "/proj-fleet.png",
+    span: "lg:col-span-1 lg:row-span-1",
+  },
+  {
     id: "carman",
     name: "CARMAN S",
     description:

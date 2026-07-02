@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dynamica QC — מערכת בקרת איכות</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Rubik',system-ui,sans-serif; }
+  html,body { height:100%; }
+  body {
+    background:
+      radial-gradient(90% 70% at 80% -10%, #12233F 0%, transparent 60%),
+      radial-gradient(70% 60% at 10% 110%, #0D1B31 0%, transparent 55%),
+      #0A1122;
+    color:#E6ECF7; overflow:hidden;
+  }
+  .app { display:grid; grid-template-columns: 232px 1fr; height:100vh; }
+
+  /* ── sidebar ─────────────────────────── */
+  .side { border-left:1px solid rgba(255,255,255,.07); padding:26px 20px; display:flex; flex-direction:column; gap:6px; background:rgba(8,13,26,.55); }
+  .brand { display:flex; align-items:center; gap:11px; margin-bottom:26px; }
+  .brand .mark { width:38px; height:38px; border-radius:11px; background:linear-gradient(135deg,#19E3B1,#0E9F7B); display:grid; place-items:center; font-weight:800; color:#04110C; font-size:17px; box-shadow:0 8px 24px -8px rgba(25,227,177,.5); }
+  .brand b { font-size:15px; letter-spacing:.02em; }
+  .brand span { display:block; font-size:10.5px; color:#7C8AA5; font-weight:400; }
+  .nav { display:flex; align-items:center; gap:11px; padding:11px 13px; border-radius:11px; color:#8A97B2; font-size:13.5px; font-weight:500; }
+  .nav.on { background:linear-gradient(90deg,rgba(25,227,177,.14),transparent); color:#EAF9F3; border:1px solid rgba(25,227,177,.22); }
+  .nav svg { width:17px; height:17px; stroke:currentColor; fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+  .side .foot { margin-top:auto; border-top:1px solid rgba(255,255,255,.07); padding-top:16px; font-size:11.5px; color:#66748F; display:flex; align-items:center; gap:8px; }
+  .avatar { width:30px; height:30px; border-radius:50%; background:linear-gradient(135deg,#2A3C5F,#16233C); display:grid; place-items:center; font-size:11px; color:#B9C6DD; font-weight:600; }
+
+  /* ── main ────────────────────────────── */
+  .main { padding:26px 30px; display:flex; flex-direction:column; gap:20px; min-width:0; }
+  .top { display:flex; align-items:center; justify-content:space-between; }
+  .top h1 { font-size:21px; font-weight:700; }
+  .top h1 small { display:block; font-size:12px; color:#7C8AA5; font-weight:400; margin-top:3px; }
+  .top .actions { display:flex; gap:10px; align-items:center; }
+  .chip { font-size:12px; padding:8px 14px; border-radius:100px; border:1px solid rgba(255,255,255,.1); color:#AAB7CF; }
+  .btn { font-size:13px; font-weight:600; padding:9px 18px; border-radius:100px; background:linear-gradient(135deg,#19E3B1,#0FA57F); color:#04110C; box-shadow:0 10px 26px -10px rgba(25,227,177,.55); }
+
+  .kpis { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+  .kpi { background:linear-gradient(180deg,rgba(23,35,60,.85),rgba(15,24,42,.85)); border:1px solid rgba(255,255,255,.07); border-radius:16px; padding:16px 18px; position:relative; overflow:hidden; }
+  .kpi .lbl { font-size:12px; color:#8A97B2; }
+  .kpi .val { font-size:27px; font-weight:800; margin-top:6px; letter-spacing:-.02em; }
+  .kpi .trend { font-size:11px; margin-top:4px; font-weight:600; }
+  .up { color:#2BE3AE; } .down { color:#FF7A88; } .warn-t { color:#FFC24B; }
+  .kpi svg.spark { position:absolute; left:12px; bottom:10px; opacity:.9; }
+  .kpi.alert { border-color:rgba(255,122,136,.35); }
+  .kpi.alert .val { color:#FF8B97; }
+
+  .grid { display:grid; grid-template-columns: 1fr 300px; gap:14px; flex:1; min-height:0; }
+  .panel { background:linear-gradient(180deg,rgba(20,31,54,.8),rgba(13,21,38,.85)); border:1px solid rgba(255,255,255,.07); border-radius:18px; padding:18px 20px; min-height:0; }
+  .panel h2 { font-size:14px; font-weight:600; display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
+  .panel h2 span { font-size:11px; color:#7C8AA5; font-weight:400; }
+
+  table { width:100%; border-collapse:collapse; font-size:12.5px; }
+  th { text-align:right; color:#7C8AA5; font-weight:500; font-size:11px; padding:8px 6px; border-bottom:1px solid rgba(255,255,255,.07); }
+  td { padding:11px 6px; border-bottom:1px solid rgba(255,255,255,.045); color:#C9D4E8; }
+  td b { color:#EAF0FA; font-weight:600; }
+  .badge { font-size:10.5px; font-weight:600; padding:4px 10px; border-radius:100px; }
+  .b-ok   { background:rgba(43,227,174,.13); color:#2BE3AE; border:1px solid rgba(43,227,174,.3); }
+  .b-run  { background:rgba(86,150,255,.13); color:#7FAAFF; border:1px solid rgba(86,150,255,.3); }
+  .b-wait { background:rgba(255,194,75,.12); color:#FFC24B; border:1px solid rgba(255,194,75,.3); }
+  .b-ncr  { background:rgba(255,122,136,.13); color:#FF8B97; border:1px solid rgba(255,122,136,.32); }
+  .bar { height:5px; border-radius:100px; background:rgba(255,255,255,.08); overflow:hidden; width:74px; }
+  .bar i { display:block; height:100%; border-radius:100px; background:linear-gradient(90deg,#19E3B1,#5FD9FF); }
+
+  .col { display:flex; flex-direction:column; gap:14px; min-height:0; }
+  .stations { display:flex; flex-direction:column; gap:9px; }
+  .st { display:flex; align-items:center; justify-content:space-between; padding:9px 12px; border-radius:11px; background:rgba(255,255,255,.035); border:1px solid rgba(255,255,255,.05); font-size:12.5px; }
+  .st .dot { width:7px; height:7px; border-radius:50%; background:#2BE3AE; box-shadow:0 0 10px rgba(43,227,174,.8); margin-left:9px; }
+  .st.idle .dot { background:#5A6A85; box-shadow:none; }
+  .st small { color:#7C8AA5; font-size:11px; }
+  .scan { text-align:center; padding:20px 16px 16px; }
+  .scan .code { display:flex; justify-content:center; gap:2.5px; align-items:flex-end; height:44px; margin:10px 0 12px; }
+  .scan .code i { display:block; width:3px; background:#DFEAF9; height:100%; border-radius:1px; }
+  .scan .code i:nth-child(2n){ height:70%; opacity:.85; width:2px; }
+  .scan .code i:nth-child(3n){ height:88%; width:5px; }
+  .scan .code i:nth-child(5n){ height:60%; opacity:.7; }
+  .scan p { font-size:11.5px; color:#7C8AA5; }
+  .scan .ok { margin-top:12px; font-size:12px; color:#2BE3AE; font-weight:600; }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">
+      <div class="mark">D</div>
+      <div><b>DYNAMICA QC</b><span>מערכת בקרת איכות</span></div>
+    </div>
+    <div class="nav on"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>דאשבורד</div>
+    <div class="nav"><svg viewBox="0 0 24 24"><path d="M6 3h12l2 4v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7z"/><path d="M4 7h16"/><path d="M9 11h6"/></svg>הזמנות</div>
+    <div class="nav"><svg viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M21 12v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h11"/></svg>בדיקות איכות</div>
+    <div class="nav"><svg viewBox="0 0 24 24"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>NCR</div>
+    <div class="nav"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>עמדות עבודה</div>
+    <div class="nav"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-6 4 3 5-8"/></svg>דוחות</div>
+    <div class="foot"><div class="avatar">אב</div><div>אבי כהן<br/>מנהל איכות</div></div>
+  </aside>
+
+  <main class="main">
+    <div class="top">
+      <h1>בוקר טוב, אבי <small>יום רביעי, 2 ביולי 2026 · משמרת א׳ · 9 מפעילים במשמרת</small></h1>
+      <div class="actions"><span class="chip">ייצוא Excel</span><span class="btn">+ הזמנה חדשה</span></div>
+    </div>
+
+    <div class="kpis">
+      <div class="kpi"><div class="lbl">הזמנות פתוחות</div><div class="val">23</div><div class="trend up">▲ 4 נפתחו היום</div>
+        <svg class="spark" width="72" height="26"><polyline points="0,20 12,16 24,18 36,10 48,13 60,6 72,8" fill="none" stroke="#2BE3AE" stroke-width="2"/></svg></div>
+      <div class="kpi"><div class="lbl">בדיקות היום</div><div class="val">148</div><div class="trend up">▲ 12% מאתמול</div>
+        <svg class="spark" width="72" height="26"><polyline points="0,22 12,18 24,14 36,15 48,9 60,10 72,4" fill="none" stroke="#7FAAFF" stroke-width="2"/></svg></div>
+      <div class="kpi alert"><div class="lbl">NCR פתוחים</div><div class="val">3</div><div class="trend warn-t">2 ממתינים לטיפול</div>
+        <svg class="spark" width="72" height="26"><polyline points="0,8 12,12 24,10 36,16 48,14 60,20 72,18" fill="none" stroke="#FF8B97" stroke-width="2"/></svg></div>
+      <div class="kpi"><div class="lbl">אחוז תקינות</div><div class="val">98.2%</div><div class="trend up">▲ 0.4% השבוע</div>
+        <svg class="spark" width="72" height="26"><polyline points="0,16 12,14 24,15 36,12 48,10 60,9 72,6" fill="none" stroke="#2BE3AE" stroke-width="2"/></svg></div>
+    </div>
+
+    <div class="grid">
+      <div class="panel">
+        <h2>הזמנות בתהליך <span>80 הזמנות · 54 לקוחות</span></h2>
+        <table>
+          <tr><th>הזמנה</th><th>לקוח</th><th>פריטים</th><th>עמדה</th><th>התקדמות</th><th>יעד</th><th>סטטוס</th></tr>
+          <tr><td><b>#4312</b></td><td>אלביט מערכות</td><td>14</td><td>Cavoflex</td><td><div class="bar"><i style="width:86%"></i></div></td><td>04.07</td><td><span class="badge b-run">בתהליך</span></td></tr>
+          <tr><td><b>#4309</b></td><td>רפאל</td><td>8</td><td>CNC</td><td><div class="bar"><i style="width:100%"></i></div></td><td>03.07</td><td><span class="badge b-ok">הושלמה</span></td></tr>
+          <tr><td><b>#4306</b></td><td>תעש מערכות</td><td>22</td><td>די פלקס</td><td><div class="bar"><i style="width:64%"></i></div></td><td>06.07</td><td><span class="badge b-run">בתהליך</span></td></tr>
+          <tr><td><b>#4301</b></td><td>IAI</td><td>5</td><td>עמדת QC</td><td><div class="bar"><i style="width:38%"></i></div></td><td>02.07</td><td><span class="badge b-ncr">NCR פתוח</span></td></tr>
+          <tr><td><b>#4298</b></td><td>פלסן</td><td>31</td><td>מכבש</td><td><div class="bar"><i style="width:12%"></i></div></td><td>09.07</td><td><span class="badge b-wait">ממתינה</span></td></tr>
+          <tr><td><b>#4295</b></td><td>אורביט</td><td>9</td><td>צימר</td><td><div class="bar"><i style="width:100%"></i></div></td><td>01.07</td><td><span class="badge b-ok">הושלמה</span></td></tr>
+        </table>
+      </div>
+
+      <div class="col">
+        <div class="panel">
+          <h2>עמדות עבודה <span>5/7 פעילות</span></h2>
+          <div class="stations">
+            <div class="st"><span><span class="dot"></span>Cavoflex</span><small>#4312 · שלב 3/5</small></div>
+            <div class="st"><span><span class="dot"></span>CNC</span><small>#4309 · הושלם</small></div>
+            <div class="st"><span><span class="dot"></span>די פלקס</span><small>#4306 · שלב 2/4</small></div>
+            <div class="st"><span><span class="dot"></span>מכבש</span><small>#4298 · ממתין</small></div>
+            <div class="st"><span><span class="dot"></span>עמדת QC</span><small>NCR-117 בטיפול</small></div>
+            <div class="st idle"><span><span class="dot"></span>סוסי</span><small>לא פעילה</small></div>
+          </div>
+        </div>
+        <div class="panel scan">
+          <h2 style="justify-content:center">סריקת ברקוד</h2>
+          <div class="code">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <p>SKU-0482 · צינור לחץ 40 מ״מ</p>
+          <div class="ok">✓ זוהה · 2,971 שלבי בדיקה במערכת</div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>

@@ -12,7 +12,8 @@ const TILT = 5; // deg
 const TICKS = 48; // scrubber ruler density
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
-  const external = project.href.startsWith("http");
+  // live sites and full-screen mockup shells both open in a new tab
+  const external = project.href.startsWith("http") || project.href.startsWith("/mockups");
   const rx = useMotionValue(0);
   const ry = useMotionValue(0);
   const srx = useSpring(rx, { stiffness: 180, damping: 18, mass: 0.4 });
