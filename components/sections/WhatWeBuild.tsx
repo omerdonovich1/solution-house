@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowUpLeft } from "lucide-react";
 import { SectionHeader } from "@/components/SectionHeader";
+import { PROJECTS } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
 /**
@@ -90,7 +91,7 @@ export function WhatWeBuild() {
         <SectionHeader
           index="01"
           label="מה אנחנו בונים"
-          title="פתרון חי לכל צורך עסקי."
+          title="פתרון טכנולוגי לכל אתגר עסקי."
           lead="אתר, דף נחיתה, דשבורד, סוכן AI, מערכת או אוטומציה — כל פתרון נבנה בדיוק למידות של העסק שלכם."
         />
 
@@ -217,6 +218,46 @@ export function WhatWeBuild() {
                     />
                   )}
                 </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* selected works — folded in from the retired projects page */}
+        <div className="mt-14 border-t border-white/[0.06] pt-10">
+          <div className="mb-7 flex items-baseline justify-between font-mono text-[11px] uppercase tracking-[0.22em] text-mist">
+            <span className="kicker">עבודות שכבר בנינו</span>
+            <span dir="ltr">{String(PROJECTS.length).padStart(2, "0")} PROJECTS</span>
+          </div>
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+            {PROJECTS.map((p) => {
+              const external = p.href.startsWith("http") || p.href.startsWith("/mockups");
+              return (
+                <a
+                  key={p.id}
+                  href={p.href}
+                  target={external ? "_blank" : undefined}
+                  rel={external ? "noopener noreferrer" : undefined}
+                  className="group overflow-hidden rounded-xl border border-white/[0.08] bg-surface transition-colors duration-500 hover:border-white/25"
+                >
+                  <div className="relative aspect-[16/10] overflow-hidden">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={p.image}
+                      alt={p.name}
+                      loading="lazy"
+                      draggable={false}
+                      className="h-full w-full object-cover grayscale transition-[transform,filter] duration-700 ease-out group-hover:scale-[1.05] group-hover:grayscale-0"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-ink/70 to-transparent" />
+                  </div>
+                  <div className="flex items-center justify-between gap-2 px-4 py-3">
+                    <span className="text-[13px] font-black tracking-tightest text-ivory">
+                      {p.name}
+                    </span>
+                    <ArrowUpLeft className="h-3.5 w-3.5 shrink-0 text-mist transition-colors duration-300 group-hover:text-dot" />
+                  </div>
+                </a>
               );
             })}
           </div>

@@ -3,6 +3,7 @@ import { Rubik, JetBrains_Mono, Heebo } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { Preloader } from "@/components/Preloader";
+import { FloatingActions } from "@/components/FloatingActions";
 import "lenis/dist/lenis.css";
 import "./globals.css";
 
@@ -55,6 +56,7 @@ export default function RootLayout({
         <Preloader />
         <SmoothScroll />
         {children}
+        <FloatingActions />
       </body>
     </html>
   );

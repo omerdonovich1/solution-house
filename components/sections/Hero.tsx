@@ -87,7 +87,7 @@ export function Hero() {
   const heroPointer = useTransform(p, (v) => (v > 0.34 ? "auto" : "none"));
 
   return (
-    <section ref={ref} id="top" className="relative h-[280vh]">
+    <section ref={ref} id="top" className="relative h-[170vh]">
       <div className="sticky top-0 flex h-svh flex-col items-center justify-center overflow-hidden px-[var(--shell-pad)] pb-16 pt-28 text-center">
         <MeshGradient />
 

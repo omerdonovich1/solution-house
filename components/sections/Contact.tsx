@@ -50,10 +50,10 @@ export function Contact() {
     <section id="contact" className="mx-auto max-w-3xl py-32 sm:py-48">
       <div className="shell">
         <SectionHeader
-          index="04"
-          label="בואו נפתור את זה"
+          index="03"
+          label="בואו נדבר"
           title="ספרו לנו על האתגר שלכם."
-          lead="שיחה אחת כדי להבין את הבעיה, לבנות את הדרך קדימה ולהעריך עלויות. בלי הבטחות שלא נוכל לעמוד בהן."
+          lead="שיחה אחת, בלי התחייבות: מבינים את האתגר, מציעים כיוון ונותנים הערכת מחיר הוגנת. מבטיחים רק מה שנוכל לקיים."
         />
 
         <form onSubmit={onSubmit} className="mt-14 grid gap-9 sm:grid-cols-2">

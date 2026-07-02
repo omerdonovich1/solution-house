@@ -4,33 +4,21 @@ import { useRef, useState } from "react";
 import {
   AnimatePresence,
   motion,
-  useAnimationFrame,
   useMotionValue,
   useMotionValueEvent,
   useReducedMotion,
   useScroll,
   useSpring,
   useTransform,
-  useVelocity,
   type MotionValue,
 } from "framer-motion";
 import { PROJECTS } from "@/lib/data";
 
 /**
  * Immersive nudot-style scene: a monitor floating in black space showing
- * the work, a giant LED dot-matrix ticker streaming behind it, and word
- * clusters hanging at different depths (blur = distance). The whole space
- * is scrubbed by scroll and steered by the mouse.
+ * the work, with word clusters hanging at different depths (blur =
+ * distance). The whole space is scrubbed by scroll and steered by the mouse.
  */
-
-const TOOLS = [
-  "מערכות מתקדמות",
-  "אוטומציות חכמות",
-  "אתרים",
-  "סוכני AI",
-  "אינטגרציות",
-  "דאשבורדים",
-] as const;
 
 // Floating word clusters — existing site vocabulary, hung in z-space.
 // depth: 1 = close (sharp, bold), 0 = far (small, blurred).
@@ -45,11 +33,6 @@ const CLUSTERS = [
   { text: "SaaS", x: "20%", y: "78%", depth: 0.6 },
   { text: "E-COMMERCE", x: "30%", y: "10%", depth: 0.5 },
 ] as const;
-
-const wrap = (min: number, max: number, v: number) => {
-  const range = max - min;
-  return ((((v - min) % range) + range) % range) + min;
-};
 
 /** A single word hanging in z-space: far = small + blurred, near = sharp. */
 function Cluster({
@@ -83,49 +66,6 @@ function Cluster({
     >
       {text}
     </motion.div>
-  );
-}
-
-/** Giant LED ticker — auto-streams, accelerates with scroll velocity. */
-function LedTicker() {
-  const baseX = useMotionValue(0);
-  const { scrollY } = useScroll();
-  const velocity = useVelocity(scrollY);
-  const smooth = useSpring(velocity, { damping: 50, stiffness: 400 });
-  const factor = useTransform(smooth, [-3000, 0, 3000], [5, 0, 5]);
-  const reduced = useReducedMotion();
-
-  useAnimationFrame((_, delta) => {
-    if (reduced) return;
-    const speed = 3.2 * (1 + factor.get());
-    baseX.set(wrap(-50, 0, baseX.get() - speed * (delta / 1000)));
-  });
-
-  const x = useTransform(baseX, (v) => `${v}%`);
-  const line = TOOLS.join("  //  ");
-
-  return (
-    <div
-      dir="ltr"
-      className="pointer-events-none absolute inset-x-0 top-1/2 z-0 -translate-y-1/2 select-none overflow-hidden"
-    >
-      <motion.div
-        style={{ x }}
-        transformTemplate={(_, generated) => `translate3d(0,0,0) ${generated}`}
-        className="flex w-max whitespace-nowrap will-change-transform"
-      >
-        {[0, 1].map((dup) => (
-          <span
-            key={dup}
-            aria-hidden={dup === 1}
-            className="led-text pe-24 text-[clamp(7rem,17vw,16rem)] font-black leading-none tracking-[0.05em]"
-          >
-            {line}
-            {"  //  "}
-          </span>
-        ))}
-      </motion.div>
-    </div>
   );
 }
 
@@ -185,8 +125,6 @@ export function ShowcaseScene() {
         onMouseLeave={onLeave}
         className="sticky top-0 flex h-svh items-center justify-center overflow-hidden [perspective:1300px]"
       >
-        <LedTicker />
-
         {/* word clusters hanging in z-space */}
         {CLUSTERS.map((c) => (
           <Cluster key={c.text} {...c} p={p} smx={smx} />
