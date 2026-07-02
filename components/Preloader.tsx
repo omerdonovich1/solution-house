@@ -57,18 +57,18 @@ export function Preloader() {
             transition={{ duration: 0.6, ease: EASE }}
             className="relative mx-[var(--shell-pad)] h-[42vw] max-h-[280px] w-full max-w-[560px] rounded-lg border border-white/15"
           >
-            {/* stretching amber line, corner to corner */}
+            {/* stretching amber line — dead level */}
             <svg
               viewBox="0 0 560 280"
               preserveAspectRatio="none"
               className="absolute inset-0 h-full w-full"
             >
-              <line x1="60" y1="150" x2="500" y2="118" stroke="rgba(244,244,242,0.1)" strokeWidth="1" />
+              <line x1="60" y1="140" x2="500" y2="140" stroke="rgba(244,244,242,0.1)" strokeWidth="1" />
               <motion.line
                 x1="60"
-                y1="150"
+                y1="140"
                 x2="500"
-                y2="118"
+                y2="140"
                 className="stroke-dot"
                 strokeWidth="4"
                 strokeLinecap="round"
@@ -78,16 +78,16 @@ export function Preloader() {
               />
             </svg>
 
-            {/* counters at each end */}
+            {/* counters at each end — one shared baseline */}
             <span
               dir="ltr"
-              className="absolute bottom-[34%] left-[8%] border-b border-white/20 pb-1 font-mono text-[13px] tracking-[0.1em] text-mist"
+              className="absolute left-[9%] top-[56%] font-mono text-[13px] tracking-[0.1em] text-mist"
             >
               0%
             </span>
             <span
               dir="ltr"
-              className="absolute top-[34%] right-[8%] border-b border-dot/60 pb-1 font-mono text-[13px] tracking-[0.1em] text-ivory"
+              className="absolute right-[9%] top-[56%] font-mono text-[13px] tracking-[0.1em] text-ivory"
             >
               {String(count).padStart(3, "0")}%
             </span>

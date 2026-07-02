@@ -76,10 +76,10 @@ function MiniSite() {
 }
 
 /**
- * premiercs-style opening sequence: the hero holds centre stage while a
- * MacBook — screening the site's own first page — peeks from the bottom
- * edge; scrolling lifts the headline away and raises the laptop to a full
- * centred presentation before releasing to the next section.
+ * premiercs-style opening sequence, inverted: the site opens AS the
+ * laptop — a MacBook front and centre, screening the first page. A short
+ * scroll zooms through the screen: the laptop grows toward the viewer and
+ * slowly dissolves while the real page "opens" out of it.
  */
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
@@ -90,20 +90,25 @@ export function Hero() {
   });
   const p = useSpring(scrollYProgress, { stiffness: 90, damping: 26, mass: 0.5 });
 
-  // phase 1 → 2: hero content lifts away
-  const heroY = useTransform(p, [0, 0.38], [0, reduced ? 0 : -170]);
-  const heroOpacity = useTransform(p, [0.08, 0.34], [1, 0]);
-  // the laptop rises from its bottom peek to a full centred reveal
-  const macY = useTransform(p, [0, 0.62], reduced ? ["0%", "0%"] : ["66%", "-2%"]);
-  const macScale = useTransform(p, [0.1, 0.62], reduced ? [1, 1] : [0.96, 1.04]);
+  // the laptop zooms toward the viewer and slowly dissolves
+  const macScale = useTransform(p, [0, 0.5], reduced ? [1, 1] : [1, 2.7]);
+  const macOpacity = useTransform(p, reduced ? [0, 0.2] : [0.16, 0.48], [1, 0]);
+  const macBlur = useTransform(p, [0.16, 0.48], ["blur(0px)", "blur(6px)"]);
+  // the real page opens out of the screen
+  const heroOpacity = useTransform(p, reduced ? [0, 0.2] : [0.3, 0.56], [0, 1]);
+  const heroScale = useTransform(p, [0.3, 0.62], reduced ? [1, 1] : [0.93, 1]);
+  const heroPointer = useTransform(p, (v) => (v > 0.34 ? "auto" : "none"));
 
   return (
     <section ref={ref} id="top" className="relative h-[280vh]">
       <div className="sticky top-0 flex h-svh flex-col items-center justify-center overflow-hidden px-[var(--shell-pad)] pb-16 pt-28 text-center">
         <MeshGradient />
 
-        {/* hero copy */}
-        <motion.div style={{ y: heroY, opacity: heroOpacity }} className="relative z-10 w-full">
+        {/* hero copy — opens out of the laptop screen */}
+        <motion.div
+          style={{ opacity: heroOpacity, scale: heroScale, pointerEvents: heroPointer as never }}
+          className="relative z-10 w-full"
+        >
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -169,17 +174,17 @@ export function Hero() {
           </motion.div>
         </motion.div>
 
-        {/* the MacBook — peeks from the bottom, rises on scroll */}
+        {/* the MacBook — opening stage, zooms through and dissolves */}
         <motion.div
-          style={{ y: macY, scale: macScale }}
-          className="absolute inset-x-0 bottom-0 z-20 flex justify-center will-change-transform"
+          style={{ scale: macScale, opacity: macOpacity, filter: macBlur }}
+          className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center will-change-transform"
         >
           <motion.div
-            initial={{ opacity: 0, y: 60 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.1, ease: EASE, delay: 1.7 }}
+            initial={{ opacity: 0, y: 46, scale: 0.94 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 1.1, ease: EASE, delay: 1.15 }}
           >
-            <MacBook>
+            <MacBook className="w-[min(88vw,940px)]">
               <MiniSite />
             </MacBook>
           </motion.div>
