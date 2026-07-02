@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<title>Flow Builder — אוטומציה עסקית</title>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Rubik',sans-serif; }
+  html,body { height:100%; }
+  body {
+    background:#0B0E17; color:#EAEDF7; overflow:hidden;
+    background-image:
+      radial-gradient(60% 50% at 20% -10%, rgba(255,138,76,.10) 0%, transparent 55%),
+      radial-gradient(55% 45% at 92% 110%, rgba(95,124,255,.12) 0%, transparent 55%),
+      radial-gradient(rgba(255,255,255,.05) 1px, transparent 1.2px);
+    background-size: auto, auto, 26px 26px;
+  }
+  .top { display:flex; align-items:center; gap:14px; padding:15px 26px; border-bottom:1px solid rgba(255,255,255,.08); background:rgba(10,12,20,.7); }
+  .logo { display:flex; align-items:center; gap:9px; font-weight:700; font-size:15px; }
+  .logo i { width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg,#FF8A4C,#E0566E); display:grid; place-items:center; font-size:13px; }
+  .crumb { font-size:12.5px; color:#8FA3C0; }
+  .top .status { margin-inline-start:auto; display:flex; align-items:center; gap:8px; font-size:12px; color:#3BE0A0; }
+  .top .status i { width:8px; height:8px; border-radius:50%; background:#3BE0A0; box-shadow:0 0 10px rgba(59,224,160,.8); }
+  .top .btn { background:linear-gradient(135deg,#FF8A4C,#F0605E); border-radius:100px; padding:9px 20px; font-size:13px; font-weight:600; }
+
+  .wrap { display:grid; grid-template-columns: 1fr 262px; height:calc(100vh - 63px); }
+  .canvas { position:relative; }
+
+  .node { position:absolute; width:212px; border-radius:14px; background:linear-gradient(180deg,rgba(26,31,50,.95),rgba(16,20,34,.96)); border:1px solid rgba(255,255,255,.1); box-shadow:0 24px 60px -24px rgba(0,0,0,.8); }
+  .node .h { display:flex; align-items:center; gap:9px; padding:11px 14px; font-size:12.5px; font-weight:600; border-bottom:1px solid rgba(255,255,255,.07); }
+  .node .h i { width:22px; height:22px; border-radius:7px; display:grid; place-items:center; font-size:11px; }
+  .node .b { padding:10px 14px 12px; font-size:11.5px; color:#8FA3C0; line-height:1.6; }
+  .node .tag { display:inline-block; margin-top:7px; font-size:10px; padding:3px 9px; border-radius:100px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08); color:#B9C6DF; }
+  .n-trig .h i { background:rgba(255,138,76,.18); } .n-trig { border-color:rgba(255,138,76,.4); }
+  .n-cond .h i { background:rgba(255,194,75,.16); }
+  .n-act1 .h i { background:rgba(95,217,255,.15); }
+  .n-act2 .h i { background:rgba(59,224,160,.15); }
+  .n-act3 .h i { background:rgba(167,139,255,.16); }
+  .port { position:absolute; width:10px; height:10px; border-radius:50%; background:#0B0E17; border:2px solid #5F7CFF; }
+
+  svg.wires { position:absolute; inset:0; width:100%; height:100%; }
+  .wire { fill:none; stroke:url(#wg); stroke-width:2; }
+  .pulse { fill:#FFD9A8; }
+
+  .side { border-right:1px solid rgba(255,255,255,.08); background:rgba(10,12,20,.6); padding:20px 18px; }
+  .side h3 { font-size:12.5px; font-weight:600; margin-bottom:12px; display:flex; justify-content:space-between; }
+  .side h3 span { color:#8FA3C0; font-weight:400; font-size:11px; }
+  .run { border-right:2px solid rgba(59,224,160,.5); padding:7px 12px 7px 0; margin-bottom:10px; font-size:11.5px; color:#B9C6DF; }
+  .run b { display:block; font-size:12px; color:#EAEDF7; font-weight:500; }
+  .run small { color:#71809B; font-size:10.5px; }
+  .run.warn { border-color:rgba(255,194,75,.6); }
+  .kpi { display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-top:16px; }
+  .k { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07); border-radius:11px; padding:11px 12px; }
+  .k b { font-size:19px; font-weight:800; display:block; }
+  .k span { font-size:10.5px; color:#8FA3C0; }
+</style>
+</head>
+<body>
+  <div class="top">
+    <div class="logo"><i>⚡</i>Flow Builder</div>
+    <div class="crumb">אוטומציות / ליד חדש → חוזה חתום</div>
+    <div class="status"><i></i>פעיל · רץ 38 פעמים היום</div>
+    <div class="btn">▶ הרצת בדיקה</div>
+  </div>
+
+  <div class="wrap">
+    <div class="canvas">
+      <svg class="wires">
+        <defs>
+          <linearGradient id="wg" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#FF8A4C" /><stop offset="1" stop-color="#5F7CFF" />
+          </linearGradient>
+        </defs>
+        <path class="wire" d="M 1066 150 C 1015 150 1028 246 978 246" />
+        <path class="wire" d="M 766 246 C 655 246 645 140 538 140" />
+        <path class="wire" d="M 766 246 C 655 246 645 312 538 312" />
+        <path class="wire" d="M 766 246 C 655 246 645 482 538 482" />
+        <circle class="pulse" r="4"><animateMotion dur="2.2s" repeatCount="indefinite" path="M 1066 150 C 1015 150 1028 246 978 246" /></circle>
+        <circle class="pulse" r="4"><animateMotion dur="2s" begin=".6s" repeatCount="indefinite" path="M 766 246 C 655 246 645 140 538 140" /></circle>
+        <circle class="pulse" r="4"><animateMotion dur="2s" begin="1.1s" repeatCount="indefinite" path="M 766 246 C 655 246 645 312 538 312" /></circle>
+        <circle class="pulse" r="4"><animateMotion dur="2.1s" begin="1.5s" repeatCount="indefinite" path="M 766 246 C 655 246 645 482 538 482" /></circle>
+      </svg>
+
+      <div class="node n-trig" style="top:104px; right:60px">
+        <div class="h"><i>⚡</i>טריגר · ליד חדש</div>
+        <div class="b">טופס באתר נשלח או ליד נכנס מקמפיין<span class="tag">Webhook · טפסים</span></div>
+      </div>
+      <div class="node n-cond" style="top:200px; right:360px">
+        <div class="h"><i>⑂</i>תנאי · ניקוד ליד</div>
+        <div class="b">אם תקציב ≥ 20K והתחום רלוונטי → מסלול VIP<span class="tag">3 מסלולים</span></div>
+      </div>
+      <div class="node n-act1" style="top:84px; right:800px">
+        <div class="h"><i>✉</i>מייל היכרות</div>
+        <div class="b">נשלח תוך דקה, מותאם אישית מתוך ה-CRM<span class="tag">תבנית · Resend</span></div>
+      </div>
+      <div class="node n-act2" style="top:254px; right:800px">
+        <div class="h"><i>◎</i>עדכון CRM</div>
+        <div class="b">יצירת כרטיס לקוח, שיוך לנציג ותזכורת מעקב<span class="tag">Pipeline: מו״מ</span></div>
+      </div>
+      <div class="node n-act3" style="top:424px; right:800px">
+        <div class="h"><i>✆</i>וואטסאפ לנציג</div>
+        <div class="b">התראה מיידית עם תקציר הליד וקישור לכרטיס<span class="tag">רק במסלול VIP</span></div>
+      </div>
+    </div>
+
+    <aside class="side">
+      <h3>ריצות אחרונות <span>היום</span></h3>
+      <div class="run"><b>ליד: סטודיו פילאטיס ת״א</b>3 פעולות הושלמו · 4.2 שנ׳<small>14:21 · מסלול VIP</small></div>
+      <div class="run"><b>ליד: משרד עו״ד גרינברג</b>3 פעולות הושלמו · 3.8 שנ׳<small>13:47</small></div>
+      <div class="run warn"><b>ליד: חסר טלפון</b>הושלם עם אזהרה · נשלח מייל בלבד<small>13:02</small></div>
+      <div class="run"><b>ליד: רשת חנויות אופניים</b>3 פעולות הושלמו · 4.0 שנ׳<small>12:36</small></div>
+      <div class="kpi">
+        <div class="k"><b>38</b><span>ריצות היום</span></div>
+        <div class="k"><b>99.2%</b><span>הצלחה</span></div>
+        <div class="k"><b>3.9 שנ׳</b><span>זמן ממוצע</span></div>
+        <div class="k"><b>6.5 ש׳</b><span>נחסכו היום</span></div>
+      </div>
+    </aside>
+  </div>
+</body>
+</html>

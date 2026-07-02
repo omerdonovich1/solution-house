@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<title>Flowly — ניהול משימות לצוותים</title>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Rubik',sans-serif; }
+  html,body { height:100%; }
+  body {
+    background:
+      radial-gradient(75% 65% at 50% -18%, #4A2E8F 0%, rgba(74,46,143,0) 62%),
+      radial-gradient(50% 40% at 88% 22%, rgba(255,94,148,.16) 0%, transparent 60%),
+      #0C0918;
+    color:#F1EEFB; overflow:hidden; height:100vh; display:flex; flex-direction:column; align-items:center; text-align:center;
+  }
+  nav { width:100%; max-width:1160px; display:flex; align-items:center; justify-content:space-between; padding:22px 30px; }
+  .logo { display:flex; align-items:center; gap:9px; font-weight:700; font-size:16px; }
+  .logo i { width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg,#A78BFF,#FF5E94); display:inline-block; }
+  nav .links { display:flex; gap:26px; font-size:13px; color:#B4ABD6; }
+  nav .login { font-size:13px; border:1px solid rgba(255,255,255,.18); border-radius:100px; padding:8px 18px; }
+
+  .badge { margin-top:34px; font-size:12px; color:#CBB8FF; background:rgba(167,139,255,.12); border:1px solid rgba(167,139,255,.3); border-radius:100px; padding:7px 16px; }
+  h1 { margin-top:20px; font-size:56px; font-weight:800; line-height:1.12; letter-spacing:-.02em; max-width:17ch; }
+  h1 .grad { background:linear-gradient(90deg,#A78BFF,#FF5E94); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .sub { margin-top:16px; font-size:16.5px; color:#B4ABD6; font-weight:300; max-width:52ch; line-height:1.7; }
+
+  .form { margin-top:28px; display:flex; gap:10px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12); padding:7px; border-radius:100px; width:430px; }
+  .form input { flex:1; background:none; border:none; outline:none; color:#F1EEFB; font-size:13.5px; padding:0 16px; font-family:inherit; }
+  .form input::placeholder { color:#8B82AC; }
+  .form .go { background:linear-gradient(135deg,#A78BFF,#7C5CFF); border-radius:100px; padding:12px 26px; font-size:13.5px; font-weight:600; box-shadow:0 12px 30px -10px rgba(124,92,255,.6); }
+  .note { margin-top:12px; font-size:11.5px; color:#8B82AC; }
+
+  .app { margin-top:38px; width:min(860px,80vw); border-radius:18px 18px 0 0; border:1px solid rgba(255,255,255,.13); border-bottom:none; background:linear-gradient(180deg,rgba(30,24,54,.92),rgba(16,12,32,.94)); box-shadow:0 -20px 80px -20px rgba(124,92,255,.35); padding:18px 22px; flex:1; }
+  .app .bar { display:flex; gap:6px; margin-bottom:16px; }
+  .app .bar i { width:9px; height:9px; border-radius:50%; background:#5A5478; display:inline-block; }
+  .app .bar i:first-child{ background:#FF5E94; } .app .bar i:nth-child(2){ background:#FFC24B; } .app .bar i:nth-child(3){ background:#3BE0A0; }
+  .cols { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; text-align:right; }
+  .col h3 { font-size:12px; color:#B4ABD6; margin-bottom:10px; display:flex; justify-content:space-between; }
+  .card { background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); border-radius:11px; padding:12px 14px; margin-bottom:9px; }
+  .card b { font-size:12.5px; font-weight:500; display:block; }
+  .card .row { display:flex; justify-content:space-between; align-items:center; margin-top:9px; }
+  .pill { font-size:9.5px; padding:3px 9px; border-radius:100px; }
+  .p1 { background:rgba(167,139,255,.15); color:#CBB8FF; } .p2 { background:rgba(59,224,160,.13); color:#3BE0A0; } .p3 { background:rgba(255,94,148,.14); color:#FF8FB4; }
+  .ava { display:flex; }
+  .ava i { width:18px; height:18px; border-radius:50%; border:2px solid #16102C; background:linear-gradient(135deg,#A78BFF,#6C4FD8); display:inline-block; margin-inline-start:-6px; }
+  .ava i:nth-child(2){ background:linear-gradient(135deg,#FF9F6E,#E0566E); }
+</style>
+</head>
+<body>
+  <nav>
+    <div class="logo"><i></i>Flowly</div>
+    <div class="links"><span>פיצ׳רים</span><span>מחירים</span><span>לקוחות</span><span>בלוג</span></div>
+    <div class="login">התחברות</div>
+  </nav>
+
+  <div class="badge">✦ חדש — אוטומציות חכמות בכל תוכנית</div>
+  <h1>הצוות שלכם, <span class="grad">מסונכרן סוף־סוף.</span></h1>
+  <p class="sub">Flowly מרכזת משימות, לוחות זמנים ושיחות במקום אחד — כדי שהצוות יעבוד, לא יתאם. התחילו בחינם, בלי כרטיס אשראי.</p>
+
+  <div class="form">
+    <input placeholder="האימייל שלכם בעבודה" />
+    <span class="go">התחילו בחינם</span>
+  </div>
+  <div class="note">14 ימי ניסיון · ביטול בקליק · 4.9★ מ-2,300 ביקורות</div>
+
+  <div class="app">
+    <div class="bar"><i></i><i></i><i></i></div>
+    <div class="cols">
+      <div class="col"><h3>לביצוע <span>4</span></h3>
+        <div class="card"><b>עיצוב מסך תשלום</b><div class="row"><span class="pill p1">מוצר</span><span class="ava"><i></i><i></i></span></div></div>
+        <div class="card"><b>חיבור Slack</b><div class="row"><span class="pill p3">אינטגרציה</span><span class="ava"><i></i></span></div></div>
+      </div>
+      <div class="col"><h3>בתהליך <span>2</span></h3>
+        <div class="card"><b>דוח רבעוני ללקוחות</b><div class="row"><span class="pill p2">דאטה</span><span class="ava"><i></i><i></i></span></div></div>
+        <div class="card"><b>שדרוג אונבורדינג</b><div class="row"><span class="pill p1">מוצר</span><span class="ava"><i></i></span></div></div>
+      </div>
+      <div class="col"><h3>הושלם <span>7</span></h3>
+        <div class="card" style="opacity:.65"><b>✓ קמפיין השקה</b><div class="row"><span class="pill p3">שיווק</span><span class="ava"><i></i><i></i></span></div></div>
+        <div class="card" style="opacity:.5"><b>✓ מיגרציית DB</b><div class="row"><span class="pill p2">דבאופס</span><span class="ava"><i></i></span></div></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -89,8 +89,8 @@ export const PROJECTS: readonly Project[] = [
     description:
       "מערכת בקרת איכות לרצפת ייצור. סריקת ברקוד בעמדות, ניהול NCR, השלמת הזמנות אוטומטית ודאשבורד ניהול בזמן אמת.",
     tags: ["מערכת", "Industry"],
-    href: "/mockups/qc-system.html",
-    image: "/proj-qc.png",
+    href: "/mockups/shots/qc-real.jpg",
+    image: "/mockups/shots/qc-real.jpg",
     span: "lg:col-span-1 lg:row-span-1",
   },
   {
@@ -99,8 +99,8 @@ export const PROJECTS: readonly Project[] = [
     description:
       "מערכת ניהול צי רכבים. הזמנות ותחזוקה, התראות טסט וביטוח, בוט WhatsApp לנהגים וסריקת מסמכים אוטומטית ב-AI.",
     tags: ["SaaS", "AI"],
-    href: "/mockups/vanguard-fleet.html",
-    image: "/proj-fleet.png",
+    href: "/mockups/shots/fleet-real.jpg",
+    image: "/mockups/shots/fleet-real.jpg",
     span: "lg:col-span-1 lg:row-span-1",
   },
   {

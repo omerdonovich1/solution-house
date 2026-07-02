@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<title>נועה — סוכנת AI לשירות לקוחות</title>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Rubik',sans-serif; }
+  html,body { height:100%; }
+  body {
+    background:
+      radial-gradient(70% 55% at 85% -10%, #133B33 0%, transparent 58%),
+      radial-gradient(55% 45% at 8% 108%, #0E2A3A 0%, transparent 55%),
+      #070D0C;
+    color:#E9F4EF; overflow:hidden;
+  }
+  .app { display:grid; grid-template-columns: 250px 1fr 268px; height:100vh; }
+  .pane { border-left:1px solid rgba(255,255,255,.07); }
+
+  /* conversations */
+  .convs { padding:22px 18px; background:rgba(6,12,11,.55); }
+  .brand { display:flex; align-items:center; gap:10px; margin-bottom:22px; }
+  .orb { width:36px; height:36px; border-radius:50%; background:radial-gradient(circle at 32% 30%, #7CF5C8, #14B884 60%, #0B6B4C); box-shadow:0 0 24px rgba(34,214,150,.5); }
+  .brand b { font-size:15px; } .brand span { display:block; font-size:10.5px; color:#7FA396; font-weight:400; }
+  .cv { padding:11px 13px; border-radius:12px; margin-bottom:7px; font-size:12.5px; color:#A9C4B8; }
+  .cv b { display:flex; justify-content:space-between; color:#DDEFE7; font-weight:500; font-size:12.5px; }
+  .cv small { font-size:10.5px; color:#6E8B7F; }
+  .cv.on { background:rgba(34,214,150,.1); border:1px solid rgba(34,214,150,.25); }
+  .cv .n { background:#22D696; color:#04120C; font-size:9.5px; font-weight:700; border-radius:100px; padding:1px 7px; }
+
+  /* chat */
+  .chat { display:flex; flex-direction:column; }
+  .chead { display:flex; align-items:center; gap:11px; padding:16px 24px; border-bottom:1px solid rgba(255,255,255,.07); }
+  .chead .st { font-size:11px; color:#22D696; display:flex; align-items:center; gap:6px; }
+  .chead .st i { width:7px; height:7px; border-radius:50%; background:#22D696; box-shadow:0 0 10px rgba(34,214,150,.9); }
+  .msgs { flex:1; padding:26px 30px; display:flex; flex-direction:column; gap:14px; overflow:hidden; }
+  .m { max-width:66%; padding:12px 16px; font-size:13.5px; line-height:1.65; }
+  .m.user { align-self:flex-start; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08); border-radius:15px 15px 15px 4px; color:#D5E6DD; }
+  .m.bot { align-self:flex-end; background:linear-gradient(135deg,rgba(34,214,150,.13),rgba(34,214,150,.05)); border:1px solid rgba(34,214,150,.25); border-radius:15px 15px 4px 15px; }
+  .m small { display:block; font-size:10px; color:#6E8B7F; margin-top:6px; }
+  .card { align-self:flex-end; width:66%; border:1px solid rgba(255,255,255,.1); border-radius:14px; overflow:hidden; }
+  .card .h { background:rgba(255,255,255,.05); padding:10px 15px; font-size:11.5px; color:#9FC0B2; display:flex; justify-content:space-between; }
+  .card .b { padding:13px 15px; font-size:12.5px; display:flex; justify-content:space-between; align-items:center; }
+  .card .b b { display:block; font-size:13.5px; }
+  .card .b small { color:#7FA396; font-size:11px; }
+  .ok { background:rgba(34,214,150,.13); color:#22D696; border:1px solid rgba(34,214,150,.3); font-size:10.5px; font-weight:600; border-radius:100px; padding:4px 11px; }
+  .typing { align-self:flex-end; display:flex; gap:4px; padding:12px 18px; background:rgba(34,214,150,.08); border-radius:15px 15px 4px 15px; border:1px solid rgba(34,214,150,.18); }
+  .typing i { width:6px; height:6px; border-radius:50%; background:#22D696; opacity:.4; }
+  .typing i:nth-child(2){ opacity:.7 } .typing i:nth-child(3){ opacity:1 }
+  .input { margin:0 30px 22px; display:flex; align-items:center; gap:10px; border:1px solid rgba(255,255,255,.1); background:rgba(255,255,255,.04); border-radius:100px; padding:8px 8px 8px 18px; font-size:13px; color:#7FA396; }
+  .input .send { margin-inline-start:auto; background:linear-gradient(135deg,#22D696,#0FA271); color:#04120C; border-radius:100px; padding:10px 22px; font-weight:600; font-size:13px; }
+
+  /* tools */
+  .tools { padding:22px 18px; background:rgba(6,12,11,.4); }
+  .tools h3 { font-size:12px; color:#7FA396; font-weight:500; margin-bottom:12px; }
+  .tool { display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:11px; background:rgba(255,255,255,.035); border:1px solid rgba(255,255,255,.06); margin-bottom:8px; font-size:12px; color:#C3DACE; }
+  .tool i { width:8px; height:8px; border-radius:3px; }
+  .t1{ background:#22D696 } .t2{ background:#5FD9FF } .t3{ background:#FFC24B } .t4{ background:#A78BFF }
+  .tool .use { margin-inline-start:auto; font-size:10px; color:#6E8B7F; }
+  .stat { margin-top:18px; border-top:1px solid rgba(255,255,255,.07); padding-top:16px; }
+  .stat .row { display:flex; justify-content:space-between; font-size:12px; color:#A9C4B8; padding:6px 0; }
+  .stat b { color:#EAF7F0; }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="convs pane">
+    <div class="brand"><div class="orb"></div><div><b>נועה · סוכנת AI</b><span>שירות לקוחות אוטונומי</span></div></div>
+    <div class="cv on"><b>דניאל אברהם <span class="n">פעיל</span></b>סטטוס הזמנה #8471…<br /><small>עכשיו · טופל ע״י נועה</small></div>
+    <div class="cv"><b>מיכל רוזן</b>החזרת מוצר פגום<br /><small>לפני 4 דק׳ · הועבר לנציג</small></div>
+    <div class="cv"><b>שירן כהן</b>עדכון כתובת למשלוח<br /><small>לפני 11 דק׳ · טופל ✓</small></div>
+    <div class="cv"><b>אורי לביא</b>שאלה על חשבונית<br /><small>לפני 26 דק׳ · טופל ✓</small></div>
+  </aside>
+
+  <main class="chat">
+    <div class="chead"><div class="orb" style="width:30px;height:30px"></div><div><b style="font-size:14px">שיחה עם דניאל אברהם</b><div class="st"><i></i>נועה מטפלת · זמן תגובה 1.8 שנ׳</div></div></div>
+    <div class="msgs">
+      <div class="m user">היי, הזמנתי מכם לפני שבוע ועדיין לא קיבלתי כלום. אפשר לבדוק מה קורה עם ההזמנה שלי?<small>14:02</small></div>
+      <div class="m bot">היי דניאל! 👋 בדקתי עבורך — ההזמנה #8471 נארזה הבוקר ונמסרה לשליח. היא תגיע אליך <b>מחר בין 09:00–13:00</b>. הנה הפרטים:<small>14:02 · נועה בדקה במערכת ההזמנות</small></div>
+      <div class="card">
+        <div class="h"><span>הזמנה #8471</span><span>חנות אונליין</span></div>
+        <div class="b"><div><b>אוזניות BT Pro + מטען</b><small>נשלח עם שליח עד הבית · מס׳ מעקב IL29845110</small></div><span class="ok">במשלוח ✓</span></div>
+      </div>
+      <div class="m user">מעולה תודה! אפשר לשנות שיגיע אחרי 12:00?<small>14:03</small></div>
+      <div class="typing"><i></i><i></i><i></i></div>
+    </div>
+    <div class="input">נועה מקלידה תשובה ומעדכנת את חלון המסירה מול חברת השליחויות…<span class="send">שליחה</span></div>
+  </main>
+
+  <aside class="tools pane">
+    <h3>כלים מחוברים</h3>
+    <div class="tool"><i class="t1"></i>מערכת הזמנות<span class="use">נשלף עכשיו</span></div>
+    <div class="tool"><i class="t2"></i>חברת שליחויות<span class="use">מתעדכן…</span></div>
+    <div class="tool"><i class="t3"></i>CRM לקוחות<span class="use">לפני 2 דק׳</span></div>
+    <div class="tool"><i class="t4"></i>מרכז ידע ומדיניות<span class="use">—</span></div>
+    <div class="stat">
+      <h3>היום</h3>
+      <div class="row"><span>שיחות שטופלו לבד</span><b>142 · 87%</b></div>
+      <div class="row"><span>זמן תגובה ממוצע</span><b>1.8 שנ׳</b></div>
+      <div class="row"><span>שביעות רצון</span><b>4.8 ★</b></div>
+      <div class="row"><span>הועברו לנציג אנושי</span><b>21</b></div>
+    </div>
+  </aside>
+</div>
+</body>
+</html>
