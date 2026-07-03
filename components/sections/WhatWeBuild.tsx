@@ -1,28 +1,33 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { ArrowUpLeft } from "lucide-react";
+import { ArrowUpLeft, ChevronLeft, ChevronRight } from "lucide-react";
 import { SectionHeader } from "@/components/SectionHeader";
-import { PROJECTS } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
 /**
- * Section 01 — a live gallery of what we build. Every category screens a
- * real mockup (two of them are actual client systems, sensitive data
- * blurred); the side cards steer the cycle and burn an amber fuse.
+ * Section 01 — a live gallery of what we build. Each category holds one or
+ * more examples (design shells + real, sensitive-data-blurred client work);
+ * scroll between examples within a category, while the side cards auto-cycle
+ * between categories on an amber fuse.
  */
 
-const CYCLE_MS = 6000;
+const CYCLE_MS = 6500;
+
+interface Example {
+  readonly name: string;
+  readonly image: string;
+  readonly href: string;
+  /** Screenshot of a real client system (vs. a design shell). */
+  readonly real?: boolean;
+}
 
 interface Category {
   readonly id: string;
   readonly name: string;
   readonly blurb: string;
-  readonly image: string;
-  readonly href: string;
-  /** Screenshot of a real client system (vs. a design shell). */
-  readonly real?: boolean;
+  readonly examples: readonly Example[];
 }
 
 const CATEGORIES: readonly Category[] = [
@@ -30,60 +35,110 @@ const CATEGORIES: readonly Category[] = [
     id: "websites",
     name: "אתרים",
     blurb: "אתר מהיר ומדויק שמספר את הסיפור שלכם — ומניע לפעולה.",
-    image: "/mockups/shots/websites.jpg",
-    href: "/mockups/websites.html",
+    examples: [
+      { name: "SHADIEZ", image: "/proj2.png", href: "https://shadiez-seven.vercel.app", real: true },
+      { name: "SPINZ", image: "/proj3.png", href: "https://www.spinzbikes.com", real: true },
+      { name: "ATELIER", image: "/mockups/shots/websites.jpg", href: "/mockups/websites.html" },
+    ],
   },
   {
     id: "landing",
     name: "דפי נחיתה",
     blurb: "עמוד אחד עם מטרה אחת: להפוך מבקרים ללקוחות.",
-    image: "/mockups/shots/landing.jpg",
-    href: "/mockups/landing.html",
+    examples: [
+      { name: "FLOWLY", image: "/mockups/shots/landing.jpg", href: "/mockups/landing.html" },
+    ],
   },
   {
     id: "dashboards",
     name: "דשבורדים",
-    blurb: "נתונים חיים, החלטות מהירות — כל העסק במסך אחד. מתוך מערכת בקרת הייצור שבנינו ל-Dynamica.",
-    image: "/mockups/shots/qc-real.jpg",
-    href: "/mockups/shots/qc-real.jpg",
-    real: true,
+    blurb: "נתונים חיים, החלטות מהירות — כל העסק במסך אחד.",
+    examples: [
+      { name: "DYNAMICA QC", image: "/mockups/shots/qc-real.jpg", href: "/mockups/shots/qc-real.jpg", real: true },
+    ],
   },
   {
     id: "agents",
     name: "סוכני AI",
     blurb: "עובדים דיגיטליים שעונים, מסכמים ומבצעים. 24/7.",
-    image: "/mockups/shots/agents.jpg",
-    href: "/mockups/agents.html",
+    examples: [
+      { name: "נועה", image: "/mockups/shots/agents.jpg", href: "/mockups/agents.html" },
+    ],
   },
   {
     id: "systems",
     name: "מערכות",
-    blurb: "מערכת מותאמת שמחליפה אקסלים ותהליכים ידניים. מתוך מערכת ניהול הצי Vanguard Fleet.",
-    image: "/mockups/shots/fleet-real.jpg",
-    href: "/mockups/shots/fleet-real.jpg",
-    real: true,
+    blurb: "מערכת מותאמת שמחליפה אקסלים ותהליכים ידניים.",
+    examples: [
+      { name: "VANGUARD FLEET", image: "/mockups/shots/fleet-real.jpg", href: "/mockups/shots/fleet-real.jpg", real: true },
+      { name: "CARMAN S", image: "/proj1.png", href: "https://carman-s.vercel.app", real: true },
+    ],
   },
   {
     id: "automations",
     name: "אוטומציות",
     blurb: "תהליכים שרצים לבד — מהטריגר ועד התוצאה.",
-    image: "/mockups/shots/automations.jpg",
-    href: "/mockups/automations.html",
+    examples: [
+      { name: "FLOW BUILDER", image: "/mockups/shots/automations.jpg", href: "/mockups/automations.html" },
+    ],
   },
 ] as const;
+
+function ExampleSlide({ example }: { example: Example }) {
+  const external = example.href.startsWith("http") || example.href.startsWith("/mockups");
+  return (
+    <a
+      href={example.href}
+      target={external ? "_blank" : undefined}
+      rel={external ? "noopener noreferrer" : undefined}
+      className="group relative block flex-[0_0_100%]"
+      aria-label={`פתיחת ${example.name}`}
+    >
+      <div className="relative overflow-hidden rounded-t-xl border border-b-0 border-white/[0.1]">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={example.image}
+          alt={example.name}
+          className="block w-full transition-transform duration-700 ease-out group-hover:scale-[1.015]"
+          loading="lazy"
+          draggable={false}
+        />
+        {/* hover invite */}
+        <div className="pointer-events-none absolute inset-0 flex items-end justify-start bg-gradient-to-t from-ink/70 via-transparent to-transparent p-4 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+          <span className="flex items-center gap-2 rounded-full bg-ivory px-4 py-2 text-[12px] font-bold text-ink">
+            {example.name} · צפייה במסך מלא
+            <ArrowUpLeft className="h-3.5 w-3.5" />
+          </span>
+        </div>
+      </div>
+    </a>
+  );
+}
 
 export function WhatWeBuild() {
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [slide, setSlide] = useState(0);
   const reduced = useReducedMotion();
 
+  const cat = CATEGORIES[active];
+  const count = cat.examples.length;
+
+  // category auto-cycle
   useEffect(() => {
     if (paused || reduced) return;
     const id = setInterval(() => setActive((i) => (i + 1) % CATEGORIES.length), CYCLE_MS);
     return () => clearInterval(id);
   }, [paused, reduced, active]);
 
-  const cat = CATEGORIES[active];
+  // reset the example rail whenever the category changes
+  useEffect(() => {
+    setSlide(0);
+  }, [active]);
+
+  function goToSlide(i: number) {
+    setSlide(Math.max(0, Math.min(count - 1, i)));
+  }
 
   return (
     <section id="build" className="py-32 sm:py-48">
@@ -100,7 +155,7 @@ export function WhatWeBuild() {
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
         >
-          {/* live mockup panel */}
+          {/* live example panel */}
           <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-surface">
             <div className="flex items-center justify-between px-7 pt-6 font-mono text-[11px] uppercase tracking-[0.22em] text-mist">
               <AnimatePresence mode="wait">
@@ -113,7 +168,7 @@ export function WhatWeBuild() {
                   className="flex items-center gap-3"
                 >
                   <span className="kicker">{cat.name}</span>
-                  {cat.real && (
+                  {cat.examples[slide]?.real && (
                     <span className="rounded-full border border-dot/40 bg-dot/10 px-2.5 py-0.5 text-[9px] tracking-[0.18em] text-dot">
                       מערכת אמיתית
                     </span>
@@ -121,57 +176,99 @@ export function WhatWeBuild() {
                 </motion.span>
               </AnimatePresence>
               <span dir="ltr">
-                <span className="text-dot">{String(active + 1).padStart(2, "0")}</span>
+                <span className="text-dot">{String(slide + 1).padStart(2, "0")}</span>
                 <span className="text-mist/50"> // </span>
-                {String(CATEGORIES.length).padStart(2, "0")}
+                {String(count).padStart(2, "0")}
               </span>
             </div>
 
-            <a
-              href={cat.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group mt-5 block px-5 sm:px-7"
-              aria-label={`פתיחת הדוגמה של ${cat.name}`}
-            >
-              <div className="relative overflow-hidden rounded-t-xl border border-b-0 border-white/[0.1]">
-                <AnimatePresence mode="wait">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <motion.img
-                    key={cat.id}
-                    src={cat.image}
-                    alt={`מוקאפ ${cat.name}`}
-                    initial={{ opacity: 0, scale: 1.03, y: 14 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, transition: { duration: 0.2 } }}
-                    transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                    className="block w-full transition-transform duration-700 ease-out group-hover:scale-[1.015]"
-                    loading="lazy"
-                    draggable={false}
-                  />
-                </AnimatePresence>
-                {/* hover invite */}
-                <div className="pointer-events-none absolute inset-0 flex items-end justify-start bg-gradient-to-t from-ink/60 via-transparent to-transparent p-4 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
-                  <span className="flex items-center gap-2 rounded-full bg-ivory px-4 py-2 text-[12px] font-bold text-ink">
-                    צפייה במסך מלא
-                    <ArrowUpLeft className="h-3.5 w-3.5" />
-                  </span>
-                </div>
-              </div>
-            </a>
+            {/* horizontal example rail for this category */}
+            <div className="relative mt-5">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={cat.id}
+                  initial={{ opacity: 0, y: 14 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, transition: { duration: 0.2 } }}
+                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                  className="px-5 sm:px-7"
+                >
+                  {/* transform carousel — CSS translateX, immune to scroll-snap */}
+                  <div className="overflow-hidden">
+                    <div
+                      dir="ltr"
+                      className="flex"
+                      style={{
+                        transform: `translateX(-${slide * 100}%)`,
+                        transition: reduced
+                          ? "none"
+                          : "transform 0.55s cubic-bezier(0.22,1,0.36,1)",
+                      }}
+                    >
+                      {cat.examples.map((ex) => (
+                        <ExampleSlide key={ex.name} example={ex} />
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
 
-            <AnimatePresence mode="wait">
-              <motion.p
-                key={cat.id}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.35 }}
-                className="border-t border-white/[0.06] px-7 py-5 text-[15px] font-light text-mist"
-              >
-                {cat.blurb}
-              </motion.p>
-            </AnimatePresence>
+              {/* per-category slide controls — only when >1 example */}
+              {count > 1 && (
+                <>
+                  <button
+                    type="button"
+                    aria-label="הדוגמה הקודמת"
+                    onClick={() => goToSlide(slide - 1)}
+                    disabled={slide === 0}
+                    className="absolute right-9 top-1/2 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full border border-white/15 bg-ink/70 text-ivory backdrop-blur transition-all duration-300 hover:border-dot hover:text-dot disabled:opacity-30"
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </button>
+                  <button
+                    type="button"
+                    aria-label="הדוגמה הבאה"
+                    onClick={() => goToSlide(slide + 1)}
+                    disabled={slide === count - 1}
+                    className="absolute left-9 top-1/2 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full border border-white/15 bg-ink/70 text-ivory backdrop-blur transition-all duration-300 hover:border-dot hover:text-dot disabled:opacity-30"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </button>
+                </>
+              )}
+            </div>
+
+            <div className="flex items-center justify-between gap-4 border-t border-white/[0.06] px-7 py-5">
+              <AnimatePresence mode="wait">
+                <motion.p
+                  key={cat.id}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.35 }}
+                  className="text-[15px] font-light text-mist"
+                >
+                  {cat.blurb}
+                </motion.p>
+              </AnimatePresence>
+              {/* dots */}
+              {count > 1 && (
+                <div className="flex shrink-0 items-center gap-2">
+                  {cat.examples.map((_, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      aria-label={`דוגמה ${i + 1}`}
+                      onClick={() => goToSlide(i)}
+                      className={cn(
+                        "h-1.5 rounded-full transition-all duration-300",
+                        i === slide ? "w-5 bg-dot" : "w-1.5 bg-white/20 hover:bg-white/40"
+                      )}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
           {/* category selectors */}
@@ -204,7 +301,7 @@ export function WhatWeBuild() {
                     />
                     {c.name}
                     <span dir="ltr" className="ms-auto font-mono text-[10px] font-normal tracking-[0.22em] text-mist/70">
-                      {String(i + 1).padStart(2, "0")}
+                      {String(c.examples.length).padStart(2, "0")}
                     </span>
                   </span>
                   {/* amber fuse — burns down while this card is live */}
@@ -218,46 +315,6 @@ export function WhatWeBuild() {
                     />
                   )}
                 </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* selected works — folded in from the retired projects page */}
-        <div className="mt-14 border-t border-white/[0.06] pt-10">
-          <div className="mb-7 flex items-baseline justify-between font-mono text-[11px] uppercase tracking-[0.22em] text-mist">
-            <span className="kicker">עבודות שכבר בנינו</span>
-            <span dir="ltr">{String(PROJECTS.length).padStart(2, "0")} PROJECTS</span>
-          </div>
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-            {PROJECTS.map((p) => {
-              const external = p.href.startsWith("http") || p.href.startsWith("/mockups");
-              return (
-                <a
-                  key={p.id}
-                  href={p.href}
-                  target={external ? "_blank" : undefined}
-                  rel={external ? "noopener noreferrer" : undefined}
-                  className="group overflow-hidden rounded-xl border border-white/[0.08] bg-surface transition-colors duration-500 hover:border-white/25"
-                >
-                  <div className="relative aspect-[16/10] overflow-hidden">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={p.image}
-                      alt={p.name}
-                      loading="lazy"
-                      draggable={false}
-                      className="h-full w-full object-cover grayscale transition-[transform,filter] duration-700 ease-out group-hover:scale-[1.05] group-hover:grayscale-0"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-ink/70 to-transparent" />
-                  </div>
-                  <div className="flex items-center justify-between gap-2 px-4 py-3">
-                    <span className="text-[13px] font-black tracking-tightest text-ivory">
-                      {p.name}
-                    </span>
-                    <ArrowUpLeft className="h-3.5 w-3.5 shrink-0 text-mist transition-colors duration-300 group-hover:text-dot" />
-                  </div>
-                </a>
               );
             })}
           </div>
