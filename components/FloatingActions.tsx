@@ -83,7 +83,7 @@ export function FloatingActions() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.96 }}
             transition={{ duration: 0.35, ease: EASE }}
-            className="fixed bottom-[104px] left-4 z-[85] flex h-[min(520px,70vh)] w-[min(380px,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-white/[0.1] bg-[#0C0C0E] shadow-[0_40px_90px_-30px_rgba(0,0,0,0.9)]"
+            className="fixed bottom-[140px] left-4 sm:bottom-[152px] z-[85] flex h-[min(500px,calc(100svh-190px))] w-[min(380px,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-white/[0.1] bg-[#0C0C0E] shadow-[0_40px_90px_-30px_rgba(0,0,0,0.9)]"
           >
             {/* header */}
             <div className="flex items-center gap-3 border-b border-white/[0.07] px-4 py-3">
@@ -174,7 +174,7 @@ export function FloatingActions() {
           transition={{ delay: 1.6, duration: 0.5, ease: EASE }}
           whileHover={{ scale: 1.08 }}
           whileTap={{ scale: 0.94 }}
-          className="relative grid h-14 w-14 place-items-center rounded-full bg-ivory text-ink shadow-[0_16px_40px_-12px_rgba(233,233,229,0.45)]"
+          className="relative grid h-12 w-12 place-items-center rounded-full bg-ivory text-ink shadow-[0_16px_40px_-12px_rgba(233,233,229,0.45)] sm:h-14 sm:w-14"
         >
           <AnimatePresence mode="wait">
             <motion.span
@@ -202,7 +202,7 @@ export function FloatingActions() {
           transition={{ delay: 1.45, duration: 0.5, ease: EASE }}
           whileHover={{ scale: 1.08 }}
           whileTap={{ scale: 0.94 }}
-          className="grid h-14 w-14 place-items-center rounded-full bg-[#25D366] text-white shadow-[0_16px_40px_-12px_rgba(37,211,102,0.55)]"
+          className="grid h-12 w-12 place-items-center rounded-full bg-[#25D366] text-white shadow-[0_16px_40px_-12px_rgba(37,211,102,0.55)] sm:h-14 sm:w-14"
         >
           <WhatsAppIcon />
         </motion.a>

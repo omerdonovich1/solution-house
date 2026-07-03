@@ -141,7 +141,7 @@ export function WhatWeBuild() {
   }
 
   return (
-    <section id="build" className="py-32 sm:py-48">
+    <section id="build" className="py-16 sm:py-24">
       <div className="shell">
         <SectionHeader
           index="01"
@@ -151,13 +151,13 @@ export function WhatWeBuild() {
         />
 
         <div
-          className="mt-16 grid gap-5 lg:grid-cols-[1fr_320px]"
+          className="mt-10 grid gap-4 sm:gap-5 lg:grid-cols-[1fr_320px]"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
         >
           {/* live example panel */}
           <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-surface">
-            <div className="flex items-center justify-between px-7 pt-6 font-mono text-[11px] uppercase tracking-[0.22em] text-mist">
+            <div className="flex items-center justify-between px-5 pt-5 font-mono sm:px-7 sm:pt-6 text-[11px] uppercase tracking-[0.22em] text-mist">
               <AnimatePresence mode="wait">
                 <motion.span
                   key={cat.id}
@@ -221,7 +221,7 @@ export function WhatWeBuild() {
                     aria-label="הדוגמה הקודמת"
                     onClick={() => goToSlide(slide - 1)}
                     disabled={slide === 0}
-                    className="absolute right-9 top-1/2 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full border border-white/15 bg-ink/70 text-ivory backdrop-blur transition-all duration-300 hover:border-dot hover:text-dot disabled:opacity-30"
+                    className="absolute right-7 top-1/2 grid h-8 w-8 -translate-y-1/2 sm:right-9 sm:h-9 sm:w-9 place-items-center rounded-full border border-white/15 bg-ink/70 text-ivory backdrop-blur transition-all duration-300 hover:border-dot hover:text-dot disabled:opacity-30"
                   >
                     <ChevronRight className="h-4 w-4" />
                   </button>
@@ -230,7 +230,7 @@ export function WhatWeBuild() {
                     aria-label="הדוגמה הבאה"
                     onClick={() => goToSlide(slide + 1)}
                     disabled={slide === count - 1}
-                    className="absolute left-9 top-1/2 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full border border-white/15 bg-ink/70 text-ivory backdrop-blur transition-all duration-300 hover:border-dot hover:text-dot disabled:opacity-30"
+                    className="absolute left-7 top-1/2 grid h-8 w-8 -translate-y-1/2 sm:left-9 sm:h-9 sm:w-9 place-items-center rounded-full border border-white/15 bg-ink/70 text-ivory backdrop-blur transition-all duration-300 hover:border-dot hover:text-dot disabled:opacity-30"
                   >
                     <ChevronLeft className="h-4 w-4" />
                   </button>
@@ -238,7 +238,7 @@ export function WhatWeBuild() {
               )}
             </div>
 
-            <div className="flex items-center justify-between gap-4 border-t border-white/[0.06] px-7 py-5">
+            <div className="flex items-center justify-between gap-4 border-t border-white/[0.06] px-5 py-4 sm:px-7 sm:py-5">
               <AnimatePresence mode="wait">
                 <motion.p
                   key={cat.id}
@@ -246,7 +246,7 @@ export function WhatWeBuild() {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.35 }}
-                  className="text-[15px] font-light text-mist"
+                  className="text-[13.5px] font-light text-mist sm:text-[15px]"
                 >
                   {cat.blurb}
                 </motion.p>
@@ -281,7 +281,7 @@ export function WhatWeBuild() {
                   type="button"
                   onClick={() => setActive(i)}
                   className={cn(
-                    "group relative overflow-hidden rounded-xl border px-5 py-4 text-start transition-colors duration-500",
+                    "group relative overflow-hidden rounded-xl border px-4 py-3 text-start transition-colors duration-500 sm:px-5 sm:py-4",
                     isActive
                       ? "border-white/25 bg-surface"
                       : "border-white/[0.08] hover:border-white/20"

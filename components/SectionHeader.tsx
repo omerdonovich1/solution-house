@@ -53,7 +53,7 @@ export function SectionHeader({
       <motion.div variants={fadeUp} className="hairline" />
       <motion.div
         variants={fadeUp}
-        className="mb-12 mt-6 flex items-baseline justify-between font-mono text-[11px] uppercase tracking-[0.22em] text-mist"
+        className="mb-8 mt-5 flex items-baseline justify-between font-mono text-[11px] uppercase tracking-[0.22em] text-mist"
       >
         <span dir="ltr">
           <span className="text-dot">{index}</span>
@@ -74,7 +74,7 @@ export function SectionHeader({
       {lead ? (
         <motion.p
           variants={blurIn}
-          className="ms-auto mt-9 max-w-2xl text-lg font-light leading-relaxed text-mist sm:text-xl"
+          className="ms-auto mt-5 max-w-2xl text-base font-light leading-relaxed text-mist sm:mt-7 sm:text-xl"
         >
           {lead}
         </motion.p>

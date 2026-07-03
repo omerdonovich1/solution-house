@@ -15,12 +15,12 @@ function StepBlock({ step }: { step: ProcessStep }) {
     <div
       ref={ref}
       className={cn(
-        "relative grid grid-cols-[auto_1fr] gap-8 py-12 transition-opacity duration-700 sm:gap-12",
+        "relative grid grid-cols-[auto_1fr] gap-5 py-7 transition-opacity duration-700 sm:gap-12 sm:py-9",
         active ? "opacity-100" : "opacity-30"
       )}
     >
       {/* oversized ghost numeral + progress spine */}
-      <div className="relative flex w-[72px] flex-col items-center sm:w-[110px]">
+      <div className="relative flex w-[58px] flex-col items-center sm:w-[110px]">
         <span
           className={cn(
             "font-mono text-[clamp(2.6rem,6vw,4.5rem)] font-bold leading-none transition-all duration-700",
@@ -49,10 +49,10 @@ function StepBlock({ step }: { step: ProcessStep }) {
         >
           {step.title}
         </h3>
-        <p className="mt-4 max-w-xl text-base font-light leading-relaxed text-mist">
+        <p className="mt-3 max-w-xl text-[15px] font-light leading-relaxed text-mist sm:mt-4 sm:text-base">
           {step.description}
         </p>
-        <div className="mt-7 flex max-w-xl items-start gap-3 border-t border-white/[0.08] pt-5">
+        <div className="mt-5 flex max-w-xl items-start gap-3 border-t border-white/[0.08] pt-4 sm:mt-7 sm:pt-5">
           <span className="mt-[2px] shrink-0 font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-volt">
             Insight
           </span>
@@ -65,7 +65,7 @@ function StepBlock({ step }: { step: ProcessStep }) {
 
 export function Process() {
   return (
-    <section id="process" className="py-32 sm:py-48">
+    <section id="process" className="py-16 sm:py-24">
       <div className="shell">
         <SectionHeader
           index="02"
@@ -79,7 +79,7 @@ export function Process() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="mt-12 md:mt-20"
+          className="mt-6 md:mt-10"
         >
           {STEPS.map((s) => (
             <StepBlock key={s.index} step={s} />

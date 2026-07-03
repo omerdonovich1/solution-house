@@ -47,7 +47,7 @@ export function Contact() {
       : "שליחה";
 
   return (
-    <section id="contact" className="mx-auto max-w-3xl py-32 sm:py-48">
+    <section id="contact" className="mx-auto max-w-3xl py-16 sm:py-24">
       <div className="shell">
         <SectionHeader
           index="03"
@@ -56,7 +56,7 @@ export function Contact() {
           lead="שיחה אחת, בלי התחייבות: מבינים את האתגר, מציעים כיוון ונותנים הערכת מחיר הוגנת. מבטיחים רק מה שנוכל לקיים."
         />
 
-        <form onSubmit={onSubmit} className="mt-14 grid gap-9 sm:grid-cols-2">
+        <form onSubmit={onSubmit} className="mt-10 grid gap-7 sm:grid-cols-2">
           <div>
             <label className={label} htmlFor="name">שם מלא</label>
             <input id="name" name="name" required placeholder="השם שלך" className={field} />
