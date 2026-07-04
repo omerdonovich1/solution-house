@@ -4,7 +4,6 @@ import { cn } from "@/lib/utils";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { Preloader } from "@/components/Preloader";
 import { FloatingActions } from "@/components/FloatingActions";
-import { CanvasScroll } from "@/components/CanvasScroll";
 import "lenis/dist/lenis.css";
 import "./globals.css";
 
@@ -54,8 +53,6 @@ export default function RootLayout({
           aria-hidden
           className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(120%_90%_at_50%_-10%,#151515_0%,#0B0B0B_45%,#050505_100%)]"
         />
-        {/* scroll-scrubbed cinematic footage above the wash, below all content */}
-        <CanvasScroll />
         <Preloader />
         <SmoothScroll />
         {children}

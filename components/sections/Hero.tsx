@@ -94,7 +94,7 @@ export function Hero() {
         {/* hero copy — opens out of the laptop screen */}
         <motion.div
           style={{ opacity: heroOpacity, scale: heroScale, pointerEvents: heroPointer as never }}
-          className="relative z-10 mx-auto w-full max-w-4xl rounded-3xl border border-white/10 bg-black/40 px-5 py-10 backdrop-blur-md sm:px-12"
+          className="relative z-10 w-full"
         >
           <motion.div
             initial={{ opacity: 0 }}
