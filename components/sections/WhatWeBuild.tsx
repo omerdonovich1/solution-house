@@ -156,7 +156,7 @@ export function WhatWeBuild() {
           onMouseLeave={() => setPaused(false)}
         >
           {/* live example panel */}
-          <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-surface">
+          <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-black/40 backdrop-blur-md">
             <div className="flex items-center justify-between px-5 pt-5 font-mono sm:px-7 sm:pt-6 text-[11px] uppercase tracking-[0.22em] text-mist">
               <AnimatePresence mode="wait">
                 <motion.span
@@ -283,8 +283,8 @@ export function WhatWeBuild() {
                   className={cn(
                     "group relative overflow-hidden rounded-xl border px-4 py-3 text-start transition-colors duration-500 sm:px-5 sm:py-4",
                     isActive
-                      ? "border-white/25 bg-surface"
-                      : "border-white/[0.08] hover:border-white/20"
+                      ? "border-white/25 bg-black/50 backdrop-blur-md"
+                      : "border-white/10 bg-black/30 backdrop-blur-md hover:border-white/20"
                   )}
                 >
                   <span

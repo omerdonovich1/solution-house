@@ -56,7 +56,7 @@ export function Contact() {
           lead="שיחה אחת, בלי התחייבות: מבינים את האתגר, מציעים כיוון ונותנים הערכת מחיר הוגנת. מבטיחים רק מה שנוכל לקיים."
         />
 
-        <form onSubmit={onSubmit} className="mt-10 grid gap-7 sm:grid-cols-2">
+        <form onSubmit={onSubmit} className="mt-10 grid gap-7 rounded-2xl border border-white/10 bg-black/40 p-6 backdrop-blur-md sm:grid-cols-2 sm:p-9">
           <div>
             <label className={label} htmlFor="name">שם מלא</label>
             <input id="name" name="name" required placeholder="השם שלך" className={field} />
@@ -82,7 +82,7 @@ export function Contact() {
           </button>
         </form>
 
-        <div className="mt-11 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-white/[0.08] pt-8 text-[15px] text-mist">
+        <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3 rounded-2xl border border-white/10 bg-black/40 px-6 py-5 backdrop-blur-md text-[15px] text-mist">
           <span>או ישירות:</span>
           <a href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noopener noreferrer" className="font-medium text-ivory transition-colors duration-300 hover:text-volt">
             וואטסאפ ›

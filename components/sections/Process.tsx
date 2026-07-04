@@ -15,7 +15,7 @@ function StepBlock({ step }: { step: ProcessStep }) {
     <div
       ref={ref}
       className={cn(
-        "relative grid grid-cols-[auto_1fr] gap-5 py-7 transition-opacity duration-700 sm:gap-12 sm:py-9",
+        "relative grid grid-cols-[auto_1fr] gap-5 rounded-2xl border border-white/10 bg-black/40 px-4 py-6 backdrop-blur-md transition-opacity duration-700 sm:gap-12 sm:px-7 sm:py-8",
         active ? "opacity-100" : "opacity-30"
       )}
     >
