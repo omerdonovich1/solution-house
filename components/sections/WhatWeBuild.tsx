@@ -126,14 +126,19 @@ function BentoCard({ cat, index }: { cat: Category; index: number }) {
     >
       {/* header — the category name, plain and confident */}
       <div className="px-5 pt-5 sm:px-6">
-        <span className="text-[17px] font-bold tracking-tight text-ivory">{cat.name}</span>
+        <span className="text-[19px] font-bold tracking-tight text-ivory sm:text-[17px]">{cat.name}</span>
       </div>
 
-      {/* media — display only; visitors stay on the page */}
+      {/* media — display only; visitors stay on the page.
+          Mobile: a consistent 4:3 window on every card so the gallery reads
+          evenly and the "tall" hero doesn't open a well of dead black. From
+          sm: up the desktop bento returns (tall grows to fill its row). */}
       <div
         className={cn(
           "relative mx-5 mt-4 overflow-hidden rounded-xl border border-white/[0.08] sm:mx-6",
-          cat.tall ? "min-h-[260px] flex-1" : "aspect-[16/10]"
+          cat.tall
+            ? "aspect-[4/3] sm:aspect-auto sm:min-h-[260px] sm:flex-1"
+            : "aspect-[4/3] sm:aspect-[16/10]"
         )}
       >
         <AnimatePresence mode="sync" initial={false}>
@@ -161,7 +166,7 @@ function BentoCard({ cat, index }: { cat: Category; index: number }) {
 
       {/* footer — blurb + example dots */}
       <div className="flex items-center justify-between gap-4 px-5 py-4 sm:px-6 sm:py-5">
-        <p className="text-[13.5px] font-light text-mist sm:text-[14.5px]">{cat.blurb}</p>
+        <p className="text-[14.5px] font-normal leading-relaxed text-body sm:text-[14.5px] sm:font-light sm:text-mist">{cat.blurb}</p>
         {count > 1 && (
           <div className="flex shrink-0 items-center gap-2">
             {cat.examples.map((_, i) => (
