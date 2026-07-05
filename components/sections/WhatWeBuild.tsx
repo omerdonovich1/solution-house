@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
  * them on a slow cycle; hover pauses.
  */
 
-const CYCLE_MS = 5200;
+const CYCLE_MS = 3200;
 
 interface Example {
   readonly name: string;
@@ -128,13 +128,8 @@ function BentoCard({ cat, index }: { cat: Category; index: number }) {
       className={cn(glassCard, cat.cell)}
     >
       {/* header — the category name, plain and confident */}
-      <div className="flex items-center gap-3 px-5 pt-5 sm:px-6">
+      <div className="px-5 pt-5 sm:px-6">
         <span className="text-[17px] font-bold tracking-tight text-ivory">{cat.name}</span>
-        {current.real && (
-          <span className="rounded-full border border-dot/40 bg-dot/10 px-2.5 py-0.5 text-[10px] font-medium text-dot">
-            מערכת אמיתית
-          </span>
-        )}
       </div>
 
       {/* media — the whole window opens the current example */}
@@ -157,7 +152,7 @@ function BentoCard({ cat, index }: { cat: Category; index: number }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.7, ease: EASE }}
+            transition={{ duration: 0.4, ease: EASE }}
             className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03]"
             loading="lazy"
             draggable={false}
