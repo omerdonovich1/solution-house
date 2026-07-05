@@ -69,24 +69,65 @@ body {
 }
 
 @layer utilities {
-  /* Liquid Glass — translucent material with saturation lift, a liquid
-     top-light, and a specular rim. One class = the whole material. */
+  /* ── Liquid Glass ─────────────────────────────────────────────────
+     Real glass needs three layers:
+     1. the slab — translucent fill + heavy backdrop blur with a
+        saturation/brightness lift, refracting the ambient color field;
+     2. ::before — a specular RIM: a 1px gradient border (mask-composite)
+        that catches light top-left and picks up a cool tint bottom-right;
+     3. ::after — a curved top-light, the liquid sheen across the surface.
+     Borders are NOT set here — .liquid-glass replaces them entirely.  */
   .liquid-glass {
+    position: relative;
     background: linear-gradient(
       135deg,
-      rgba(255, 255, 255, 0.065) 0%,
-      rgba(255, 255, 255, 0.018) 36%,
-      rgba(255, 255, 255, 0.008) 62%,
-      rgba(255, 255, 255, 0.05) 100%
+      rgba(255, 255, 255, 0.09) 0%,
+      rgba(255, 255, 255, 0.028) 34%,
+      rgba(255, 255, 255, 0.012) 58%,
+      rgba(255, 255, 255, 0.055) 100%
     );
-    backdrop-filter: blur(28px) saturate(170%);
-    -webkit-backdrop-filter: blur(28px) saturate(170%);
-    /* border stays a tailwind utility so hover/active tints can override */
-    box-shadow:
-      inset 0 1px 0 0 rgba(255, 255, 255, 0.13),
-      inset 0 -1px 1px 0 rgba(255, 255, 255, 0.035),
-      inset 0 0 46px rgba(255, 255, 255, 0.02),
-      0 18px 50px -18px rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(32px) saturate(185%) brightness(1.12);
+    -webkit-backdrop-filter: blur(32px) saturate(185%) brightness(1.12);
+    box-shadow: 0 22px 60px -22px rgba(0, 0, 0, 0.65);
+  }
+  .liquid-glass::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      165deg,
+      rgba(255, 255, 255, 0.5),
+      rgba(255, 255, 255, 0.12) 26%,
+      rgba(255, 255, 255, 0.03) 52%,
+      rgba(125, 180, 255, 0.22) 80%,
+      rgba(255, 255, 255, 0.3)
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  .liquid-glass::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      130% 62% at 50% -12%,
+      rgba(255, 255, 255, 0.13),
+      rgba(255, 255, 255, 0.04) 42%,
+      transparent 68%
+    );
+    opacity: 0.85;
+    transition: opacity 0.5s ease-out;
+    pointer-events: none;
+  }
+  .liquid-glass:hover::after {
+    opacity: 1;
   }
 
   /* 1px neutral hairline — the system's only divider */
@@ -160,6 +201,8 @@ body {
   .animate-marquee,
   .animate-mesh-a,
   .animate-mesh-b,
+  .animate-drift,
+  .animate-drift-slow,
   .animate-shimmer {
     animation: none !important;
   }

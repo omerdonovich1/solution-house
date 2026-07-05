@@ -96,9 +96,10 @@ const CATEGORIES: readonly Category[] = [
   },
 ] as const;
 
-/* Liquid Glass card — the material lives in the .liquid-glass utility. */
+/* Liquid Glass card — the material (slab + rim + sheen) lives in the
+   .liquid-glass utility; hover adds a cool halo and the 1.01 lift. */
 const glassCard =
-  "liquid-glass group relative flex flex-col overflow-hidden rounded-3xl border border-white/[0.09] transition-[transform,border-color] duration-500 ease-out hover:scale-[1.01] hover:border-blue-500/20";
+  "liquid-glass group relative flex flex-col overflow-hidden rounded-3xl transition-[transform,box-shadow] duration-500 ease-out hover:scale-[1.01] hover:shadow-[0_0_0_1px_rgba(96,165,250,0.28),0_0_70px_-18px_rgba(96,165,250,0.3),0_22px_60px_-22px_rgba(0,0,0,0.65)]";
 
 function BentoCard({ cat, index }: { cat: Category; index: number }) {
   const [slide, setSlide] = useState(0);

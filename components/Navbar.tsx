@@ -70,7 +70,7 @@ export function Navbar() {
         transition={{ duration: 0.6, ease: EASE }}
         className="fixed inset-x-0 top-5 z-50 flex justify-center"
       >
-        <div className="liquid-glass relative z-[95] flex items-center gap-2 rounded-2xl border border-white/[0.09] p-2">
+        <div className="liquid-glass relative z-[95] flex items-center gap-2 rounded-2xl p-2">
           <a
             href={`mailto:${EMAIL}`}
             aria-label="אימייל"

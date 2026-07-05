@@ -15,8 +15,10 @@ function StepBlock({ step }: { step: ProcessStep }) {
     <div
       ref={ref}
       className={cn(
-        "liquid-glass relative grid grid-cols-[auto_1fr] gap-5 rounded-3xl border px-4 py-6 transition-[opacity,border-color] duration-700 sm:gap-12 sm:px-7 sm:py-8",
-        active ? "border-blue-500/20 opacity-100" : "border-white/[0.09] opacity-40"
+        "liquid-glass relative grid grid-cols-[auto_1fr] gap-5 rounded-3xl px-4 py-6 transition-[opacity,box-shadow] duration-700 sm:gap-12 sm:px-7 sm:py-8",
+        active
+          ? "opacity-100 shadow-[0_0_0_1px_rgba(96,165,250,0.25),0_0_70px_-20px_rgba(96,165,250,0.28),0_22px_60px_-22px_rgba(0,0,0,0.65)]"
+          : "opacity-40"
       )}
     >
       {/* oversized ghost numeral + progress spine */}
