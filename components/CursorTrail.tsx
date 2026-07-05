@@ -19,13 +19,13 @@ import { useEffect, useRef } from "react";
 
 const SIM_RES = 128; // velocity field resolution
 const DYE_RES = 720; // visible ribbon resolution
-const DYE_DISSIPATION = 0.988; // per-frame — trail lives ~2-3s
-const VEL_DISSIPATION = 0.993; // swirls outlive the dye slightly
+const DYE_DISSIPATION = 0.982; // per-frame — trail lives ~2s, tighter tail
+const VEL_DISSIPATION = 0.99; // swirls outlive the dye slightly
 const PRESSURE_DECAY = 0.8;
 const PRESSURE_ITERS = 20;
-const CURL = 38; // vorticity confinement strength — the filaments
-const SPLAT_RADIUS = 0.0022;
-const SPLAT_FORCE = 5200;
+const CURL = 30; // vorticity confinement strength — the filaments
+const SPLAT_RADIUS = 0.0011; // thinner ribbon, closer to the cursor
+const SPLAT_FORCE = 3400; // less billow — a leaner trail
 const DYE_COLOR: [number, number, number] = [0.24, 0.34, 0.62]; // cool blue, cores add to white
 const PARK_MS = 9000;
 
