@@ -81,14 +81,16 @@ body {
     position: relative;
     background: linear-gradient(
       135deg,
-      rgba(255, 255, 255, 0.09) 0%,
-      rgba(255, 255, 255, 0.028) 34%,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0.03) 32%,
       rgba(255, 255, 255, 0.012) 58%,
-      rgba(255, 255, 255, 0.055) 100%
+      rgba(255, 255, 255, 0.065) 100%
     );
-    backdrop-filter: blur(32px) saturate(185%) brightness(1.12);
-    -webkit-backdrop-filter: blur(32px) saturate(185%) brightness(1.12);
-    box-shadow: 0 22px 60px -22px rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(36px) saturate(200%) brightness(1.15);
+    -webkit-backdrop-filter: blur(36px) saturate(200%) brightness(1.15);
+    box-shadow:
+      0 24px 70px -24px rgba(0, 0, 0, 0.72),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.045);
   }
   .liquid-glass::before {
     content: "";
@@ -98,11 +100,11 @@ body {
     padding: 1px;
     background: linear-gradient(
       165deg,
-      rgba(255, 255, 255, 0.5),
-      rgba(255, 255, 255, 0.12) 26%,
-      rgba(255, 255, 255, 0.03) 52%,
-      rgba(125, 180, 255, 0.22) 80%,
-      rgba(255, 255, 255, 0.3)
+      rgba(255, 255, 255, 0.62),
+      rgba(255, 255, 255, 0.14) 26%,
+      rgba(255, 255, 255, 0.04) 52%,
+      rgba(125, 180, 255, 0.28) 80%,
+      rgba(255, 255, 255, 0.36)
     );
     -webkit-mask:
       linear-gradient(#000 0 0) content-box,
@@ -111,17 +113,25 @@ body {
     mask-composite: exclude;
     pointer-events: none;
   }
+  /* two lights live here: the curved top sheen, and a specular highlight
+     that tracks the cursor (GlassLight writes --gx/--gy per surface) */
   .liquid-glass::after {
     content: "";
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background: radial-gradient(
-      130% 62% at 50% -12%,
-      rgba(255, 255, 255, 0.13),
-      rgba(255, 255, 255, 0.04) 42%,
-      transparent 68%
-    );
+    background:
+      radial-gradient(
+        300px circle at var(--gx, 50%) var(--gy, -60%),
+        rgba(190, 225, 255, 0.14),
+        transparent 62%
+      ),
+      radial-gradient(
+        130% 62% at 50% -12%,
+        rgba(255, 255, 255, 0.13),
+        rgba(255, 255, 255, 0.04) 42%,
+        transparent 68%
+      );
     opacity: 0.85;
     transition: opacity 0.5s ease-out;
     pointer-events: none;

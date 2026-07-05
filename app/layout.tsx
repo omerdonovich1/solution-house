@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { CursorGlow } from "@/components/CursorGlow";
 import { CursorTrail } from "@/components/CursorTrail";
+import { GlassLight } from "@/components/GlassLight";
 import { FloatingActions } from "@/components/FloatingActions";
 import "lenis/dist/lenis.css";
 import "./globals.css";
@@ -65,6 +66,8 @@ export default function RootLayout({
         <CursorGlow />
         {/* smoky light trail painted by the cursor */}
         <CursorTrail />
+        {/* cursor-tracked specular highlight on every glass surface */}
+        <GlassLight />
         <SmoothScroll />
         {children}
         <FloatingActions />

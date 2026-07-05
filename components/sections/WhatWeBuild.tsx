@@ -3,14 +3,15 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { SectionHeader } from "@/components/SectionHeader";
+import { CardStack } from "@/components/ui/CardStack";
 import { EASE } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 /**
- * Section 01 — an asymmetric bento grid of what we build. Every category
- * is its own frosted-glass card (design shells + real, sensitive-data-
- * blurred client work). Cards with several examples crossfade through
- * them on a slow cycle; hover pauses.
+ * Section 01 — a scroll-stacking deck of what we build. Every category
+ * is a full-width liquid-glass card (design shells + real, sensitive-
+ * data-blurred client work) that pins and gets covered by the next.
+ * Cards with several examples crossfade through them; hover pauses.
  */
 
 const CYCLE_MS = 3200;
@@ -28,10 +29,6 @@ interface Category {
   readonly name: string;
   readonly blurb: string;
   readonly examples: readonly Example[];
-  /** Bento cell — tailwind col/row spans for the lg grid. */
-  readonly cell: string;
-  /** Hero cell renders a taller media window. */
-  readonly tall?: boolean;
 }
 
 const CATEGORIES: readonly Category[] = [
@@ -39,8 +36,6 @@ const CATEGORIES: readonly Category[] = [
     id: "websites",
     name: "אתרים",
     blurb: "אתר מהיר ומדויק שמספר את הסיפור שלכם — ומניע לפעולה.",
-    cell: "md:col-span-6 lg:col-span-7 lg:row-span-2",
-    tall: true,
     examples: [
       { name: "SHADIEZ", image: "/proj2.png", href: "https://shadiez-seven.vercel.app", real: true },
       { name: "SPINZ", image: "/proj3.png", href: "https://www.spinzbikes.com", real: true },
@@ -51,7 +46,6 @@ const CATEGORIES: readonly Category[] = [
     id: "dashboards",
     name: "דשבורדים",
     blurb: "נתונים חיים, החלטות מהירות — כל העסק במסך אחד.",
-    cell: "md:col-span-3 lg:col-span-5",
     examples: [
       { name: "DYNAMICA QC", image: "/mockups/shots/qc-real.jpg", href: "/mockups/shots/qc-real.jpg", real: true },
     ],
@@ -60,7 +54,6 @@ const CATEGORIES: readonly Category[] = [
     id: "systems",
     name: "מערכות",
     blurb: "מערכת מותאמת שמחליפה אקסלים ותהליכים ידניים.",
-    cell: "md:col-span-3 lg:col-span-5",
     examples: [
       { name: "VANGUARD FLEET", image: "/mockups/shots/fleet-real.jpg", href: "/mockups/shots/fleet-real.jpg", real: true },
       { name: "CARMAN S", image: "/proj1.png", href: "https://carman-s.vercel.app", real: true },
@@ -70,7 +63,6 @@ const CATEGORIES: readonly Category[] = [
     id: "landing",
     name: "דפי נחיתה",
     blurb: "עמוד אחד עם מטרה אחת: להפוך מבקרים ללקוחות.",
-    cell: "md:col-span-2 lg:col-span-4",
     examples: [
       { name: "FLOWLY", image: "/mockups/shots/landing.jpg", href: "/mockups/landing.html" },
     ],
@@ -79,7 +71,6 @@ const CATEGORIES: readonly Category[] = [
     id: "agents",
     name: "סוכני AI",
     blurb: "עובדים דיגיטליים שעונים, מסכמים ומבצעים. 24/7.",
-    cell: "md:col-span-2 lg:col-span-4",
     examples: [
       { name: "נועה", image: "/mockups/shots/agents.jpg", href: "/mockups/agents.html" },
     ],
@@ -88,19 +79,13 @@ const CATEGORIES: readonly Category[] = [
     id: "automations",
     name: "אוטומציות",
     blurb: "תהליכים שרצים לבד — מהטריגר ועד התוצאה.",
-    cell: "md:col-span-2 lg:col-span-4",
     examples: [
       { name: "FLOW BUILDER", image: "/mockups/shots/automations.jpg", href: "/mockups/automations.html" },
     ],
   },
 ] as const;
 
-/* Liquid Glass card — the material (slab + rim + sheen) lives in the
-   .liquid-glass utility; hover adds a cool halo and the 1.01 lift. */
-const glassCard =
-  "liquid-glass group relative flex flex-col overflow-hidden rounded-3xl transition-[transform,box-shadow] duration-500 ease-out hover:scale-[1.01] hover:shadow-[0_0_0_1px_rgba(96,165,250,0.28),0_0_70px_-18px_rgba(96,165,250,0.3),0_22px_60px_-22px_rgba(0,0,0,0.65)]";
-
-function BentoCard({ cat, index }: { cat: Category; index: number }) {
+function CategoryCard({ cat, index }: { cat: Category; index: number }) {
   const [slide, setSlide] = useState(0);
   const [hovered, setHovered] = useState(false);
   const reduced = useReducedMotion();
@@ -115,76 +100,67 @@ function BentoCard({ cat, index }: { cat: Category; index: number }) {
   }, [count, hovered, reduced]);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 26 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-8% 0px" }}
-      transition={{ duration: 0.8, ease: EASE, delay: (index % 3) * 0.08 }}
+    <div
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className={cn(glassCard, cat.cell)}
+      className="liquid-glass group relative overflow-hidden rounded-3xl p-5 sm:p-7 lg:p-8"
     >
-      {/* header — the category name, plain and confident */}
-      <div className="px-5 pt-5 sm:px-6">
-        <span className="text-[19px] font-bold tracking-tight text-ivory sm:text-[17px]">{cat.name}</span>
-      </div>
-
-      {/* media — display only; visitors stay on the page.
-          Mobile: a consistent 4:3 window on every card so the gallery reads
-          evenly and the "tall" hero doesn't open a well of dead black. From
-          sm: up the desktop bento returns (tall grows to fill its row). */}
-      <div
-        className={cn(
-          "relative mx-5 mt-4 overflow-hidden rounded-xl border border-white/[0.08] sm:mx-6",
-          cat.tall
-            ? "aspect-[4/3] sm:aspect-auto sm:min-h-[260px] sm:flex-1"
-            : "aspect-[4/3] sm:aspect-[16/10]"
-        )}
-      >
-        <AnimatePresence mode="sync" initial={false}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <motion.img
-            key={current.image}
-            src={current.image}
-            alt={current.name}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.4, ease: EASE }}
-            className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-            loading="lazy"
-            draggable={false}
-          />
-        </AnimatePresence>
-        {/* project name, revealed on hover — no link out */}
-        <div className="pointer-events-none absolute inset-0 flex items-end justify-start bg-gradient-to-t from-ink/70 via-transparent to-transparent p-4 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
-          <span className="rounded-full bg-ivory px-4 py-2 text-[12px] font-bold text-ink">
-            {current.name}
+      <div className="grid gap-5 lg:grid-cols-[0.8fr_1.35fr] lg:items-center lg:gap-10">
+        {/* words */}
+        <div className="flex h-full flex-col">
+          <span dir="ltr" className="mb-3 hidden text-[12px] tracking-[0.2em] text-mist/70 lg:block">
+            {String(index + 1).padStart(2, "0")} / {String(CATEGORIES.length).padStart(2, "0")}
           </span>
+          <h3 className="text-gradient text-3xl font-black tracking-tightest sm:text-4xl">
+            {cat.name}
+          </h3>
+          <p className="mt-3 max-w-md text-[15px] font-light leading-relaxed text-body sm:text-base">
+            {cat.blurb}
+          </p>
+          {count > 1 && (
+            <div className="mt-5 flex items-center gap-2 lg:mt-auto lg:pt-6">
+              {cat.examples.map((_, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  aria-label={`דוגמה ${i + 1}`}
+                  onClick={() => setSlide(i)}
+                  className={cn(
+                    "h-1.5 rounded-full transition-all duration-300",
+                    i === slide ? "w-6 bg-dot" : "w-1.5 bg-white/20 hover:bg-white/40"
+                  )}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* media — display only; visitors stay on the page */}
+        <div className="relative h-[210px] overflow-hidden rounded-2xl border border-white/[0.08] sm:h-[300px] lg:h-[360px]">
+          <AnimatePresence mode="sync" initial={false}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <motion.img
+              key={current.image}
+              src={current.image}
+              alt={current.name}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.4, ease: EASE }}
+              className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+              loading="lazy"
+              draggable={false}
+            />
+          </AnimatePresence>
+          {/* project name, revealed on hover — no link out */}
+          <div className="pointer-events-none absolute inset-0 flex items-end justify-start bg-gradient-to-t from-ink/70 via-transparent to-transparent p-4 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+            <span className="rounded-full bg-ivory px-4 py-2 text-[12px] font-bold text-ink">
+              {current.name}
+            </span>
+          </div>
         </div>
       </div>
-
-      {/* footer — blurb + example dots */}
-      <div className="flex items-center justify-between gap-4 px-5 py-4 sm:px-6 sm:py-5">
-        <p className="text-[14.5px] font-normal leading-relaxed text-body sm:text-[14.5px] sm:font-light sm:text-mist">{cat.blurb}</p>
-        {count > 1 && (
-          <div className="flex shrink-0 items-center gap-2">
-            {cat.examples.map((_, i) => (
-              <button
-                key={i}
-                type="button"
-                aria-label={`דוגמה ${i + 1}`}
-                onClick={() => setSlide(i)}
-                className={cn(
-                  "h-1.5 rounded-full transition-all duration-300",
-                  i === slide ? "w-5 bg-dot" : "w-1.5 bg-white/20 hover:bg-white/40"
-                )}
-              />
-            ))}
-          </div>
-        )}
-      </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -200,11 +176,12 @@ export function WhatWeBuild() {
           lead="אתר, דף נחיתה, דשבורד, סוכן AI, מערכת או אוטומציה — כל פתרון נבנה בדיוק למידות של העסק שלכם."
         />
 
-        {/* asymmetric bento — one hero cell, two supporting, three compact */}
-        <div className="mt-10 grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-6 lg:grid-cols-12">
-          {CATEGORIES.map((cat, i) => (
-            <BentoCard key={cat.id} cat={cat} index={i} />
-          ))}
+        <div className="mt-10 sm:mt-14">
+          <CardStack
+            items={CATEGORIES.map((cat, i) => (
+              <CategoryCard key={cat.id} cat={cat} index={i} />
+            ))}
+          />
         </div>
       </div>
     </section>

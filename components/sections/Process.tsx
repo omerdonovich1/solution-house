@@ -1,54 +1,32 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion } from "framer-motion";
 import { SectionHeader } from "@/components/SectionHeader";
+import { CardStack } from "@/components/ui/CardStack";
 import { STEPS, type ProcessStep } from "@/lib/data";
-import { cn } from "@/lib/utils";
 
 function StepBlock({ step }: { step: ProcessStep }) {
-  const ref = useRef<HTMLDivElement>(null);
-  // Active while the block sits near the vertical centre of the viewport.
-  const active = useInView(ref, { margin: "-45% 0px -45% 0px" });
-
   return (
-    <div
-      ref={ref}
-      className={cn(
-        "liquid-glass relative grid grid-cols-[auto_1fr] gap-5 rounded-3xl px-4 py-6 transition-[opacity,box-shadow] duration-700 sm:gap-12 sm:px-7 sm:py-8",
-        active
-          ? "opacity-100 shadow-[0_0_0_1px_rgba(96,165,250,0.25),0_0_70px_-20px_rgba(96,165,250,0.28),0_22px_60px_-22px_rgba(0,0,0,0.65)]"
-          : "opacity-40"
-      )}
-    >
-      {/* oversized ghost numeral + progress spine */}
+    <div className="liquid-glass relative grid grid-cols-[auto_1fr] gap-5 overflow-hidden rounded-3xl px-4 py-6 sm:gap-12 sm:px-7 sm:py-8">
+      {/* oversized numeral + amber spine */}
       <div className="relative flex w-[58px] flex-col items-center sm:w-[110px]">
-        <span
-          className={cn(
-            "font-mono text-[clamp(2.6rem,6vw,4.5rem)] font-bold leading-none transition-all duration-700",
-            active ? "text-volt" : "text-stroke"
-          )}
-        >
+        <span className="font-mono text-[clamp(2.6rem,6vw,4.5rem)] font-bold leading-none text-volt">
           {step.index}
         </span>
         <span className="relative mt-4 w-px flex-1 overflow-hidden bg-white/10">
-          <span
-            className={cn(
-              "absolute inset-x-0 top-0 h-full origin-top bg-volt/70 transition-transform duration-700 ease-out",
-              active ? "scale-y-100" : "scale-y-0"
-            )}
+          <motion.span
+            initial={{ scaleY: 0 }}
+            whileInView={{ scaleY: 1 }}
+            viewport={{ once: true, margin: "-20% 0px" }}
+            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+            className="absolute inset-x-0 top-0 h-full origin-top bg-volt/70"
           />
         </span>
       </div>
 
       {/* content */}
       <div className="pb-2">
-        <h3
-          className={cn(
-            "text-[clamp(1.8rem,3.6vw,2.8rem)] font-black tracking-tightest transition-colors duration-700",
-            active ? "text-ivory" : "text-mist"
-          )}
-        >
+        <h3 className="text-[clamp(1.8rem,3.6vw,2.8rem)] font-black tracking-tightest text-ivory">
           {step.title}
         </h3>
         <p className="mt-3 max-w-xl text-[15px] font-light leading-relaxed text-mist sm:mt-4 sm:text-base">
@@ -74,17 +52,14 @@ export function Process() {
           lead="לא מתחייבים מראש על הכול. מתקדמים שלב אחר שלב — ואחרי כל שלב אתם מחליטים אם ממשיכים."
         />
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="mt-6 space-y-4 sm:space-y-5 md:mt-10"
-        >
-          {STEPS.map((s) => (
-            <StepBlock key={s.index} step={s} />
-          ))}
-        </motion.div>
+        <div className="mt-10 sm:mt-14">
+          <CardStack
+            topOffset={96}
+            items={STEPS.map((s) => (
+              <StepBlock key={s.index} step={s} />
+            ))}
+          />
+        </div>
       </div>
     </section>
   );

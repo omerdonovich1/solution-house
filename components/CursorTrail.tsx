@@ -155,7 +155,7 @@ varying vec2 vUv;
 uniform sampler2D uTexture;
 void main () {
   vec3 c = texture2D(uTexture, vUv).rgb;
-  gl_FragColor = vec4(c * 0.62, 1.0);
+  gl_FragColor = vec4(c * 0.48, 1.0);
 }`,
 };
 
@@ -176,6 +176,7 @@ interface DoubleFBO {
 
 export function CursorTrail() {
   const ref = useRef<HTMLCanvasElement>(null);
+  const sparkRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const canvas = ref.current;
@@ -305,6 +306,9 @@ export function CursorTrail() {
       return a > 1 ? [Math.round(base * a), base] : [base, Math.round(base / a)];
     }
 
+    const sparkC = sparkRef.current;
+    const sctx = sparkC ? sparkC.getContext("2d") : null;
+
     const syncCanvas = () => {
       const w = window.innerWidth;
       const h = window.innerHeight;
@@ -312,8 +316,52 @@ export function CursorTrail() {
         canvas!.width = w;
         canvas!.height = h;
       }
+      if (sparkC && (sparkC.width !== w || sparkC.height !== h)) {
+        sparkC.width = w;
+        sparkC.height = h;
+      }
     };
     syncCanvas();
+
+    // ── electric micro-sparks — very rare, very faint ────────────────
+    type Spark = { pts: [number, number][]; born: number; ttl: number };
+    const sparks: Spark[] = [];
+    function spawnSpark(x: number, y: number) {
+      let ang = Math.random() * Math.PI * 2;
+      let sx = x;
+      let sy = y;
+      const pts: [number, number][] = [[sx, sy]];
+      const segs = 2 + Math.floor(Math.random() * 2);
+      for (let i = 0; i < segs; i++) {
+        ang += (Math.random() - 0.5) * 1.4;
+        const len = 5 + Math.random() * 8;
+        sx += Math.cos(ang) * len;
+        sy += Math.sin(ang) * len;
+        pts.push([sx, sy]);
+      }
+      sparks.push({ pts, born: performance.now(), ttl: 200 + Math.random() * 180 });
+    }
+    function renderSparks(now: number) {
+      if (!sctx || !sparkC) return;
+      sctx.clearRect(0, 0, sparkC.width, sparkC.height);
+      for (let i = sparks.length - 1; i >= 0; i--) {
+        const s = sparks[i];
+        const t = (now - s.born) / s.ttl;
+        if (t >= 1) {
+          sparks.splice(i, 1);
+          continue;
+        }
+        const a = (1 - t) * 0.3;
+        sctx.strokeStyle = `rgba(190,225,255,${a.toFixed(3)})`;
+        sctx.lineWidth = 1;
+        sctx.shadowColor = `rgba(125,180,255,${a.toFixed(3)})`;
+        sctx.shadowBlur = 4;
+        sctx.beginPath();
+        sctx.moveTo(s.pts[0][0], s.pts[0][1]);
+        for (let j = 1; j < s.pts.length; j++) sctx.lineTo(s.pts[j][0], s.pts[j][1]);
+        sctx.stroke();
+      }
+    }
 
     const [vw, vh] = simSize(SIM_RES);
     const [dw, dh] = simSize(DYE_RES);
@@ -451,6 +499,8 @@ export function CursorTrail() {
       gl!.uniform1i(pr.u.uTexture, dye.read.attach(0));
       blit(null);
 
+      renderSparks(now);
+
       if (idle < PARK_MS) {
         rafId = requestAnimationFrame(frame);
       } else {
@@ -459,6 +509,7 @@ export function CursorTrail() {
         gl!.viewport(0, 0, canvas!.width, canvas!.height);
         gl!.clearColor(0, 0, 0, 1);
         gl!.clear(gl!.COLOR_BUFFER_BIT);
+        if (sctx && sparkC) sctx.clearRect(0, 0, sparkC.width, sparkC.height);
       }
     }
 
@@ -474,6 +525,10 @@ export function CursorTrail() {
         if (speed > 0.0001) {
           pending.push({ x, y, dx, dy, speed });
           if (pending.length > 24) pending.shift();
+        }
+        // a tiny static discharge, only on brisk movement — and rarely
+        if (speed * window.innerWidth > 17 && Math.random() < 0.085 && sparks.length < 4) {
+          spawnSpark(e.clientX, e.clientY);
         }
       }
       px = x;
@@ -493,10 +548,18 @@ export function CursorTrail() {
   }, []);
 
   return (
-    <canvas
-      ref={ref}
-      aria-hidden
-      className="pointer-events-none fixed inset-0 -z-[4] h-full w-full mix-blend-screen"
-    />
+    <>
+      <canvas
+        ref={ref}
+        aria-hidden
+        className="pointer-events-none fixed inset-0 -z-[4] h-full w-full mix-blend-screen"
+      />
+      {/* electric micro-sparks, above the vapor, still behind content */}
+      <canvas
+        ref={sparkRef}
+        aria-hidden
+        className="pointer-events-none fixed inset-0 -z-[3] h-full w-full mix-blend-screen"
+      />
+    </>
   );
 }

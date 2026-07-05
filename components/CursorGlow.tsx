@@ -48,6 +48,83 @@ for (let i = 0; i < NODES.length; i++) {
   }
 }
 
+/**
+ * Easter eggs: faint line-art hardware hiding between the constellations —
+ * a server rack, a chip, a database, a terminal, a laptop, a little robot.
+ * Only the attentive, flashlight in hand, will ever meet them.
+ */
+function Devices() {
+  const stroke = "rgba(154,216,245,0.34)";
+  const led = (x: number, y: number, delay = 0) => (
+    <circle
+      cx={x}
+      cy={y}
+      r="1.6"
+      fill="#D9A13B"
+      stroke="none"
+      style={{ animation: `node-pulse 2.8s ease-in-out ${delay}s infinite` }}
+    />
+  );
+  return (
+    <g fill="none" stroke={stroke} strokeWidth="1.1" opacity="0.9">
+      {/* server rack */}
+      <g transform="translate(196, 168)">
+        <rect x="0" y="0" width="38" height="48" rx="4" />
+        <line x1="0" y1="16" x2="38" y2="16" />
+        <line x1="0" y1="32" x2="38" y2="32" />
+        <line x1="6" y1="8" x2="20" y2="8" />
+        <line x1="6" y1="24" x2="20" y2="24" />
+        <line x1="6" y1="40" x2="20" y2="40" />
+        {led(31, 8, 0)}
+        {led(31, 24, 0.9)}
+        {led(31, 40, 1.7)}
+      </g>
+      {/* chip / CPU */}
+      <g transform="translate(1372, 214)">
+        <rect x="0" y="0" width="32" height="32" rx="5" />
+        <rect x="9" y="9" width="14" height="14" rx="2" />
+        <line x1="8" y1="-6" x2="8" y2="0" />
+        <line x1="16" y1="-6" x2="16" y2="0" />
+        <line x1="24" y1="-6" x2="24" y2="0" />
+        <line x1="8" y1="32" x2="8" y2="38" />
+        <line x1="16" y1="32" x2="16" y2="38" />
+        <line x1="24" y1="32" x2="24" y2="38" />
+        <line x1="-6" y1="8" x2="0" y2="8" />
+        <line x1="-6" y1="24" x2="0" y2="24" />
+        <line x1="32" y1="8" x2="38" y2="8" />
+        <line x1="32" y1="24" x2="38" y2="24" />
+      </g>
+      {/* database */}
+      <g transform="translate(492, 668)">
+        <ellipse cx="18" cy="6" rx="18" ry="6" />
+        <path d="M 0 6 V 34 C 0 37.3 8 40 18 40 C 28 40 36 37.3 36 34 V 6" />
+        <path d="M 0 20 C 0 23.3 8 26 18 26 C 28 26 36 23.3 36 20" />
+        {led(30, 33, 0.4)}
+      </g>
+      {/* terminal window */}
+      <g transform="translate(1150, 682)">
+        <rect x="0" y="0" width="46" height="34" rx="4" />
+        <line x1="0" y1="10" x2="46" y2="10" />
+        <path d="M 7 17 L 12 21 L 7 25" />
+        <line x1="16" y1="25" x2="24" y2="25" />
+      </g>
+      {/* laptop */}
+      <g transform="translate(292, 452)">
+        <rect x="4" y="0" width="36" height="24" rx="2" />
+        <path d="M 0 28 H 44 L 40 24 H 4 Z" />
+      </g>
+      {/* little robot */}
+      <g transform="translate(1452, 528)">
+        <rect x="0" y="10" width="30" height="24" rx="7" />
+        <circle cx="10" cy="22" r="2.4" />
+        <circle cx="20" cy="22" r="2.4" />
+        <line x1="15" y1="10" x2="15" y2="3" />
+        {led(15, 2, 1.2)}
+      </g>
+    </g>
+  );
+}
+
 export function CursorGlow() {
   const glowRef = useRef<HTMLDivElement>(null);
   const meshRef = useRef<HTMLDivElement>(null);
@@ -60,7 +137,7 @@ export function CursorGlow() {
 
     const coarse = window.matchMedia("(pointer: coarse)").matches;
     const rGlow = coarse ? 420 : 560;
-    const rMask = coarse ? 250 : 340;
+    const rMask = coarse ? 250 : 375;
 
     let targetX = window.innerWidth / 2;
     let targetY = window.innerHeight * 0.35;
@@ -70,7 +147,7 @@ export function CursorGlow() {
 
     const paint = () => {
       glow.style.background = `radial-gradient(${rGlow}px circle at ${x}px ${y}px, rgba(125,180,255,0.06), rgba(125,180,255,0.022) 42%, transparent 72%)`;
-      const mask = `radial-gradient(${rMask}px circle at ${x}px ${y}px, rgba(0,0,0,1) 22%, rgba(0,0,0,0.35) 55%, transparent 78%)`;
+      const mask = `radial-gradient(${rMask}px circle at ${x}px ${y}px, rgba(0,0,0,1) 26%, rgba(0,0,0,0.5) 58%, transparent 80%)`;
       mesh.style.webkitMaskImage = mask;
       mesh.style.maskImage = mask;
     };
@@ -156,7 +233,7 @@ export function CursorGlow() {
       {/* the hidden neural field — visible only through the cursor mask */}
       <div
         ref={meshRef}
-        className="absolute inset-0 opacity-80"
+        className="absolute inset-0 opacity-90"
         style={{ maskImage: "radial-gradient(0px circle at 50% 40%, black, transparent)" }}
       >
         <svg
@@ -193,6 +270,8 @@ export function CursorGlow() {
               }}
             />
           ))}
+          {/* the hidden hardware — for whoever looks closely */}
+          <Devices />
         </svg>
       </div>
       {/* the ambient spotlight itself */}

@@ -11,8 +11,8 @@ import {
 import { ArrowLeft } from "lucide-react";
 import { EASE, blurIn, fadeUp, maskRise } from "@/lib/motion";
 import { MagneticButton } from "@/components/ui/MagneticButton";
-import { MacBook } from "@/components/ui/MacBook";
 import { LogoMark } from "@/components/ui/Logo";
+import { SolutionArchitect } from "@/components/hero/SolutionArchitect";
 
 // Instant pacing — no preloader curtain, the laptop lands right away.
 const heroStagger = {
@@ -37,23 +37,23 @@ function Words({ text, className }: { text: string; className?: string }) {
   );
 }
 
-/** The brand lockup on the MacBook screen: the mark, big, name beneath. */
-function MiniSite() {
+/** The opening brand lockup — the mark, big, name beneath, on bare black. */
+function BrandLockup() {
   return (
-    <div className="relative flex h-full flex-col items-center justify-center bg-[radial-gradient(120%_100%_at_50%_0%,#161616_0%,#0A0A0A_55%,#050505_100%)] text-center">
+    <div className="flex flex-col items-center text-center">
       <motion.div
         initial={{ opacity: 0, scale: 0.9, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 1, ease: EASE, delay: 0.45 }}
+        transition={{ duration: 1, ease: EASE, delay: 0.25 }}
       >
-        <LogoMark className="mx-auto h-[clamp(72px,13vw,150px)] w-[clamp(72px,13vw,150px)] text-ivory" />
+        <LogoMark className="mx-auto h-[clamp(110px,17vw,200px)] w-[clamp(110px,17vw,200px)] text-ivory" />
       </motion.div>
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.9, ease: EASE, delay: 0.7 }}
+        transition={{ duration: 0.9, ease: EASE, delay: 0.55 }}
         dir="ltr"
-        className="mt-[4%] font-heebo text-[clamp(15px,2.6vw,30px)] font-light uppercase tracking-[0.38em] text-ivory"
+        className="mt-7 font-heebo text-[clamp(17px,2.8vw,32px)] font-light uppercase tracking-[0.38em] text-ivory"
       >
         Solution House
       </motion.div>
@@ -62,11 +62,11 @@ function MiniSite() {
 }
 
 /**
- * The site opens AS the laptop — a realistic MacBook front and centre,
- * screening the brand. A short scroll zooms through the screen: the
- * laptop grows toward the viewer and dissolves while the real page
- * (metallic-cyan gradient type over the ambient-lit black canvas)
- * opens out of it.
+ * The site opens on the brand alone — the mark and wordmark on bare
+ * black, lit by the ambient cursor effects. A short scroll zooms the
+ * lockup toward the viewer as it dissolves, while the real page
+ * (metallic-cyan gradient type + the Solution Architect) is revealed
+ * slowly out of it.
  */
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
@@ -76,6 +76,11 @@ export function Hero() {
     offset: ["start start", "end end"],
   });
   const p = useSpring(scrollYProgress, { stiffness: 90, damping: 26, mass: 0.5 });
+  // 0→1 as the hero actually leaves the viewport (after the pin releases)
+  const { scrollYProgress: leave } = useScroll({
+    target: ref,
+    offset: ["end 0.92", "end 0.35"],
+  });
 
   // the laptop zooms toward the viewer and slowly dissolves
   const macScale = useTransform(p, [0, 0.5], reduced ? [1, 1] : [1, 2.7]);
@@ -149,22 +154,17 @@ export function Hero() {
               </MagneticButton>
             </motion.div>
           </motion.div>
+
+          {/* the Live Solution Architect — command interface + node build */}
+          <SolutionArchitect leave={leave} />
         </motion.div>
 
-        {/* the MacBook — opening stage, zooms through and dissolves */}
+        {/* the brand lockup — opening stage, zooms toward the viewer and dissolves */}
         <motion.div
           style={{ scale: macScale, opacity: macOpacity, filter: macBlur }}
           className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center will-change-transform"
         >
-          <motion.div
-            initial={{ opacity: 0, y: 46, scale: 0.94 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 1, ease: EASE, delay: 0.1 }}
-          >
-            <MacBook className="w-[min(88vw,940px)]">
-              <MiniSite />
-            </MacBook>
-          </motion.div>
+          <BrandLockup />
         </motion.div>
 
       </div>
