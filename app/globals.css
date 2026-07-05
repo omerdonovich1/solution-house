@@ -197,6 +197,22 @@ body {
   }
 }
 
+/* neural field — pulsing nodes + data packets travelling the synapses */
+@keyframes node-pulse {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes dash-flow {
+  to {
+    stroke-dashoffset: -126;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-marquee,
   .animate-mesh-a,
