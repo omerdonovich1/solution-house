@@ -129,6 +129,13 @@ body {
   .liquid-glass:hover::after {
     opacity: 1;
   }
+  /* mobile GPUs choke on 32px backdrop blur — lighter material, same look */
+  @media (max-width: 640px) {
+    .liquid-glass {
+      backdrop-filter: blur(16px) saturate(160%) brightness(1.1);
+      -webkit-backdrop-filter: blur(16px) saturate(160%) brightness(1.1);
+    }
+  }
 
   /* 1px neutral hairline — the system's only divider */
   .hairline {

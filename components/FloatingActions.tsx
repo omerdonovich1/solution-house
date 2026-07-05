@@ -83,7 +83,7 @@ export function FloatingActions() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.96 }}
             transition={{ duration: 0.35, ease: EASE }}
-            className="liquid-glass fixed bottom-[140px] left-4 sm:bottom-[152px] z-[85] flex h-[min(500px,calc(100svh-190px))] w-[min(380px,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl !bg-[#0C0C0E]/70"
+            className="liquid-glass fixed bottom-[calc(140px+env(safe-area-inset-bottom))] left-4 sm:bottom-[152px] z-[85] flex h-[min(500px,calc(100svh-190px-env(safe-area-inset-bottom)))] w-[min(380px,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl !bg-[#0C0C0E]/70"
           >
             {/* header */}
             <div className="flex items-center gap-3 border-b border-white/[0.07] px-4 py-3">
@@ -164,7 +164,7 @@ export function FloatingActions() {
       </AnimatePresence>
 
       {/* floating buttons */}
-      <div className="fixed bottom-5 left-4 z-[80] flex flex-col gap-3">
+      <div className="fixed bottom-[calc(20px+env(safe-area-inset-bottom))] left-4 z-[80] flex flex-col gap-3">
         <motion.button
           type="button"
           aria-label={open ? "סגירת הצ'אט" : "פתיחת צ'אט עם סול"}

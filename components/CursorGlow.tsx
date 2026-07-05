@@ -56,12 +56,11 @@ export function CursorGlow() {
     const glow = glowRef.current;
     const mesh = meshRef.current;
     if (!glow || !mesh) return;
-    if (
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
-      window.matchMedia("(pointer: coarse)").matches
-    ) {
-      return;
-    }
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const coarse = window.matchMedia("(pointer: coarse)").matches;
+    const rGlow = coarse ? 420 : 560;
+    const rMask = coarse ? 250 : 340;
 
     let targetX = window.innerWidth / 2;
     let targetY = window.innerHeight * 0.35;
@@ -70,12 +69,30 @@ export function CursorGlow() {
     let rafId = 0;
 
     const paint = () => {
-      glow.style.background = `radial-gradient(560px circle at ${x}px ${y}px, rgba(125,180,255,0.06), rgba(125,180,255,0.022) 42%, transparent 72%)`;
-      const mask = `radial-gradient(340px circle at ${x}px ${y}px, rgba(0,0,0,1) 22%, rgba(0,0,0,0.35) 55%, transparent 78%)`;
+      glow.style.background = `radial-gradient(${rGlow}px circle at ${x}px ${y}px, rgba(125,180,255,0.06), rgba(125,180,255,0.022) 42%, transparent 72%)`;
+      const mask = `radial-gradient(${rMask}px circle at ${x}px ${y}px, rgba(0,0,0,1) 22%, rgba(0,0,0,0.35) 55%, transparent 78%)`;
       mesh.style.webkitMaskImage = mask;
       mesh.style.maskImage = mask;
     };
 
+    // ── touch devices: no cursor — the spotlight wanders on its own ──
+    if (coarse) {
+      const drift = (t: number) => {
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        targetX = w * (0.5 + 0.34 * Math.sin(t * 0.00019));
+        targetY = h * (0.42 + 0.3 * Math.sin(t * 0.00031 + 1.2));
+        x += (targetX - x) * 0.04;
+        y += (targetY - y) * 0.04;
+        paint();
+        rafId = requestAnimationFrame(drift);
+      };
+      paint();
+      rafId = requestAnimationFrame(drift);
+      return () => cancelAnimationFrame(rafId);
+    }
+
+    // ── fine pointers: trail the cursor ──────────────────────────────
     const step = () => {
       rafId = 0;
       x += (targetX - x) * 0.12;

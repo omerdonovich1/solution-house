@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Rubik, Heebo } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
@@ -22,6 +22,13 @@ const heebo = Heebo({
   variable: "--font-heebo",
   display: "swap",
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover", // enables env(safe-area-inset-*) on notched phones
+  themeColor: "#050505",
+};
 
 export const metadata: Metadata = {
   title: "Solution House — מהנדסים את התשתית להצלחה שלכם",
@@ -49,9 +56,9 @@ export default function RootLayout({
         {/* ambient color field — soft drifting light the Liquid Glass
             panels refract; without it, backdrop-blur has nothing to bend */}
         <div aria-hidden className="pointer-events-none fixed inset-0 -z-[8] overflow-hidden">
-          <div className="absolute -top-[12%] left-[6%] h-[46vw] w-[46vw] animate-drift-slow rounded-full bg-[#3b6fb8] opacity-[0.11] blur-[130px]" />
-          <div className="absolute -right-[12%] top-[34%] h-[38vw] w-[38vw] animate-drift rounded-full bg-[#7d5fd3] opacity-[0.09] blur-[130px]" />
-          <div className="absolute -bottom-[16%] left-[26%] h-[42vw] w-[42vw] animate-drift-slow rounded-full bg-[#D9A13B] opacity-[0.06] blur-[140px]" />
+          <div className="absolute -top-[12%] left-[6%] h-[74vw] w-[74vw] animate-drift-slow rounded-full bg-[#3b6fb8] opacity-[0.11] blur-[80px] sm:h-[46vw] sm:w-[46vw] sm:blur-[130px]" />
+          <div className="absolute -right-[12%] top-[34%] h-[60vw] w-[60vw] animate-drift rounded-full bg-[#7d5fd3] opacity-[0.09] blur-[80px] sm:h-[38vw] sm:w-[38vw] sm:blur-[130px]" />
+          <div className="absolute -bottom-[16%] left-[26%] h-[66vw] w-[66vw] animate-drift-slow rounded-full bg-[#D9A13B] opacity-[0.06] blur-[90px] sm:h-[42vw] sm:w-[42vw] sm:blur-[140px]" />
         </div>
         {/* spatial lighting — ambient spotlight trailing the cursor */}
         <CursorGlow />
