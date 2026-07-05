@@ -88,7 +88,7 @@ export function CursorTrail() {
       octx!.scale(1.007, 1.007);
       octx!.rotate(0.0016);
       octx!.translate(-w / 2, -h / 2);
-      octx!.drawImage(vis, 0, 0);
+      octx!.drawImage(vis!, 0, 0);
       octx!.setTransform(1, 0, 0, 1, 0, 0);
       octx!.globalAlpha = 1;
 
