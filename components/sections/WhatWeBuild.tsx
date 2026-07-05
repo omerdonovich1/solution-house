@@ -127,21 +127,12 @@ function BentoCard({ cat, index }: { cat: Category; index: number }) {
       onMouseLeave={() => setHovered(false)}
       className={cn(glassCard, cat.cell)}
     >
-      {/* header */}
-      <div className="flex items-center justify-between px-5 pt-5 font-mono text-[11px] uppercase tracking-[0.22em] text-mist sm:px-6">
-        <span className="flex items-center gap-3">
-          <span className="kicker">{cat.name}</span>
-          {current.real && (
-            <span className="rounded-full border border-dot/40 bg-dot/10 px-2.5 py-0.5 text-[9px] tracking-[0.18em] text-dot">
-              מערכת אמיתית
-            </span>
-          )}
-        </span>
-        {count > 1 && (
-          <span dir="ltr">
-            <span className="text-dot">{String(slide + 1).padStart(2, "0")}</span>
-            <span className="text-mist/50"> // </span>
-            {String(count).padStart(2, "0")}
+      {/* header — the category name, plain and confident */}
+      <div className="flex items-center gap-3 px-5 pt-5 sm:px-6">
+        <span className="text-[17px] font-bold tracking-tight text-ivory">{cat.name}</span>
+        {current.real && (
+          <span className="rounded-full border border-dot/40 bg-dot/10 px-2.5 py-0.5 text-[10px] font-medium text-dot">
+            מערכת אמיתית
           </span>
         )}
       </div>

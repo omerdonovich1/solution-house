@@ -54,10 +54,7 @@ function StepBlock({ step }: { step: ProcessStep }) {
         <p className="mt-3 max-w-xl text-[15px] font-light leading-relaxed text-mist sm:mt-4 sm:text-base">
           {step.description}
         </p>
-        <div className="mt-5 flex max-w-xl items-start gap-3 border-t border-white/[0.08] pt-4 sm:mt-7 sm:pt-5">
-          <span className="mt-[2px] shrink-0 font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-volt">
-            Insight
-          </span>
+        <div className="mt-5 max-w-xl border-t border-white/[0.08] pt-4 sm:mt-7 sm:pt-5">
           <p className="text-[15px] leading-relaxed text-body">{step.insight}</p>
         </div>
       </div>

@@ -127,7 +127,7 @@ export function Navbar() {
               animate="show"
               className="shell flex flex-col gap-1"
             >
-              {NAV_LINKS.map((l, i) => (
+              {NAV_LINKS.map((l) => (
                 <span key={l.href} className="overflow-hidden">
                   <motion.a
                     variants={menuItem}
@@ -135,18 +135,11 @@ export function Navbar() {
                     onClick={() => setOpen(false)}
                     className="group flex items-baseline gap-6 py-2 text-5xl font-black tracking-tightest text-ivory transition-colors duration-300 hover:text-mist active:text-dot sm:text-7xl"
                   >
-                    <span dir="ltr" className="font-mono text-xs font-normal tracking-[0.22em] text-mist">
-                      0{i + 1} <span className="text-mist/50">//</span>
-                    </span>
                     {l.label}
                   </motion.a>
                 </span>
               ))}
             </motion.nav>
-            <div className="shell absolute bottom-10 flex w-full items-center justify-between font-mono text-[11px] uppercase tracking-[0.22em] text-mist">
-              <span className="kicker">Solution House</span>
-              <span>תל אביב — 2026</span>
-            </div>
           </motion.div>
         )}
       </AnimatePresence>

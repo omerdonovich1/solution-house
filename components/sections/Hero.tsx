@@ -100,20 +100,6 @@ export function Hero() {
           style={{ opacity: heroOpacity, scale: heroScale, pointerEvents: heroPointer as never }}
           className="relative z-10 w-full"
         >
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, ease: EASE, delay: 0.3 }}
-            className="mx-auto mb-9 flex max-w-shell items-center justify-between text-[11px] uppercase tracking-[0.22em] text-mist"
-          >
-            <span className="kicker">Solution House</span>
-            <span className="hidden gap-6 sm:flex">
-              <span>תל אביב</span>
-              <span>—</span>
-              <span>2026</span>
-            </span>
-          </motion.div>
-
           <motion.h1
             initial="hidden"
             animate="show"

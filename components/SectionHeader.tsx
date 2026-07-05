@@ -5,8 +5,9 @@ import type { ReactNode } from "react";
 import { blurIn, fadeUp, maskRise, viewportOnce } from "@/lib/motion";
 
 interface SectionHeaderProps {
-  index: string;
-  label: string;
+  /** Retained in the API for callers; no longer rendered. */
+  index?: string;
+  label?: string;
   title: ReactNode;
   lead?: ReactNode;
   className?: string;
@@ -34,14 +35,8 @@ function TitleWords({ text }: { text: string }) {
   );
 }
 
-/** Editorial section header: hairline rule · mono index/label · word-reveal title · lead. */
-export function SectionHeader({
-  index,
-  label,
-  title,
-  lead,
-  className,
-}: SectionHeaderProps) {
+/** Editorial section header: hairline rule · word-reveal title · lead. */
+export function SectionHeader({ title, lead, className }: SectionHeaderProps) {
   return (
     <motion.div
       variants={headStagger}
@@ -50,18 +45,7 @@ export function SectionHeader({
       viewport={viewportOnce}
       className={className}
     >
-      <motion.div variants={fadeUp} className="hairline" />
-      <motion.div
-        variants={fadeUp}
-        className="mb-8 mt-5 flex items-baseline justify-between font-mono text-[11px] uppercase tracking-[0.22em] text-mist"
-      >
-        <span dir="ltr">
-          <span className="text-dot">{index}</span>
-          <span className="text-mist/50"> // </span>
-          <span>03</span>
-        </span>
-        <span className="kicker">{label}</span>
-      </motion.div>
+      <motion.div variants={fadeUp} className="hairline mb-8" />
       <h2 className="max-w-[20ch] text-[clamp(2.6rem,6.5vw,5.5rem)] font-black leading-[1.02] tracking-tightest text-ivory">
         {typeof title === "string" ? (
           <TitleWords text={title} />
