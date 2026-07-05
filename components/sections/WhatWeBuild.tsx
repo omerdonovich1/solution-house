@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { ArrowUpLeft } from "lucide-react";
 import { SectionHeader } from "@/components/SectionHeader";
 import { EASE } from "@/lib/motion";
 import { cn } from "@/lib/utils";
@@ -115,8 +114,6 @@ function BentoCard({ cat, index }: { cat: Category; index: number }) {
     return () => clearInterval(id);
   }, [count, hovered, reduced]);
 
-  const external = current.href.startsWith("http") || current.href.startsWith("/mockups");
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 26 }}
@@ -132,14 +129,10 @@ function BentoCard({ cat, index }: { cat: Category; index: number }) {
         <span className="text-[17px] font-bold tracking-tight text-ivory">{cat.name}</span>
       </div>
 
-      {/* media — the whole window opens the current example */}
-      <a
-        href={current.href}
-        target={external ? "_blank" : undefined}
-        rel={external ? "noopener noreferrer" : undefined}
-        aria-label={`פתיחת ${current.name}`}
+      {/* media — display only; visitors stay on the page */}
+      <div
         className={cn(
-          "relative mx-5 mt-4 block overflow-hidden rounded-xl border border-white/[0.08] sm:mx-6",
+          "relative mx-5 mt-4 overflow-hidden rounded-xl border border-white/[0.08] sm:mx-6",
           cat.tall ? "min-h-[260px] flex-1" : "aspect-[16/10]"
         )}
       >
@@ -158,14 +151,13 @@ function BentoCard({ cat, index }: { cat: Category; index: number }) {
             draggable={false}
           />
         </AnimatePresence>
-        {/* hover invite */}
+        {/* project name, revealed on hover — no link out */}
         <div className="pointer-events-none absolute inset-0 flex items-end justify-start bg-gradient-to-t from-ink/70 via-transparent to-transparent p-4 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
-          <span className="flex items-center gap-2 rounded-full bg-ivory px-4 py-2 text-[12px] font-bold text-ink">
-            {current.name} · צפייה במסך מלא
-            <ArrowUpLeft className="h-3.5 w-3.5" />
+          <span className="rounded-full bg-ivory px-4 py-2 text-[12px] font-bold text-ink">
+            {current.name}
           </span>
         </div>
-      </a>
+      </div>
 
       {/* footer — blurb + example dots */}
       <div className="flex items-center justify-between gap-4 px-5 py-4 sm:px-6 sm:py-5">
