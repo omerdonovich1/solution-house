@@ -4,10 +4,10 @@ import { cn } from "@/lib/utils";
 // Key counts per row: function row, numbers, qwerty, home, shift.
 const KEY_ROWS = [
   { keys: 13, h: 9 }, // function row — shorter keys
-  { keys: 14, h: 13 },
-  { keys: 14, h: 13 },
-  { keys: 13, h: 13 },
-  { keys: 12, h: 13 },
+  { keys: 14, h: 14 },
+  { keys: 14, h: 14 },
+  { keys: 13, h: 14 },
+  { keys: 12, h: 14 },
 ] as const;
 
 const KEYCAP =
@@ -17,7 +17,7 @@ const KEYCAP =
 function Speaker() {
   return (
     <div
-      className="h-full w-[6.5%] rounded-[4px] opacity-70"
+      className="h-full w-[5.5%] rounded-[4px] opacity-70"
       style={{
         backgroundImage:
           "radial-gradient(circle, rgba(0,0,0,0.85) 34%, transparent 40%)",
@@ -28,10 +28,10 @@ function Speaker() {
 }
 
 /**
- * A realistic CSS MacBook Pro. Space-gray aluminum lid with a glass panel,
- * camera notch, hinge, and a keyboard deck tilted toward the viewer
- * (perspective rotateX) with speaker grilles, sculpted keycaps and a glass
- * trackpad. Whatever is passed as children renders "on screen".
+ * A realistic CSS MacBook Pro, front-on. One chassis width for lid,
+ * hinge and deck (they are the same machine); the deck is a tilted
+ * plane under mild perspective, closed off by a straight front-edge
+ * face that gives the base its physical thickness.
  */
 export function MacBook({
   children,
@@ -65,25 +65,30 @@ export function MacBook({
       {/* ── hinge ───────────────────────────────────────────────────── */}
       <div className="relative z-20 mx-auto -mt-px h-[8px] w-[88%] rounded-b-[6px] bg-gradient-to-b from-[#08080a] via-[#1a1a1e] to-[#2e2e34] shadow-[inset_0_-1px_0_rgba(255,255,255,0.1)]" />
 
-      {/* ── deck — a real plane, tilted toward the viewer ───────────── */}
-      <div className="relative z-10 -mt-px" style={{ perspective: "1000px" }}>
+      {/* ── base: tilted deck plane + straight front-edge face ──────── */}
+      <div
+        className="relative z-10 -mt-px h-[124px]"
+        style={{ perspective: "2400px" }}
+      >
+        {/* deck — SAME chassis width as the lid, foreshortened */}
         <div
-          className="relative mx-auto w-[96%] rounded-b-[26px] rounded-t-[4px] shadow-[0_60px_90px_-40px_rgba(0,0,0,0.9)]"
+          className="absolute left-1/2 top-0 w-[88%] rounded-t-[4px]"
           style={{
-            height: 210,
-            transform: "rotateX(68deg)",
+            height: 235,
+            transform: "translateX(-50%) rotateX(63deg)",
             transformOrigin: "center top",
             background:
               // brushed aluminum: base gradient + faint vertical graining
               "repeating-linear-gradient(90deg, rgba(255,255,255,0.012) 0 1px, transparent 1px 3px), linear-gradient(180deg, #232327 0%, #2c2c32 45%, #3a3a41 100%)",
             border: "1px solid rgba(255,255,255,0.09)",
             borderTop: "none",
+            borderBottom: "none",
           }}
         >
           {/* keyboard well flanked by speaker grilles */}
-          <div className="absolute left-1/2 top-[12px] flex h-[118px] w-[94%] -translate-x-1/2 items-stretch justify-center gap-[1.5%]">
+          <div className="absolute left-1/2 top-[12px] flex h-[120px] w-[95%] -translate-x-1/2 items-stretch justify-center gap-[1.2%]">
             <Speaker />
-            <div className="w-[83%] rounded-[10px] bg-[#0d0d10] p-[6px] shadow-[inset_0_2px_10px_rgba(0,0,0,0.85),inset_0_-1px_0_rgba(255,255,255,0.04)]">
+            <div className="w-[84%] rounded-[10px] bg-[#0d0d10] p-[6px] shadow-[inset_0_2px_10px_rgba(0,0,0,0.85),inset_0_-1px_0_rgba(255,255,255,0.04)]">
               <div className="flex h-full flex-col justify-between gap-[3px]">
                 {KEY_ROWS.map((row, r) => (
                   <div key={r} className="flex flex-1 gap-[3.5px]" style={{ maxHeight: row.h + 4 }}>
@@ -116,23 +121,25 @@ export function MacBook({
             <Speaker />
           </div>
 
-          {/* glass trackpad */}
-          <div className="absolute bottom-[12px] left-1/2 h-[62px] w-[36%] -translate-x-1/2 rounded-[10px] bg-gradient-to-b from-[#202024] to-[#2b2b31] shadow-[inset_0_1px_2px_rgba(0,0,0,0.6),inset_0_-1px_0_rgba(255,255,255,0.06),0_0_0_1px_rgba(0,0,0,0.35)]" />
+          {/* glass trackpad — proportioned to the keyboard above it */}
+          <div className="absolute bottom-[11px] left-1/2 h-[84px] w-[38%] -translate-x-1/2 rounded-[10px] bg-gradient-to-b from-[#202024] to-[#2b2b31] shadow-[inset_0_1px_2px_rgba(0,0,0,0.6),inset_0_-1px_0_rgba(255,255,255,0.06),0_0_0_1px_rgba(0,0,0,0.35)]" />
+        </div>
 
-          {/* front lip: thumb-scoop notch + edge highlight */}
-          <div className="absolute -bottom-px left-1/2 h-[7px] w-[13%] -translate-x-1/2 rounded-t-[100px] bg-gradient-to-b from-[#0c0c0e] to-[#1c1c21] shadow-[inset_0_1px_2px_rgba(0,0,0,0.8)]" />
-          <div className="absolute inset-x-8 bottom-0 h-px rounded-full bg-white/[0.14]" />
+        {/* front-edge face — the aluminum slab's thickness */}
+        <div className="absolute left-1/2 top-[108px] z-10 h-[12px] w-[95.5%] -translate-x-1/2 rounded-b-[14px] bg-gradient-to-b from-[#3d3d44] via-[#26262b] to-[#0f0f12] shadow-[inset_0_1px_0_rgba(255,255,255,0.16),0_10px_24px_-8px_rgba(0,0,0,0.8)]">
+          {/* thumb scoop, cut into the front edge */}
+          <div className="absolute left-1/2 top-0 h-[7px] w-[12%] -translate-x-1/2 rounded-b-[100px] bg-gradient-to-b from-[#0a0a0c] to-[#1a1a1f] shadow-[inset_0_1px_2px_rgba(0,0,0,0.9)]" />
         </div>
       </div>
 
       {/* floor shadow + faint reflection */}
       <div
         aria-hidden
-        className="absolute -bottom-8 left-1/2 h-12 w-[118%] -translate-x-1/2 rounded-[100%] bg-black/75 blur-2xl"
+        className="absolute -bottom-7 left-1/2 h-10 w-[104%] -translate-x-1/2 rounded-[100%] bg-black/75 blur-2xl"
       />
       <div
         aria-hidden
-        className="absolute -bottom-[52px] left-1/2 h-10 w-[80%] -translate-x-1/2 rounded-[100%] bg-white/[0.02] blur-xl"
+        className="absolute -bottom-[44px] left-1/2 h-8 w-[74%] -translate-x-1/2 rounded-[100%] bg-white/[0.02] blur-xl"
       />
     </div>
   );
