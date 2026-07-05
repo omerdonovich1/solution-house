@@ -67,6 +67,7 @@ export function Process() {
     <section id="process" className="py-16 sm:py-24">
       <div className="shell">
         <SectionHeader
+          center
           index="02"
           label="איך זה עובד"
           title="ארבעה שלבים. בלי הפתעות."
