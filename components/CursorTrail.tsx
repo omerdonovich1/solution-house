@@ -26,7 +26,7 @@ const PRESSURE_ITERS = 20;
 const CURL = 30; // vorticity confinement strength — the filaments
 const SPLAT_RADIUS = 0.0011; // thinner ribbon, closer to the cursor
 const SPLAT_FORCE = 3400; // less billow — a leaner trail
-const DYE_COLOR: [number, number, number] = [0.24, 0.34, 0.62]; // cool blue, cores add to white
+const DYE_COLOR: [number, number, number] = [0.17, 0.24, 0.44]; // cool blue, cores add to white
 const PARK_MS = 9000;
 
 const VERT = `
@@ -155,7 +155,7 @@ varying vec2 vUv;
 uniform sampler2D uTexture;
 void main () {
   vec3 c = texture2D(uTexture, vUv).rgb;
-  gl_FragColor = vec4(c * 1.15, 1.0);
+  gl_FragColor = vec4(c * 0.62, 1.0);
 }`,
 };
 
@@ -358,9 +358,9 @@ export function CursorTrail() {
       gl!.uniform1i(sp.u.uTarget, dye.read.attach(0));
       gl!.uniform3f(
         sp.u.color,
-        DYE_COLOR[0] + lift * 0.34,
-        DYE_COLOR[1] + lift * 0.32,
-        DYE_COLOR[2] + lift * 0.26
+        DYE_COLOR[0] + lift * 0.22,
+        DYE_COLOR[1] + lift * 0.21,
+        DYE_COLOR[2] + lift * 0.17
       );
       blit(dye.write);
       dye.swap();

@@ -1,13 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  AnimatePresence,
-  motion,
-  useMotionValueEvent,
-  useScroll,
-  useSpring,
-} from "framer-motion";
+import { AnimatePresence, motion, useScroll, useSpring } from "framer-motion";
 import { Mail } from "lucide-react";
 import { EASE } from "@/lib/motion";
 import { NAV_LINKS } from "@/lib/data";
@@ -32,19 +26,13 @@ const menuItem = {
  * away on scroll-down and resurfaces on scroll-up.
  */
 export function Navbar() {
-  const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
 
-  const { scrollY, scrollYProgress } = useScroll();
+  const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, {
     stiffness: 120,
     damping: 30,
     mass: 0.4,
-  });
-
-  useMotionValueEvent(scrollY, "change", (y) => {
-    const prev = scrollY.getPrevious() ?? 0;
-    setHidden(y > prev && y > 160 && !open);
   });
 
   // Lock page scroll behind the fullscreen menu.
@@ -66,7 +54,7 @@ export function Navbar() {
 
       <motion.header
         initial={{ y: -32, opacity: 0 }}
-        animate={{ y: hidden ? -110 : 0, opacity: 1 }}
+        animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: EASE }}
         className="fixed inset-x-0 top-5 z-50 flex justify-center"
       >
