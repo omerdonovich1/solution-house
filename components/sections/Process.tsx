@@ -15,8 +15,8 @@ function StepBlock({ step }: { step: ProcessStep }) {
     <div
       ref={ref}
       className={cn(
-        "relative grid grid-cols-[auto_1fr] gap-5 py-7 transition-opacity duration-700 sm:gap-12 sm:py-9",
-        active ? "opacity-100" : "opacity-30"
+        "relative grid grid-cols-[auto_1fr] gap-5 rounded-3xl border bg-white/[0.02] px-4 py-6 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] backdrop-blur-xl transition-[opacity,border-color] duration-700 sm:gap-12 sm:px-7 sm:py-8",
+        active ? "border-blue-500/20 opacity-100" : "border-white/[0.06] opacity-40"
       )}
     >
       {/* oversized ghost numeral + progress spine */}
@@ -79,7 +79,7 @@ export function Process() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="mt-6 md:mt-10"
+          className="mt-6 space-y-4 sm:space-y-5 md:mt-10"
         >
           {STEPS.map((s) => (
             <StepBlock key={s.index} step={s} />

@@ -9,9 +9,9 @@ const EMAIL = "hello@solution.house";
 
 type Status = "idle" | "loading" | "done" | "error";
 
-/* Underline-only fields — gallery-minimal, focus warms to amber. */
+/* Sleek minimal fields — faint glass fill, elegant white focus ring. */
 const field =
-  "w-full border-0 border-b border-white/[0.12] bg-transparent px-2 py-3.5 text-base text-ivory outline-none transition-[border-color,background-color] duration-300 placeholder:text-mist/40 focus:border-dot focus:bg-white/[0.02] focus-visible:outline-none";
+  "w-full rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3.5 text-base text-ivory outline-none transition-[box-shadow,border-color,background-color] duration-300 placeholder:text-mist/40 focus:border-transparent focus:bg-white/[0.04] focus:ring-1 focus:ring-white/30 focus-visible:outline-none";
 const label =
   "mb-1 block font-mono text-[11px] uppercase tracking-[0.18em] text-mist";
 
