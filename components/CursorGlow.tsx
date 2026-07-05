@@ -75,21 +75,55 @@ export function CursorGlow() {
       mesh.style.maskImage = mask;
     };
 
-    // ── touch devices: no cursor — the spotlight wanders on its own ──
+    // ── touch devices: no cursor — the field is driven by SCROLL ──────
+    // Instead of a spotlight (which, cropped to a narrow phone, looked
+    // like one stuck cluster), the whole mesh is softly visible and
+    // parallaxes as the page scrolls: it drifts upward while you scroll
+    // down, so fresh constellations emerge from the bottom fade.
     if (coarse) {
-      const drift = (t: number) => {
-        const w = window.innerWidth;
-        const h = window.innerHeight;
-        targetX = w * (0.5 + 0.34 * Math.sin(t * 0.00019));
-        targetY = h * (0.42 + 0.3 * Math.sin(t * 0.00031 + 1.2));
-        x += (targetX - x) * 0.04;
-        y += (targetY - y) * 0.04;
-        paint();
-        rafId = requestAnimationFrame(drift);
+      const svg = mesh.querySelector("svg") as SVGElement | null;
+      // oversize the mesh so there's headroom to travel without exposing
+      // edges, and fade it top & bottom instead of a hard rectangle
+      if (svg) {
+        svg.style.position = "absolute";
+        svg.style.left = "0";
+        svg.style.top = "-50%";
+        svg.style.width = "100%";
+        svg.style.height = "200%";
+      }
+      mesh.style.opacity = "0.55";
+      const softMask =
+        "linear-gradient(to bottom, transparent 0%, #000 15%, #000 85%, transparent 100%)";
+      mesh.style.webkitMaskImage = softMask;
+      mesh.style.maskImage = softMask;
+      // a faint, still ambient wash — the parallax mesh is the star
+      glow.style.background = `radial-gradient(${rGlow}px circle at 50% 32%, rgba(125,180,255,0.05), transparent 70%)`;
+
+      let targetTY = 0;
+      let ty = 0;
+      const readScroll = () => {
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        const sp = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+        // svg spans -50%…150% of the viewport; travel ±40% keeps it covering
+        targetTY = (0.4 - sp * 0.8) * window.innerHeight;
       };
-      paint();
-      rafId = requestAnimationFrame(drift);
-      return () => cancelAnimationFrame(rafId);
+      const loop = (t: number) => {
+        ty += (targetTY - ty) * 0.08;
+        const swayX = Math.sin(t * 0.0004) * 10;
+        if (svg) {
+          svg.style.transform = `translate3d(${swayX.toFixed(1)}px, ${ty.toFixed(1)}px, 0)`;
+        }
+        rafId = requestAnimationFrame(loop);
+      };
+      readScroll();
+      window.addEventListener("scroll", readScroll, { passive: true });
+      window.addEventListener("resize", readScroll);
+      rafId = requestAnimationFrame(loop);
+      return () => {
+        window.removeEventListener("scroll", readScroll);
+        window.removeEventListener("resize", readScroll);
+        cancelAnimationFrame(rafId);
+      };
     }
 
     // ── fine pointers: trail the cursor ──────────────────────────────
