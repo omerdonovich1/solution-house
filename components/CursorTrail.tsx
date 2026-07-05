@@ -54,20 +54,21 @@ export function CursorTrail() {
     let lastMove = -1e9;
     let rafId = 0;
 
-    /** Soft glowing dabs along the segment — white core, cool blue halo. */
+    /** Thick, soft vapor dabs along the segment — bright core, wide halo. */
     function brush(ax: number, ay: number, cx2: number, cy2: number) {
       const dx = cx2 - ax;
       const dy = cy2 - ay;
       const dist = Math.hypot(dx, dy);
-      const steps = Math.max(1, Math.ceil(dist / 4));
-      const r = 9 + Math.min(22, dist * 0.6);
+      const steps = Math.max(1, Math.ceil(dist / 5));
+      const r = 17 + Math.min(36, dist * 0.9);
       for (let i = 0; i <= steps; i++) {
         const t = i / steps;
         const cx = ax + dx * t;
         const cy = ay + dy * t;
         const g = octx!.createRadialGradient(cx, cy, 0, cx, cy, r);
-        g.addColorStop(0, "rgba(240,248,255,0.30)");
-        g.addColorStop(0.45, "rgba(154,200,255,0.14)");
+        g.addColorStop(0, "rgba(244,250,255,0.42)");
+        g.addColorStop(0.35, "rgba(190,220,255,0.20)");
+        g.addColorStop(0.7, "rgba(140,185,255,0.08)");
         g.addColorStop(1, "rgba(120,170,255,0)");
         octx!.fillStyle = g;
         octx!.beginPath();
@@ -79,23 +80,29 @@ export function CursorTrail() {
     function frame() {
       rafId = 0;
       syncSize();
-      const idle = performance.now() - lastMove;
+      const t = performance.now();
+      const idle = t - lastMove;
 
-      // feedback pass: last frame, expanded + curled + faded = smoke
+      // feedback pass: last frame diffused outward with a BREATHING curl —
+      // the swirl direction oscillates so the vapor keeps churning after
+      // the pointer rests, instead of spinning uniformly
       octx!.clearRect(0, 0, w, h);
-      octx!.globalAlpha = 0.945;
-      octx!.translate(w / 2, h / 2);
-      octx!.scale(1.007, 1.007);
-      octx!.rotate(0.0016);
+      octx!.globalAlpha = 0.958;
+      octx!.translate(
+        w / 2 + Math.sin(t * 0.0007) * 0.9,
+        h / 2 + Math.cos(t * 0.0009) * 0.9
+      );
+      octx!.scale(1.009, 1.009);
+      octx!.rotate(0.0042 * Math.sin(t * 0.0011));
       octx!.translate(-w / 2, -h / 2);
       octx!.drawImage(vis!, 0, 0);
       octx!.setTransform(1, 0, 0, 1, 0, 0);
       octx!.globalAlpha = 1;
 
       // ink the newest movement while the pointer is active
-      if (tx >= 0 && idle < 120) {
-        const nbx = bx + (tx - bx) * 0.32;
-        const nby = by + (ty - by) * 0.32;
+      if (tx >= 0 && idle < 140) {
+        const nbx = bx + (tx - bx) * 0.3;
+        const nby = by + (ty - by) * 0.3;
         brush(bx, by, nbx, nby);
         bx = nbx;
         by = nby;
@@ -109,7 +116,7 @@ export function CursorTrail() {
       ctx!.drawImage(off, 0, 0);
 
       // let the vapor fully dissolve, then park the loop
-      if (idle < 4500) {
+      if (idle < 6000) {
         rafId = requestAnimationFrame(frame);
       } else {
         ctx!.clearRect(0, 0, w, h);
