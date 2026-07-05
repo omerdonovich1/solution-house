@@ -201,6 +201,7 @@ export function WhatWeBuild() {
     <section id="build" className="py-16 sm:py-24">
       <div className="shell">
         <SectionHeader
+          center
           index="01"
           label="מה אנחנו בונים"
           title="פתרון טכנולוגי לכל אתגר עסקי."

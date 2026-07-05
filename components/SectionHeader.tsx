@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import type { ReactNode } from "react";
 import { blurIn, fadeUp, maskRise, viewportOnce } from "@/lib/motion";
+import { cn } from "@/lib/utils";
 
 interface SectionHeaderProps {
   /** Retained in the API for callers; no longer rendered. */
@@ -11,6 +12,8 @@ interface SectionHeaderProps {
   title: ReactNode;
   lead?: ReactNode;
   className?: string;
+  /** Center the title and lead instead of the RTL edge alignment. */
+  center?: boolean;
 }
 
 const headStagger = {
@@ -36,17 +39,27 @@ function TitleWords({ text }: { text: string }) {
 }
 
 /** Editorial section header: hairline rule · word-reveal title · lead. */
-export function SectionHeader({ title, lead, className }: SectionHeaderProps) {
+export function SectionHeader({
+  title,
+  lead,
+  className,
+  center,
+}: SectionHeaderProps) {
   return (
     <motion.div
       variants={headStagger}
       initial="hidden"
       whileInView="show"
       viewport={viewportOnce}
-      className={className}
+      className={cn(center && "text-center", className)}
     >
       <motion.div variants={fadeUp} className="hairline mb-8" />
-      <h2 className="max-w-[20ch] text-[clamp(2.6rem,6.5vw,5.5rem)] font-black leading-[1.02] tracking-tightest text-ivory">
+      <h2
+        className={cn(
+          "max-w-[20ch] text-[clamp(2.6rem,6.5vw,5.5rem)] font-black leading-[1.02] tracking-tightest text-ivory",
+          center && "mx-auto"
+        )}
+      >
         {typeof title === "string" ? (
           <TitleWords text={title} />
         ) : (
@@ -58,7 +71,10 @@ export function SectionHeader({ title, lead, className }: SectionHeaderProps) {
       {lead ? (
         <motion.p
           variants={blurIn}
-          className="ms-auto mt-5 max-w-2xl text-base font-light leading-relaxed text-mist sm:mt-7 sm:text-xl"
+          className={cn(
+            "mt-5 max-w-2xl text-base font-light leading-relaxed text-mist sm:mt-7 sm:text-xl",
+            center ? "mx-auto" : "ms-auto"
+          )}
         >
           {lead}
         </motion.p>
