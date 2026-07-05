@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Rubik, JetBrains_Mono, Heebo } from "next/font/google";
+import { Rubik, Heebo } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { CursorGlow } from "@/components/CursorGlow";
@@ -12,13 +12,6 @@ const rubik = Rubik({
   subsets: ["hebrew", "latin"],
   weight: ["300", "400", "500", "600", "700", "800", "900"],
   variable: "--font-rubik",
-  display: "swap",
-});
-
-const mono = JetBrains_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
-  variable: "--font-mono",
   display: "swap",
 });
 
@@ -45,7 +38,7 @@ export default function RootLayout({
     <html
       lang="he"
       dir="rtl"
-      className={cn(rubik.variable, mono.variable, heebo.variable, "grain")}
+      className={cn(rubik.variable, heebo.variable, "grain")}
     >
       <body className="font-sans antialiased">
         {/* deep-space canvas — a fixed radial wash so nothing sits on flat black */}

@@ -83,7 +83,7 @@ export function FloatingActions() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.96 }}
             transition={{ duration: 0.35, ease: EASE }}
-            className="fixed bottom-[140px] left-4 sm:bottom-[152px] z-[85] flex h-[min(500px,calc(100svh-190px))] w-[min(380px,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-white/[0.1] bg-[#0C0C0E] shadow-[0_40px_90px_-30px_rgba(0,0,0,0.9)]"
+            className="liquid-glass fixed bottom-[140px] left-4 sm:bottom-[152px] z-[85] flex h-[min(500px,calc(100svh-190px))] w-[min(380px,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-white/[0.1] !bg-[#0C0C0E]/85"
           >
             {/* header */}
             <div className="flex items-center gap-3 border-b border-white/[0.07] px-4 py-3">

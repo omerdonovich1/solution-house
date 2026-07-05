@@ -43,7 +43,9 @@ const config: Config = {
       },
       fontFamily: {
         sans: ["var(--font-rubik)", "system-ui", "sans-serif"],
-        mono: ["var(--font-mono)", "monospace"],
+        // "mono" is a role, not a face: every label/counter that used the
+        // monospace font now renders in the brand's regular face (Rubik).
+        mono: ["var(--font-rubik)", "system-ui", "sans-serif"],
         heebo: ["var(--font-heebo)", "system-ui", "sans-serif"],
       },
       letterSpacing: {

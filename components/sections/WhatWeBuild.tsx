@@ -96,9 +96,9 @@ const CATEGORIES: readonly Category[] = [
   },
 ] as const;
 
-/* Premium Frosted Glass 2.0 — faint fill, xl blur, inner top highlight. */
+/* Liquid Glass card — the material lives in the .liquid-glass utility. */
 const glassCard =
-  "group relative flex flex-col overflow-hidden rounded-3xl border border-white/[0.06] bg-white/[0.02] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06),inset_0_0_44px_rgba(255,255,255,0.015)] backdrop-blur-xl transition-[transform,border-color] duration-500 ease-out hover:scale-[1.01] hover:border-blue-500/20";
+  "liquid-glass group relative flex flex-col overflow-hidden rounded-3xl border border-white/[0.09] transition-[transform,border-color] duration-500 ease-out hover:scale-[1.01] hover:border-blue-500/20";
 
 function BentoCard({ cat, index }: { cat: Category; index: number }) {
   const [slide, setSlide] = useState(0);
