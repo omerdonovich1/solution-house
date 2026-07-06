@@ -12,7 +12,6 @@ import { ArrowLeft } from "lucide-react";
 import { EASE, blurIn, fadeUp, maskRise } from "@/lib/motion";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { LogoMark } from "@/components/ui/Logo";
-import { SolutionArchitect } from "@/components/hero/SolutionArchitect";
 
 // Instant pacing — no preloader curtain, the laptop lands right away.
 const heroStagger = {
@@ -76,11 +75,6 @@ export function Hero() {
     offset: ["start start", "end end"],
   });
   const p = useSpring(scrollYProgress, { stiffness: 90, damping: 26, mass: 0.5 });
-  // 0→1 as the hero actually leaves the viewport (after the pin releases)
-  const { scrollYProgress: leave } = useScroll({
-    target: ref,
-    offset: ["end 0.92", "end 0.35"],
-  });
 
   // the laptop zooms toward the viewer and slowly dissolves
   const macScale = useTransform(p, [0, 0.5], reduced ? [1, 1] : [1, 2.7]);
@@ -154,9 +148,6 @@ export function Hero() {
               </MagneticButton>
             </motion.div>
           </motion.div>
-
-          {/* the Live Solution Architect — command interface + node build */}
-          <SolutionArchitect leave={leave} />
         </motion.div>
 
         {/* the brand lockup — opening stage, zooms toward the viewer and dissolves */}
