@@ -5,7 +5,7 @@ import { blurIn, fadeUp, stagger, viewportOnce } from "@/lib/motion";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { LogoMark } from "@/components/ui/Logo";
 
-const WHATSAPP = "972500000000";
+const WHATSAPP = "972523794801";
 
 /**
  * The closer: full white inversion — the monochrome system flipped for

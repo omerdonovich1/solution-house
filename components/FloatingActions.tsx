@@ -6,7 +6,7 @@ import { Bot, Send, X } from "lucide-react";
 import { EASE } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
-const WHATSAPP = "972500000000";
+const WHATSAPP = "972523794801";
 
 interface ChatMessage {
   role: "user" | "assistant";
@@ -39,6 +39,12 @@ export function FloatingActions() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const QUICK_REPLIES = [
+    "ספרו לי על השירותים",
+    "אני רוצה שיחת ייעוץ",
+    "מה העלות המשוערת?",
+  ];
+
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, busy]);
@@ -47,8 +53,8 @@ export function FloatingActions() {
     if (open) inputRef.current?.focus();
   }, [open]);
 
-  async function send() {
-    const text = input.trim();
+  async function sendText(raw: string) {
+    const text = raw.trim();
     if (!text || busy) return;
     setInput("");
     const next: ChatMessage[] = [...messages, { role: "user", content: text }];
@@ -132,13 +138,29 @@ export function FloatingActions() {
                   ))}
                 </div>
               )}
+
+              {/* quick replies — shown before the first question */}
+              {messages.length === 1 && !busy && (
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {QUICK_REPLIES.map((q) => (
+                    <button
+                      key={q}
+                      type="button"
+                      onClick={() => sendText(q)}
+                      className="rounded-full border border-dot/30 bg-dot/10 px-3.5 py-1.5 text-[12.5px] font-medium text-dot transition-colors duration-300 hover:bg-dot/20"
+                    >
+                      {q}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* input */}
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                send();
+                sendText(input);
               }}
               className="flex items-center gap-2 border-t border-white/[0.07] p-3"
             >

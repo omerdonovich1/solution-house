@@ -8,7 +8,7 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Check } from "lucide-react";
 import { EASE, blurIn, fadeUp, maskRise } from "@/lib/motion";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { LogoMark } from "@/components/ui/Logo";
@@ -137,16 +137,35 @@ export function Hero() {
             className="mt-9 flex flex-wrap items-center justify-center gap-3.5"
           >
             <motion.div variants={fadeUp}>
-              <MagneticButton href="#contact" variant="solid">
-                בואו נדבר
+              <MagneticButton
+                href="#contact"
+                variant="solid"
+                className="!bg-dot !text-ink hover:!bg-dot hover:shadow-[0_16px_50px_-12px_rgba(217,161,59,0.6)]"
+              >
+                קבעו שיחת אבחון חינם
                 <ArrowLeft className="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-1" />
               </MagneticButton>
             </motion.div>
             <motion.div variants={fadeUp}>
               <MagneticButton href="#build" variant="ghost" strength={8}>
-                מה אנחנו בונים
+                צפו בפרויקטים שלנו
               </MagneticButton>
             </motion.div>
+          </motion.div>
+
+          {/* trust badge */}
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            className="mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-1.5 text-[12.5px] text-mist"
+          >
+            {["ללא התחייבות", "תוך 24 שעות", "מסמך פתרונות מותאם אישית"].map((t) => (
+              <span key={t} className="inline-flex items-center gap-1.5">
+                <Check className="h-3.5 w-3.5 text-dot" strokeWidth={2.4} />
+                {t}
+              </span>
+            ))}
           </motion.div>
         </motion.div>
 

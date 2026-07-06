@@ -4,7 +4,7 @@ import { useState } from "react";
 import { SectionHeader } from "@/components/SectionHeader";
 import { cn } from "@/lib/utils";
 
-const WHATSAPP = "972500000000";
+const WHATSAPP = "972523794801";
 const EMAIL = "hello@solution.house";
 
 type Status = "idle" | "loading" | "done" | "error";
@@ -53,8 +53,17 @@ export function Contact() {
           index="03"
           label="בואו נדבר"
           title="ספרו לנו על האתגר שלכם."
-          lead="שיחה אחת, בלי התחייבות: מבינים את האתגר, מציעים כיוון ונותנים הערכת מחיר הוגנת. מבטיחים רק מה שנוכל לקיים."
+          lead="שיחת אבחון אחת, בלי התחייבות: מבינים את האתגר, מציעים כיוון ונותנים הערכת מחיר הוגנת."
         />
+
+        {/* urgency */}
+        <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-dot/30 bg-dot/10 px-4 py-2 text-[13.5px] text-dot">
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-dot/70" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-dot" />
+          </span>
+          מוגבל ל-5 שיחות השבוע — שריינו את המקום שלכם עכשיו
+        </div>
 
         <form onSubmit={onSubmit} className="mt-10 grid gap-7 sm:grid-cols-2">
           <div>
