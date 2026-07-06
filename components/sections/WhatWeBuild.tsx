@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { ChevronLeft } from "lucide-react";
 import { SectionHeader } from "@/components/SectionHeader";
 import { CardStack } from "@/components/ui/CardStack";
 import { EASE } from "@/lib/motion";
@@ -164,6 +165,116 @@ function CategoryCard({ cat, index }: { cat: Category; index: number }) {
   );
 }
 
+/** Mobile-only: a horizontal swipe carousel (native snap, RTL). */
+function MobileServicesCarousel() {
+  const railRef = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(0);
+
+  // active = the card whose centre is nearest the rail centre (RTL-safe)
+  useEffect(() => {
+    const rail = railRef.current;
+    if (!rail) return;
+    let raf = 0;
+    const onScroll = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        const mid = rail.getBoundingClientRect().left + rail.clientWidth / 2;
+        let best = 0;
+        let bestDist = Infinity;
+        rail.querySelectorAll<HTMLElement>("[data-card]").forEach((el, i) => {
+          const r = el.getBoundingClientRect();
+          const d = Math.abs(r.left + r.width / 2 - mid);
+          if (d < bestDist) {
+            bestDist = d;
+            best = i;
+          }
+        });
+        setActive(best);
+      });
+    };
+    rail.addEventListener("scroll", onScroll, { passive: true });
+    return () => rail.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const goTo = (i: number) => {
+    const card = railRef.current?.querySelectorAll<HTMLElement>("[data-card]")[i];
+    card?.scrollIntoView({ inline: "center", block: "nearest", behavior: "smooth" });
+  };
+
+  return (
+    <div className="md:hidden">
+      {/* swipe hint */}
+      <div className="mb-3 flex items-center justify-center gap-1.5 text-[12px] text-mist/70">
+        <span>החליקו לצדדים</span>
+        <motion.span animate={{ x: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>
+          <ChevronLeft className="h-3.5 w-3.5" />
+        </motion.span>
+      </div>
+
+      {/* rail */}
+      <div
+        ref={railRef}
+        dir="rtl"
+        className="scrollbar-hide flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2"
+        style={{
+          scrollPaddingInline: "var(--shell-pad)",
+          paddingInline: "var(--shell-pad)",
+          WebkitOverflowScrolling: "touch",
+        }}
+      >
+        {CATEGORIES.map((cat, i) => {
+          const ex = cat.examples[0];
+          return (
+            <article
+              key={cat.id}
+              data-card
+              className="liquid-glass w-[82vw] max-w-[340px] shrink-0 snap-center overflow-hidden rounded-3xl"
+            >
+              <div className="relative h-[185px] border-b border-white/[0.08]">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={ex.image}
+                  alt={ex.name}
+                  className="absolute inset-0 h-full w-full object-cover object-top"
+                  loading="lazy"
+                  draggable={false}
+                />
+                <span
+                  dir="ltr"
+                  className="absolute left-3 top-3 rounded-full bg-ink/70 px-2.5 py-1 text-[11px] font-medium text-dot backdrop-blur"
+                >
+                  {String(i + 1).padStart(2, "0")} / {String(CATEGORIES.length).padStart(2, "0")}
+                </span>
+              </div>
+              <div className="p-5">
+                <h3 className="text-gradient text-2xl font-black tracking-tightest">{cat.name}</h3>
+                <p className="mt-2 text-[14px] font-light leading-relaxed text-body">{cat.blurb}</p>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+
+      {/* progress dots */}
+      <div className="mt-5 flex justify-center gap-1.5">
+        {CATEGORIES.map((_, i) => (
+          <button
+            key={i}
+            type="button"
+            aria-label={`שירות ${i + 1}`}
+            onClick={() => goTo(i)}
+            className={cn(
+              "h-1.5 rounded-full transition-all duration-300",
+              i === active ? "w-5 bg-dot" : "w-1.5 bg-white/20"
+            )}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function WhatWeBuild() {
   return (
     <section id="build" className="py-16 sm:py-24">
@@ -175,14 +286,24 @@ export function WhatWeBuild() {
           title="פתרון טכנולוגי לכל אתגר עסקי."
           lead="אתר, דף נחיתה, דשבורד, סוכן AI, מערכת או אוטומציה — כל פתרון נבנה בדיוק למידות של העסק שלכם."
         />
+      </div>
 
-        <div className="mt-10 sm:mt-14">
-          <CardStack
-            items={CATEGORIES.map((cat, i) => (
-              <CategoryCard key={cat.id} cat={cat} index={i} />
-            ))}
-          />
+      {/* desktop: scroll-stacking deck */}
+      <div className="hidden md:block">
+        <div className="shell">
+          <div className="mt-10 sm:mt-14">
+            <CardStack
+              items={CATEGORIES.map((cat, i) => (
+                <CategoryCard key={cat.id} cat={cat} index={i} />
+              ))}
+            />
+          </div>
         </div>
+      </div>
+
+      {/* mobile: horizontal swipe carousel */}
+      <div className="mt-10">
+        <MobileServicesCarousel />
       </div>
     </section>
   );
