@@ -323,23 +323,28 @@ export function CursorTrail() {
     };
     syncCanvas();
 
-    // ── electric micro-sparks — very rare, very faint ────────────────
+    // ── electric micro-sparks — subtle, but noticeable on a brisk flick ─
     type Spark = { pts: [number, number][]; born: number; ttl: number };
     const sparks: Spark[] = [];
     function spawnSpark(x: number, y: number) {
-      let ang = Math.random() * Math.PI * 2;
-      let sx = x;
-      let sy = y;
-      const pts: [number, number][] = [[sx, sy]];
-      const segs = 2 + Math.floor(Math.random() * 2);
-      for (let i = 0; i < segs; i++) {
-        ang += (Math.random() - 0.5) * 1.4;
-        const len = 5 + Math.random() * 8;
-        sx += Math.cos(ang) * len;
-        sy += Math.sin(ang) * len;
-        pts.push([sx, sy]);
+      // one or two forked bolts from the discharge point
+      const forks = 1 + (Math.random() < 0.5 ? 1 : 0);
+      const base = Math.random() * Math.PI * 2;
+      for (let f = 0; f < forks; f++) {
+        let ang = base + (Math.random() - 0.5) * 2.2;
+        let sx = x;
+        let sy = y;
+        const pts: [number, number][] = [[sx, sy]];
+        const segs = 3 + Math.floor(Math.random() * 2);
+        for (let i = 0; i < segs; i++) {
+          ang += (Math.random() - 0.5) * 1.5;
+          const len = 6 + Math.random() * 11;
+          sx += Math.cos(ang) * len;
+          sy += Math.sin(ang) * len;
+          pts.push([sx, sy]);
+        }
+        sparks.push({ pts, born: performance.now(), ttl: 260 + Math.random() * 260 });
       }
-      sparks.push({ pts, born: performance.now(), ttl: 200 + Math.random() * 180 });
     }
     function renderSparks(now: number) {
       if (!sctx || !sparkC) return;
@@ -351,15 +356,27 @@ export function CursorTrail() {
           sparks.splice(i, 1);
           continue;
         }
-        const a = (1 - t) * 0.3;
-        sctx.strokeStyle = `rgba(190,225,255,${a.toFixed(3)})`;
-        sctx.lineWidth = 1;
-        sctx.shadowColor = `rgba(125,180,255,${a.toFixed(3)})`;
-        sctx.shadowBlur = 4;
+        const a = (1 - t) * 0.62;
         sctx.beginPath();
         sctx.moveTo(s.pts[0][0], s.pts[0][1]);
         for (let j = 1; j < s.pts.length; j++) sctx.lineTo(s.pts[j][0], s.pts[j][1]);
+        // cool halo underlay
+        sctx.strokeStyle = `rgba(125,180,255,${(a * 0.6).toFixed(3)})`;
+        sctx.lineWidth = 2.4;
+        sctx.shadowColor = `rgba(125,180,255,${a.toFixed(3)})`;
+        sctx.shadowBlur = 7;
         sctx.stroke();
+        // hot white filament
+        sctx.strokeStyle = `rgba(235,245,255,${a.toFixed(3)})`;
+        sctx.lineWidth = 1;
+        sctx.shadowBlur = 2;
+        sctx.stroke();
+        // bright discharge point
+        sctx.fillStyle = `rgba(245,250,255,${a.toFixed(3)})`;
+        sctx.shadowBlur = 6;
+        sctx.beginPath();
+        sctx.arc(s.pts[0][0], s.pts[0][1], 1.4, 0, Math.PI * 2);
+        sctx.fill();
       }
     }
 
@@ -526,8 +543,8 @@ export function CursorTrail() {
           pending.push({ x, y, dx, dy, speed });
           if (pending.length > 24) pending.shift();
         }
-        // a tiny static discharge, only on brisk movement — and rarely
-        if (speed * window.innerWidth > 17 && Math.random() < 0.085 && sparks.length < 4) {
+        // a small static discharge on brisk movement — subtle, occasional
+        if (speed * window.innerWidth > 13 && Math.random() < 0.2 && sparks.length < 7) {
           spawnSpark(e.clientX, e.clientY);
         }
       }
