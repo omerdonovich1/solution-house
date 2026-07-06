@@ -33,20 +33,22 @@ type Source = "website" | "whatsapp" | "email";
 type Tone = "aqua" | "iris" | "dot" | "rose" | "mist";
 
 interface Lead {
-  id: number;
+  id: string;
   name: string;
   initials: string;
-  role: string;
+  role?: string;
   phone: string;
   email: string;
   source: Source;
-  score: number;
+  score?: number;
   status: Status;
-  statusLabel: string;
+  statusLabel?: string;
   time: string;
   message: string;
-  tags: { label: string; tone: Tone }[];
-  agents: { scout: string; qualifier: string; scorer: string; router: string };
+  tags?: { label: string; tone: Tone }[];
+  agents?: { scout: string; qualifier: string; scorer: string; router: string };
+  /** a real inbound lead from the form (vs. a demo card). */
+  fresh?: boolean;
 }
 
 interface Agent {
@@ -59,9 +61,9 @@ interface Agent {
   lastAction: string;
 }
 
-const LEADS: Lead[] = [
+const DEMO_LEADS: Lead[] = [
   {
-    id: 1,
+    id: "demo-1",
     name: "דוד שטרן",
     initials: "דש",
     role: 'מנכ"ל, סטארטאפ טק',
@@ -87,7 +89,7 @@ const LEADS: Lead[] = [
     },
   },
   {
-    id: 2,
+    id: "demo-2",
     name: "רונית לוי",
     initials: "רל",
     role: "מנהלת שיווק, קליניקה",
@@ -111,7 +113,7 @@ const LEADS: Lead[] = [
     },
   },
   {
-    id: 3,
+    id: "demo-3",
     name: "אלכס כהן",
     initials: "אכ",
     role: "פרילנסר",
@@ -202,9 +204,53 @@ const STATUS: Record<Status, { border: string; avatar: string; accent: string }>
 
 const scoreColor = (s: number) => (s >= 80 ? "text-rose" : s >= 60 ? "text-dot" : "text-mist");
 
+/* ── real leads from the store (/api/leads) ──────────────────────────── */
+interface StoredLead {
+  id: string;
+  name: string;
+  phone: string;
+  email: string | null;
+  message: string | null;
+  source: string;
+  receivedAt: string;
+}
+
+function initialsOf(name: string) {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  return ((parts[0]?.[0] ?? "") + (parts[1]?.[0] ?? "")).trim() || "•";
+}
+
+function timeAgo(iso: string) {
+  const diff = Date.now() - new Date(iso).getTime();
+  const m = Math.floor(diff / 60000);
+  if (m < 1) return "עכשיו";
+  if (m < 60) return `לפני ${m} דק׳`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `לפני ${h} שע׳`;
+  const d = Math.floor(h / 24);
+  return d === 1 ? "אתמול" : `לפני ${d} ימים`;
+}
+
+/** map a stored lead into the card's display shape (no AI enrichment yet). */
+function mapStored(s: StoredLead): Lead {
+  return {
+    id: s.id,
+    name: s.name,
+    initials: initialsOf(s.name),
+    phone: s.phone,
+    email: s.email ?? "",
+    source: "website",
+    status: "warm",
+    statusLabel: "חדש",
+    time: timeAgo(s.receivedAt),
+    message: s.message ?? "",
+    fresh: true,
+  };
+}
+
 /* ── modal (bottom sheet) ────────────────────────────────────────────── */
 type ModalState =
-  | { kind: "lead"; id: number }
+  | { kind: "lead"; id: string }
   | { kind: "agent"; key: string }
   | { kind: "agents" }
   | { kind: "filter" }
@@ -223,15 +269,39 @@ function ModalSection({ title, children }: { title: string; children: React.Reac
 
 /* ── page ────────────────────────────────────────────────────────────── */
 export default function LeadManager() {
-  const [taken, setTaken] = useState<Set<number>>(new Set());
+  const [taken, setTaken] = useState<Set<string>>(new Set());
   const [modal, setModal] = useState<ModalState>(null);
   const [tab, setTab] = useState("leads");
   const [filter, setFilter] = useState<Status | "all">("all");
   const [toast, setToast] = useState<{ text: string; n: number }>({ text: "", n: 0 });
+  const [realLeads, setRealLeads] = useState<Lead[] | null>(null);
   const toastTimer = useRef<ReturnType<typeof setTimeout>>();
 
   const showToast = (text: string) =>
     setToast((t) => ({ text, n: t.n + 1 }));
+
+  // pull real leads from the store; refresh when returning to the tab
+  useEffect(() => {
+    let alive = true;
+    const load = async () => {
+      try {
+        const res = await fetch("/api/leads", { cache: "no-store" });
+        const data = await res.json();
+        if (alive && Array.isArray(data.leads)) {
+          setRealLeads((data.leads as StoredLead[]).map(mapStored));
+        }
+      } catch {
+        if (alive) setRealLeads([]);
+      }
+    };
+    load();
+    const onFocus = () => load();
+    window.addEventListener("focus", onFocus);
+    return () => {
+      alive = false;
+      window.removeEventListener("focus", onFocus);
+    };
+  }, []);
 
   useEffect(() => {
     if (!toast.n) return;
@@ -252,10 +322,18 @@ export default function LeadManager() {
     showToast("הליד נלקח בהצלחה");
   };
 
+  // real leads when we have them, otherwise the demo cards keep the UI alive
+  const showingDemo = !realLeads || realLeads.length === 0;
+  const allLeads = showingDemo ? DEMO_LEADS : realLeads;
+
   const stats = [
-    { value: 12, label: "חדשים", gold: false },
-    { value: 8, label: "בטיפול", gold: false },
-    { value: 3, label: "חמים", gold: true },
+    { value: allLeads.filter((l) => !taken.has(l.id)).length, label: "חדשים", gold: false },
+    { value: taken.size, label: "בטיפול", gold: false },
+    {
+      value: allLeads.filter((l) => l.status === "hot" || (l.score ?? 0) >= 80).length,
+      label: "חמים",
+      gold: true,
+    },
   ];
 
   const NAV = [
@@ -265,7 +343,7 @@ export default function LeadManager() {
     { id: "settings", Icon: Settings, label: "הגדרות" },
   ];
 
-  const visibleLeads = LEADS.filter((l) => filter === "all" || l.status === filter);
+  const visibleLeads = allLeads.filter((l) => filter === "all" || l.status === filter);
 
   return (
     <div className="relative z-[1] min-h-svh">
@@ -390,6 +468,12 @@ export default function LeadManager() {
         </button>
       </div>
 
+      {showingDemo && (
+        <div className="mx-6 mb-3.5 rounded-xl border border-dot/25 bg-dot/[0.07] px-4 py-3 text-[12px] leading-relaxed text-dot lg:mx-0">
+          מוצגים לידים לדוגמה. לידים אמיתיים מטופס יצירת הקשר יופיעו כאן אוטומטית.
+        </div>
+      )}
+
       <div className="space-y-3.5 px-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-4 lg:space-y-0 lg:px-0 xl:grid-cols-3">
         {visibleLeads.map((lead, i) => {
           const st = STATUS[lead.status];
@@ -406,14 +490,19 @@ export default function LeadManager() {
                 st.border
               )}
             >
-              {lead.status === "hot" && (
+              {lead.status === "hot" && lead.score != null && (
                 <div className="absolute right-0 top-0 flex items-center gap-1 rounded-bl-xl bg-gradient-to-l from-rose to-[#e0555f] px-3 py-1.5 text-[10px] font-black text-ink">
                   <Flame className="h-3 w-3" strokeWidth={2.4} />
                   חם · {lead.score}
                 </div>
               )}
+              {lead.fresh && (
+                <div className="absolute right-0 top-0 rounded-bl-xl bg-gradient-to-l from-dot to-[#b8842f] px-3 py-1.5 text-[10px] font-black text-ink">
+                  ליד חדש
+                </div>
+              )}
 
-              <div className={cn("flex items-center gap-3.5", lead.status === "hot" && "mt-3")}>
+              <div className={cn("flex items-center gap-3.5", (lead.status === "hot" || lead.fresh) && "mt-3")}>
                 <span
                   className={cn(
                     "grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br text-[15px] font-black",
@@ -425,7 +514,7 @@ export default function LeadManager() {
                 </span>
                 <div className="min-w-0 flex-1">
                   <div className="truncate text-[15px] font-extrabold text-ivory">{lead.name}</div>
-                  <div className="mt-0.5 truncate text-[11px] text-mist">{lead.role}</div>
+                  <div className="mt-0.5 truncate text-[11px] text-mist">{lead.role ?? lead.phone}</div>
                 </div>
                 <div className="shrink-0 text-end">
                   <div className="text-[10px] text-mist">{lead.time}</div>
@@ -436,17 +525,21 @@ export default function LeadManager() {
                 </div>
               </div>
 
-              <p className="mt-3.5 rounded-xl border border-white/[0.05] bg-ink/40 px-3.5 py-3 text-[12.5px] leading-relaxed text-body">
-                {lead.message}
-              </p>
+              {lead.message && (
+                <p className="mt-3.5 rounded-xl border border-white/[0.05] bg-ink/40 px-3.5 py-3 text-[12.5px] leading-relaxed text-body">
+                  {lead.message}
+                </p>
+              )}
 
-              <div className="mt-3 flex flex-wrap gap-1.5">
-                {lead.tags.map((t) => (
-                  <span key={t.label} className={cn("rounded-lg px-2.5 py-1 text-[10px] font-bold", TONE[t.tone])}>
-                    {t.label}
-                  </span>
-                ))}
-              </div>
+              {lead.tags && lead.tags.length > 0 && (
+                <div className="mt-3 flex flex-wrap gap-1.5">
+                  {lead.tags.map((t) => (
+                    <span key={t.label} className={cn("rounded-lg px-2.5 py-1 text-[10px] font-bold", TONE[t.tone])}>
+                      {t.label}
+                    </span>
+                  ))}
+                </div>
+              )}
 
               <div className="mt-4 flex gap-2">
                 <button
@@ -456,7 +549,7 @@ export default function LeadManager() {
                     "flex flex-1 items-center justify-center gap-1.5 rounded-xl py-3 text-[12.5px] font-extrabold transition-all duration-300",
                     isTaken
                       ? "bg-emerald-500/90 text-white"
-                      : lead.status === "hot"
+                      : lead.status === "hot" || lead.fresh
                       ? "bg-gradient-to-l from-dot to-[#b8842f] text-ink hover:-translate-y-0.5 hover:shadow-[0_8px_24px_-8px_rgba(217,161,59,0.6)]"
                       : "border border-dot/50 text-dot hover:bg-dot/10"
                   )}
@@ -527,7 +620,7 @@ export default function LeadManager() {
               onClick={(e) => e.stopPropagation()}
               className="liquid-glass max-h-[85vh] w-full max-w-[480px] overflow-y-auto rounded-t-3xl !bg-surface/95 px-6 pb-[calc(28px+env(safe-area-inset-bottom))] pt-6"
             >
-              <ModalContent modal={modal} onNavigate={setModal} onFilter={(f) => { setFilter(f); setModal(null); }} onClose={() => setModal(null)} />
+              <ModalContent modal={modal} leads={allLeads} onNavigate={setModal} onFilter={(f) => { setFilter(f); setModal(null); }} onClose={() => setModal(null)} />
             </motion.div>
           </motion.div>
         )}
@@ -556,11 +649,13 @@ export default function LeadManager() {
 /* ── modal body ──────────────────────────────────────────────────────── */
 function ModalContent({
   modal,
+  leads,
   onNavigate,
   onFilter,
   onClose,
 }: {
   modal: NonNullable<ModalState>;
+  leads: Lead[];
   onNavigate: (m: ModalState) => void;
   onFilter: (f: Status | "all") => void;
   onClose: () => void;
@@ -569,33 +664,49 @@ function ModalContent({
   let body: React.ReactNode = null;
 
   if (modal.kind === "lead") {
-    const lead = LEADS.find((l) => l.id === modal.id)!;
+    const lead = leads.find((l) => l.id === modal.id);
+    if (!lead) return null;
     title = lead.name;
     body = (
       <div className="space-y-4">
         <ModalSection title="פרטי קשר">
           <div className="space-y-1.5">
-            <div>{lead.email}</div>
+            {lead.email && <div>{lead.email}</div>}
             <div dir="ltr" className="text-start">{lead.phone}</div>
-            <div>{lead.role}</div>
+            {lead.role && <div>{lead.role}</div>}
           </div>
         </ModalSection>
+        {lead.message && <ModalSection title="ההודעה">{lead.message}</ModalSection>}
         <ModalSection title="מקור וציון">
           מקור: {SOURCES[lead.source].label}
-          <br />
-          ציון: <span className={cn("text-lg font-black", scoreColor(lead.score))}>{lead.score}/100</span>
-          <br />
-          סטטוס: {lead.statusLabel}
+          {lead.score != null && (
+            <>
+              <br />
+              ציון: <span className={cn("text-lg font-black", scoreColor(lead.score))}>{lead.score}/100</span>
+            </>
+          )}
+          {lead.statusLabel && (
+            <>
+              <br />
+              סטטוס: {lead.statusLabel}
+            </>
+          )}
         </ModalSection>
         <ModalSection title="פעולות הסוכנים">
-          <div className="space-y-3">
-            {AGENTS.map((a) => (
-              <div key={a.key}>
-                <span className={cn("font-bold", TEXT_TONE[a.tone])}>{a.name}:</span>{" "}
-                {lead.agents[a.key as keyof Lead["agents"]]}
-              </div>
-            ))}
-          </div>
+          {lead.agents ? (
+            <div className="space-y-3">
+              {AGENTS.map((a) => (
+                <div key={a.key}>
+                  <span className={cn("font-bold", TEXT_TONE[a.tone])}>{a.name}:</span>{" "}
+                  {lead.agents![a.key as keyof NonNullable<Lead["agents"]>]}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <span className="text-mist">
+              ליד חדש שהתקבל מהטופס — טרם נותח על ידי הסוכנים.
+            </span>
+          )}
         </ModalSection>
       </div>
     );

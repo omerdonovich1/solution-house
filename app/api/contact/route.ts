@@ -1,17 +1,15 @@
 import { NextResponse } from "next/server";
+import { saveLead } from "@/lib/leads-store";
 
 /**
  * Contact form endpoint.
  *
- * Every valid lead is forwarded to your own system via a webhook. Point
- * it there with env vars (set in Vercel → Settings → Environment Variables):
+ * Every valid lead is (1) saved to the lead store so it shows up in the
+ * Lead Manager at /leads, and (2) optionally forwarded to an external
+ * webhook. Set in Vercel → Settings → Environment Variables:
  *
- *   LEADS_WEBHOOK_URL    – the endpoint your system exposes to receive leads
+ *   LEADS_WEBHOOK_URL    – optional external endpoint to also receive leads
  *   LEADS_WEBHOOK_TOKEN  – optional; sent as `Authorization: Bearer <token>`
- *
- * The lead is POSTed as JSON: { name, phone, email, message, receivedAt,
- * source }. Until the URL is set, leads are logged server-side as a
- * fallback so nothing silently breaks.
  */
 
 type ContactPayload = {
@@ -45,15 +43,19 @@ export async function POST(request: Request) {
   }
 
   const lead = {
+    id: crypto.randomUUID(),
     name,
     phone,
     email: body.email?.trim() || null,
     message: body.message?.trim() || null,
     receivedAt: new Date().toISOString(),
-    source: "solution-house-website",
+    source: "website",
   };
 
-  // --- delivery to your system -------------------------------------------
+  // --- 1) persist to the lead store (shows in /leads) --------------------
+  await saveLead(lead);
+
+  // --- 2) optional external webhook --------------------------------------
   if (WEBHOOK_URL) {
     try {
       const res = await fetch(WEBHOOK_URL, {
