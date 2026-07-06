@@ -15,24 +15,17 @@ interface Member {
 
 const TEAM: readonly Member[] = [
   {
-    name: "דן כהן",
-    role: "מייסד ו-CTO",
-    bio: "10+ שנות ניסיון בבניית מערכות לסקייל.",
-    initials: "דכ",
+    name: "ירין לוין",
+    role: "UI/UX Expert",
+    bio: "מתמחה באתרים ובדפי נחיתה — עיצוב וחוויית משתמש שממירים.",
+    initials: "יל",
     linkedin: "https://linkedin.com",
   },
   {
-    name: "נועה לוי",
-    role: "מפתחת Full Stack",
-    bio: "מומחית ב-AI ובבניית דשבורדים.",
-    initials: "נל",
-    linkedin: "https://linkedin.com",
-  },
-  {
-    name: "איתי ברק",
-    role: "מעצב מוצר",
-    bio: "ממיר רעיונות מורכבים לחוויות פשוטות.",
-    initials: "אב",
+    name: "עומר דונוביץ",
+    role: "מערכות · אוטומציות · AI",
+    bio: "בונה מערכות מותאמות, אוטומציות וסוכני AI לעסקים.",
+    initials: "עד",
     linkedin: "https://linkedin.com",
   },
 ];
@@ -55,7 +48,7 @@ export function Team() {
           initial="hidden"
           whileInView="show"
           viewport={viewportOnce}
-          className="mx-auto mt-10 grid max-w-4xl gap-4 sm:mt-14 sm:gap-5 md:grid-cols-3"
+          className="mx-auto mt-10 grid max-w-2xl gap-4 sm:mt-14 sm:gap-5 sm:grid-cols-2"
         >
           {TEAM.map((m) => (
             <motion.div

@@ -15,9 +15,9 @@ interface Stat {
 }
 
 const STATS: readonly Stat[] = [
-  { value: 50, suffix: "+", label: "פרויקטים שהושלמו" },
-  { value: 12000, suffix: "+", label: "שעות חיסכון ללקוחות" },
-  { value: 98, suffix: "%", label: "שביעות רצון" },
+  { value: 10, suffix: "+", label: "פרויקטים שהושלמו" },
+  { value: 2000, suffix: "+", label: "שעות חיסכון ללקוחות" },
+  { value: 100, suffix: "%", label: "שביעות רצון" },
   { value: 0, literal: "24/7", label: "תמיכה טכנית" },
 ];
 
