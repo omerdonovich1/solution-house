@@ -23,8 +23,8 @@ const REASONS: { Icon: LucideIcon; title: string; desc: string }[] = [
   },
   {
     Icon: Code2,
-    title: "קוד נקי וניתן להרחבה",
-    desc: "לא מקלקלים כדי לספק מהר. הקוד שלכם בנוי לצמוח איתכם.",
+    title: "בנייה גמישה",
+    desc: "נשארים גמישים ולא מקובעים כדי להגיע לתוצאה מצוינת.",
   },
 ];
 
