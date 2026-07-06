@@ -268,11 +268,52 @@ export default function LeadManager() {
   const visibleLeads = LEADS.filter((l) => filter === "all" || l.status === filter);
 
   return (
-    <div className="relative z-[1] mx-auto min-h-svh max-w-[480px] pb-[96px] sm:border-x sm:border-white/[0.06]">
+    <div className="relative z-[1] min-h-svh">
+      <div className="mx-auto max-w-[480px] lg:flex lg:max-w-[1200px] lg:items-start lg:gap-6 lg:px-8 lg:py-8">
+        {/* ── desktop sidebar (RTL → right) ── */}
+        <aside className="hidden lg:block lg:w-[240px] lg:shrink-0">
+          <div className="liquid-glass sticky top-8 rounded-3xl p-5">
+            <div className="flex items-center gap-3">
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-dot to-[#b8842f] shadow-[0_8px_24px_-6px_rgba(217,161,59,0.5)]">
+                <LogoMark className="h-6 w-6 text-ink" />
+              </span>
+              <div>
+                <div className="font-mono text-[9px] font-bold uppercase tracking-[0.24em] text-dot">
+                  Solution House
+                </div>
+                <div className="text-[17px] font-black tracking-tightest text-ivory">Lead Manager</div>
+              </div>
+            </div>
+            <nav className="mt-6 flex flex-col gap-1">
+              {NAV.map((n) => {
+                const active = tab === n.id;
+                return (
+                  <button
+                    key={n.id}
+                    onClick={() => {
+                      setTab(n.id);
+                      if (n.id !== "leads") showToast(`${n.label} — בקרוב`);
+                    }}
+                    className={cn(
+                      "flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-[13.5px] font-bold transition-colors",
+                      active ? "bg-dot/10 text-dot" : "text-mist hover:bg-white/[0.04] hover:text-ivory"
+                    )}
+                  >
+                    <n.Icon className="h-[18px] w-[18px]" strokeWidth={1.9} />
+                    {n.label}
+                  </button>
+                );
+              })}
+            </nav>
+          </div>
+        </aside>
+
+        {/* ── main ── */}
+        <main className="min-w-0 pb-[96px] lg:flex-1 lg:pb-0">
       {/* ── header ── */}
-      <header className="liquid-glass relative overflow-hidden rounded-b-3xl px-6 pb-7 pt-8">
+      <header className="liquid-glass relative overflow-hidden rounded-b-3xl px-6 pb-7 pt-8 lg:rounded-3xl">
         <div className="pointer-events-none absolute -right-10 -top-16 h-40 w-40 rounded-full bg-[radial-gradient(circle,rgba(217,161,59,0.18),transparent_65%)]" />
-        <div className="relative flex items-center gap-4">
+        <div className="relative flex items-center gap-4 lg:hidden">
           <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-dot to-[#b8842f] shadow-[0_8px_24px_-6px_rgba(217,161,59,0.5)]">
             <LogoMark className="h-7 w-7 text-ink" />
           </span>
@@ -286,7 +327,7 @@ export default function LeadManager() {
           </div>
         </div>
 
-        <div className="relative mt-6 flex gap-2.5">
+        <div className="relative mt-6 flex gap-2.5 lg:mt-0">
           {stats.map((s) => (
             <div
               key={s.label}
@@ -302,7 +343,7 @@ export default function LeadManager() {
       </header>
 
       {/* ── AI agents ── */}
-      <div className="flex items-center justify-between px-6 pb-3.5 pt-7">
+      <div className="flex items-center justify-between px-6 pb-3.5 pt-7 lg:px-0">
         <div className="flex items-center gap-2.5 text-[13px] font-extrabold text-body">
           <span className="relative flex h-2 w-2">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400/70" />
@@ -318,7 +359,7 @@ export default function LeadManager() {
         </button>
       </div>
 
-      <div className="scrollbar-hide flex gap-2.5 overflow-x-auto px-6 pb-1">
+      <div className="scrollbar-hide flex gap-2.5 overflow-x-auto px-6 pb-1 lg:px-0">
         {AGENTS.map((a) => (
           <button
             key={a.key}
@@ -339,7 +380,7 @@ export default function LeadManager() {
       </div>
 
       {/* ── leads ── */}
-      <div className="flex items-center justify-between px-6 pb-3.5 pt-7">
+      <div className="flex items-center justify-between px-6 pb-3.5 pt-7 lg:px-0">
         <div className="text-[13px] font-extrabold text-body">לידים אחרונים</div>
         <button
           onClick={() => setModal({ kind: "filter" })}
@@ -349,7 +390,7 @@ export default function LeadManager() {
         </button>
       </div>
 
-      <div className="space-y-3.5 px-6">
+      <div className="space-y-3.5 px-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-4 lg:space-y-0 lg:px-0 xl:grid-cols-3">
         {visibleLeads.map((lead, i) => {
           const st = STATUS[lead.status];
           const src = SOURCES[lead.source];
@@ -440,9 +481,11 @@ export default function LeadManager() {
           );
         })}
       </div>
+        </main>
+      </div>
 
-      {/* ── bottom nav ── */}
-      <nav className="liquid-glass fixed bottom-0 left-1/2 z-[100] flex w-full max-w-[480px] -translate-x-1/2 justify-around rounded-none border-x-0 border-b-0 px-2 pb-[calc(14px+env(safe-area-inset-bottom))] pt-2.5">
+      {/* ── bottom nav — mobile only ── */}
+      <nav className="liquid-glass fixed bottom-0 left-1/2 z-[100] flex w-full max-w-[480px] -translate-x-1/2 justify-around rounded-none border-x-0 border-b-0 px-2 pb-[calc(14px+env(safe-area-inset-bottom))] pt-2.5 lg:hidden">
         {NAV.map((n) => {
           const active = tab === n.id;
           return (
