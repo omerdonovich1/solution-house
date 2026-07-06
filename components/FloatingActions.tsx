@@ -4,9 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Bot, Send, X } from "lucide-react";
 import { EASE } from "@/lib/motion";
+import { WHATSAPP_URL } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
-
-const WHATSAPP = "972523794801";
 
 interface ChatMessage {
   role: "user" | "assistant";
@@ -215,7 +214,7 @@ export function FloatingActions() {
         </motion.button>
 
         <motion.a
-          href={`https://wa.me/${WHATSAPP}`}
+          href={WHATSAPP_URL}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="כתבו לנו בוואטסאפ"

@@ -4,8 +4,7 @@ import { motion } from "framer-motion";
 import { blurIn, fadeUp, stagger, viewportOnce } from "@/lib/motion";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { LogoMark } from "@/components/ui/Logo";
-
-const WHATSAPP = "972523794801";
+import { WHATSAPP_URL } from "@/lib/whatsapp";
 
 /**
  * The closer: full white inversion — the monochrome system flipped for
@@ -61,7 +60,7 @@ export function CTA() {
             בואו נדבר
           </MagneticButton>
           <MagneticButton
-            href={`https://wa.me/${WHATSAPP}`}
+            href={WHATSAPP_URL}
             variant="ghost"
             strength={8}
             className="border-ink/25 text-ink hover:border-ink"

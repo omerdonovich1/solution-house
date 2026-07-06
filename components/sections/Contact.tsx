@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { SectionHeader } from "@/components/SectionHeader";
+import { WHATSAPP_URL } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
 
-const WHATSAPP = "972523794801";
 const EMAIL = "hello@solution.house";
 
 type Status = "idle" | "loading" | "done" | "error";
@@ -93,7 +93,7 @@ export function Contact() {
 
         <div className="mt-11 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-white/[0.08] pt-8 text-[15px] text-mist">
           <span>או ישירות:</span>
-          <a href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noopener noreferrer" className="font-medium text-ivory transition-colors duration-300 hover:text-volt">
+          <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="font-medium text-ivory transition-colors duration-300 hover:text-volt">
             וואטסאפ ›
           </a>
           <a href={`mailto:${EMAIL}`} className="font-medium text-ivory transition-colors duration-300 hover:text-volt">

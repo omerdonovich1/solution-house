@@ -1,4 +1,5 @@
-const WHATSAPP = "972523794801";
+import { WHATSAPP_URL } from "@/lib/whatsapp";
+
 const EMAIL = "hello@solution.house";
 
 export function Footer() {
@@ -11,7 +12,7 @@ export function Footer() {
 
         <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[13.5px] text-mist">
           <a
-            href={`https://wa.me/${WHATSAPP}`}
+            href={WHATSAPP_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="transition-colors duration-300 hover:text-ivory"
