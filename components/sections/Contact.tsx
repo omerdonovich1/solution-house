@@ -68,19 +68,19 @@ export function Contact() {
         <form onSubmit={onSubmit} className="mt-10 grid gap-7 sm:grid-cols-2">
           <div>
             <label className={label} htmlFor="name">שם מלא</label>
-            <input id="name" name="name" required placeholder="השם שלך" className={field} />
+            <input id="name" name="name" required autoComplete="name" placeholder="השם שלך" className={field} />
           </div>
           <div>
             <label className={label} htmlFor="phone">טלפון</label>
-            <input id="phone" name="phone" type="tel" required placeholder="050-0000000" className={field} />
+            <input id="phone" name="phone" type="tel" inputMode="tel" autoComplete="tel" required placeholder="050-0000000" className={field} />
           </div>
           <div className="sm:col-span-2">
             <label className={label} htmlFor="email">אימייל</label>
-            <input id="email" name="email" type="email" placeholder="you@example.com" className={field} />
+            <input id="email" name="email" type="email" inputMode="email" autoComplete="email" placeholder="you@example.com" className={field} />
           </div>
           <div className="sm:col-span-2">
             <label className={label} htmlFor="message">ספרו לנו על הפרויקט</label>
-            <textarea id="message" name="message" rows={5} placeholder="מה האתגר שעומד בפניכם?" className={cn(field, "resize-y")} />
+            <textarea id="message" name="message" rows={5} autoComplete="off" placeholder="מה האתגר שעומד בפניכם?" className={cn(field, "resize-y")} />
           </div>
           <button
             type="submit"

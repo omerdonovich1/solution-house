@@ -103,7 +103,7 @@ export function Hero() {
             initial="hidden"
             animate="show"
             variants={heroStagger}
-            className="mx-auto max-w-[16ch] font-black leading-[1.02] tracking-tightest text-[clamp(2.7rem,8.5vw,8rem)]"
+            className="mx-auto max-w-[16ch] text-balance font-black leading-[1.08] tracking-tightest text-[clamp(2.15rem,8vw,8rem)] sm:leading-[1.02]"
           >
             <span className="block text-gradient">
               <Words text="בונים את התשתית" />
@@ -134,20 +134,20 @@ export function Hero() {
             initial="hidden"
             animate="show"
             variants={heroStagger}
-            className="mt-9 flex flex-wrap items-center justify-center gap-3.5"
+            className="mt-9 flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:items-center sm:gap-3.5"
           >
-            <motion.div variants={fadeUp}>
+            <motion.div variants={fadeUp} className="w-full sm:w-auto">
               <MagneticButton
                 href="#contact"
                 variant="solid"
-                className="!bg-dot !text-ink hover:!bg-dot hover:shadow-[0_16px_50px_-12px_rgba(217,161,59,0.6)]"
+                className="w-full !bg-dot !text-ink hover:!bg-dot hover:shadow-[0_16px_50px_-12px_rgba(217,161,59,0.6)] sm:w-auto"
               >
                 קבעו שיחת אבחון חינם
                 <ArrowLeft className="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-1" />
               </MagneticButton>
             </motion.div>
-            <motion.div variants={fadeUp}>
-              <MagneticButton href="#build" variant="ghost" strength={8}>
+            <motion.div variants={fadeUp} className="w-full sm:w-auto">
+              <MagneticButton href="#build" variant="ghost" strength={8} className="w-full sm:w-auto">
                 צפו בפרויקטים שלנו
               </MagneticButton>
             </motion.div>

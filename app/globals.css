@@ -11,6 +11,24 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+html {
+  -webkit-tap-highlight-color: transparent; /* no blue flash on tap */
+}
+
+/* snappier touch response — no 300ms delay, no accidental double-tap zoom */
+button,
+a,
+[role="button"] {
+  touch-action: manipulation;
+}
+
+/* strip iOS default input chrome (fields keep their own styling) */
+input,
+textarea {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
 body {
   background-color: theme("colors.ink");
   color: theme("colors.body");
@@ -151,6 +169,15 @@ body {
   .hairline {
     height: 1px;
     background: rgba(242, 241, 236, 0.1);
+  }
+
+  /* hide the scrollbar on swipe rails while keeping them scrollable */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
   }
 
   /* legacy name kept for older components */

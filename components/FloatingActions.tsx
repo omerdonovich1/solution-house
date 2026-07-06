@@ -35,6 +35,7 @@ export function FloatingActions() {
   const [messages, setMessages] = useState<ChatMessage[]>([GREETING]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
+  const [tucked, setTucked] = useState(false); // buttons dip away on scroll-down (mobile)
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -51,6 +52,21 @@ export function FloatingActions() {
   useEffect(() => {
     if (open) inputRef.current?.focus();
   }, [open]);
+
+  // tuck the floating buttons away on scroll-down, bring them back on
+  // scroll-up (so they never cover the form submit on a phone)
+  useEffect(() => {
+    let last = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      if (Math.abs(y - last) > 6) {
+        setTucked(y > last && y > 300);
+        last = y;
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   async function sendText(raw: string) {
     const text = raw.trim();
@@ -169,7 +185,7 @@ export function FloatingActions() {
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="כתבו לי כל דבר…"
                 maxLength={1000}
-                className="flex-1 rounded-full border border-white/[0.1] bg-white/[0.03] px-4 py-2.5 text-[13.5px] text-ivory outline-none transition-colors placeholder:text-mist/50 focus:border-dot/60"
+                className="flex-1 rounded-full border border-white/[0.1] bg-white/[0.03] px-4 py-2.5 text-base text-ivory outline-none transition-colors placeholder:text-mist/50 focus:border-dot/60 sm:text-[13.5px]"
               />
               <button
                 type="submit"
@@ -184,8 +200,13 @@ export function FloatingActions() {
         )}
       </AnimatePresence>
 
-      {/* floating buttons */}
-      <div className="fixed bottom-[calc(20px+env(safe-area-inset-bottom))] left-4 z-[80] flex flex-col gap-3">
+      {/* floating buttons — tuck away on scroll-down (mobile only) */}
+      <div
+        className={cn(
+          "fixed bottom-[calc(20px+env(safe-area-inset-bottom))] left-4 z-[80] flex flex-col gap-3 transition-[transform,opacity] duration-300 ease-out",
+          tucked && !open && "max-sm:pointer-events-none max-sm:translate-y-28 max-sm:opacity-0"
+        )}
+      >
         <motion.button
           type="button"
           aria-label={open ? "סגירת הצ'אט" : "פתיחת צ'אט עם סול"}

@@ -61,7 +61,7 @@ export function MagneticButton({
       style={{ x: sx, y: sy }}
       whileTap={{ scale: 0.97 }}
       className={cn(
-        "group relative inline-flex items-center justify-center gap-2 rounded-pill px-8 py-4 text-[15px] font-semibold transition-[background-color,border-color,color,box-shadow] duration-500 will-change-transform",
+        "group relative inline-flex min-h-[52px] items-center justify-center gap-2 rounded-pill px-8 py-4 text-base font-semibold transition-[background-color,border-color,color,box-shadow] duration-500 will-change-transform sm:min-h-0 sm:text-[15px]",
         variant === "solid"
           ? "bg-ivory text-ink hover:bg-dot hover:shadow-[0_10px_44px_-10px_rgba(217,161,59,0.45)]"
           : "liquid-glass text-ivory hover:shadow-[0_0_0_1px_rgba(233,233,229,0.3),0_8px_40px_-12px_rgba(233,233,229,0.3)]",
