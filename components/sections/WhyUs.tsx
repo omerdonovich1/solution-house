@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Zap, ShieldCheck, Clock, Code2, type LucideIcon } from "lucide-react";
 import { SectionHeader } from "@/components/SectionHeader";
+import { Magnetic } from "@/components/Magnetic";
 import { fadeUp, stagger, viewportOnce } from "@/lib/motion";
 
 const REASONS: { Icon: LucideIcon; title: string; desc: string }[] = [
@@ -45,12 +46,12 @@ export function WhyUs() {
           className="mt-10 grid gap-4 sm:mt-14 sm:gap-5 md:grid-cols-2"
         >
           {REASONS.map(({ Icon, title, desc }) => (
-            <motion.div
-              key={title}
-              variants={fadeUp}
-              className={`liquid-glass group relative overflow-hidden rounded-3xl p-6 sm:p-8 ${cardHover}`}
-            >
-              <div className="flex items-start gap-5">
+            <motion.div key={title} variants={fadeUp}>
+              <Magnetic strength={0.14} radius={26}>
+                <div
+                  className={`liquid-glass group relative overflow-hidden rounded-3xl p-6 sm:p-8 ${cardHover}`}
+                >
+                  <div className="flex items-start gap-5">
                 <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-dot/10 text-dot transition-colors duration-500 group-hover:bg-dot/20">
                   <Icon className="h-6 w-6" strokeWidth={1.7} />
                 </span>
@@ -62,7 +63,9 @@ export function WhyUs() {
                     {desc}
                   </p>
                 </div>
-              </div>
+                  </div>
+                </div>
+              </Magnetic>
             </motion.div>
           ))}
         </motion.div>

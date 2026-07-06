@@ -19,14 +19,14 @@ import { useEffect, useRef } from "react";
 
 const SIM_RES = 128; // velocity field resolution
 const DYE_RES = 720; // visible ribbon resolution
-const DYE_DISSIPATION = 0.982; // per-frame — trail lives ~2s, tighter tail
-const VEL_DISSIPATION = 0.99; // swirls outlive the dye slightly
+const DYE_DISSIPATION = 0.976; // per-frame — shorter-lived, wispier trail
+const VEL_DISSIPATION = 0.988; // swirls fade a touch faster too
 const PRESSURE_DECAY = 0.8;
 const PRESSURE_ITERS = 20;
 const CURL = 30; // vorticity confinement strength — the filaments
-const SPLAT_RADIUS = 0.0011; // thinner ribbon, closer to the cursor
-const SPLAT_FORCE = 3400; // less billow — a leaner trail
-const DYE_COLOR: [number, number, number] = [0.17, 0.24, 0.44]; // cool blue, cores add to white
+const SPLAT_RADIUS = 0.00072; // ~35% thinner ribbon — much less volume
+const SPLAT_FORCE = 2400; // less billow — a leaner trail
+const DYE_COLOR: [number, number, number] = [0.115, 0.16, 0.3]; // dimmer cool blue
 const PARK_MS = 9000;
 
 const VERT = `
@@ -155,7 +155,7 @@ varying vec2 vUv;
 uniform sampler2D uTexture;
 void main () {
   vec3 c = texture2D(uTexture, vUv).rgb;
-  gl_FragColor = vec4(c * 0.48, 1.0);
+  gl_FragColor = vec4(c * 0.24, 1.0);
 }`,
 };
 

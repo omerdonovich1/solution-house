@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Linkedin } from "lucide-react";
 import { SectionHeader } from "@/components/SectionHeader";
+import { Magnetic } from "@/components/Magnetic";
 import { fadeUp, stagger, viewportOnce } from "@/lib/motion";
 
 interface Member {
@@ -51,11 +52,11 @@ export function Team() {
           className="mx-auto mt-10 grid max-w-2xl gap-4 sm:mt-14 sm:gap-5 sm:grid-cols-2"
         >
           {TEAM.map((m) => (
-            <motion.div
-              key={m.name}
-              variants={fadeUp}
-              className={`liquid-glass group relative flex flex-col items-center rounded-3xl p-7 text-center ${cardHover}`}
-            >
+            <motion.div key={m.name} variants={fadeUp}>
+              <Magnetic strength={0.13} radius={30} className="h-full">
+                <div
+                  className={`liquid-glass group relative flex h-full flex-col items-center rounded-3xl p-7 text-center ${cardHover}`}
+                >
               {/* avatar — gold ring, initials placeholder */}
               <div className="relative">
                 <div className="grid h-[120px] w-[120px] place-items-center rounded-full bg-gradient-to-b from-[#1B1B1F] to-[#0E0E11] text-2xl font-black text-ivory ring-2 ring-dot/50 ring-offset-4 ring-offset-[#0b0b0d] transition-transform duration-500 group-hover:scale-105">
@@ -77,6 +78,8 @@ export function Team() {
               >
                 <Linkedin className="h-[17px] w-[17px]" strokeWidth={1.7} />
               </a>
+                </div>
+              </Magnetic>
             </motion.div>
           ))}
         </motion.div>

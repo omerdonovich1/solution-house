@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Star, ChevronRight, ChevronLeft } from "lucide-react";
 import { SectionHeader } from "@/components/SectionHeader";
+import { Magnetic } from "@/components/Magnetic";
 import { fadeUp, stagger, viewportOnce, EASE } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
@@ -124,11 +125,11 @@ export function SocialProof() {
           className="mt-10 grid gap-4 sm:mt-14 sm:gap-5 lg:grid-cols-3"
         >
           {CASES.map((c, i) => (
-            <motion.article
-              key={c.client}
-              variants={fadeUp}
-              className={`liquid-glass group relative flex flex-col overflow-hidden rounded-3xl p-6 sm:p-7 ${cardHover}`}
-            >
+            <motion.div key={c.client} variants={fadeUp}>
+              <Magnetic strength={0.12} radius={26} className="h-full">
+                <article
+                  className={`liquid-glass group relative flex h-full flex-col overflow-hidden rounded-3xl p-6 sm:p-7 ${cardHover}`}
+                >
               <span
                 dir="ltr"
                 className="absolute left-6 top-5 font-black text-[2.4rem] leading-none text-dot/25 transition-colors duration-500 group-hover:text-dot/45"
@@ -156,7 +157,9 @@ export function SocialProof() {
                 <span className="text-2xl font-black tracking-tightest text-dot">{c.metric}</span>
                 <span className="text-[13px] text-mist">{c.result}</span>
               </div>
-            </motion.article>
+                </article>
+              </Magnetic>
+            </motion.div>
           ))}
         </motion.div>
 

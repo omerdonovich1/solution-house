@@ -4,6 +4,7 @@ import { motion, useScroll, useSpring } from "framer-motion";
 import { Home, LayoutGrid, Workflow, MessageSquare, type LucideIcon } from "lucide-react";
 import { EASE } from "@/lib/motion";
 import { LogoMark } from "@/components/ui/Logo";
+import { Magnetic } from "@/components/Magnetic";
 
 /** The nav, spelled out — icon + label, no cryptic hamburger. */
 const ITEMS: { href: string; label: string; Icon: LucideIcon }[] = [
@@ -45,32 +46,35 @@ export function Navbar() {
       >
         <div className="liquid-glass flex flex-col gap-1 rounded-3xl p-2">
           {/* brand mark caps the rail */}
-          <a
-            href="#top"
-            aria-label="לראש הדף"
-            className="mb-1 grid h-11 place-items-center rounded-2xl transition-colors duration-300 hover:bg-white/[0.06]"
-          >
-            <LogoMark className="h-7 w-7 text-ivory" />
-          </a>
+          <Magnetic strength={0.4} radius={44}>
+            <a
+              href="#top"
+              aria-label="לראש הדף"
+              className="mb-1 grid h-11 place-items-center rounded-2xl transition-colors duration-300 hover:bg-white/[0.06]"
+            >
+              <LogoMark className="h-7 w-7 text-ivory" />
+            </a>
+          </Magnetic>
 
           <span aria-hidden className="mx-auto h-px w-7 bg-white/10" />
 
           {ITEMS.map(({ href, label, Icon }) => (
-            <a
-              key={href}
-              href={href}
-              aria-label={label}
-              title={label}
-              className="group flex items-center gap-2.5 rounded-2xl p-1.5 text-mist transition-colors duration-300 hover:bg-white/[0.06] hover:text-ivory sm:py-2.5 sm:pe-2.5 sm:ps-3.5"
-            >
-              {/* label — always shown on desktop; icon-only on phones */}
-              <span className="hidden whitespace-nowrap text-[13.5px] font-medium sm:inline">
-                {label}
-              </span>
-              <span className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-white/[0.05] transition-colors duration-300 group-hover:bg-dot/15 group-hover:text-dot">
-                <Icon className="h-[17px] w-[17px]" strokeWidth={1.7} />
-              </span>
-            </a>
+            <Magnetic key={href} strength={0.4} radius={44}>
+              <a
+                href={href}
+                aria-label={label}
+                title={label}
+                className="group flex items-center gap-2.5 rounded-2xl p-1.5 text-mist transition-colors duration-300 hover:bg-white/[0.06] hover:text-ivory sm:py-2.5 sm:pe-2.5 sm:ps-3.5"
+              >
+                {/* label — always shown on desktop; icon-only on phones */}
+                <span className="hidden whitespace-nowrap text-[13.5px] font-medium sm:inline">
+                  {label}
+                </span>
+                <span className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-white/[0.05] transition-colors duration-300 group-hover:bg-dot/15 group-hover:text-dot">
+                  <Icon className="h-[17px] w-[17px]" strokeWidth={1.7} />
+                </span>
+              </a>
+            </Magnetic>
           ))}
         </div>
       </motion.nav>
