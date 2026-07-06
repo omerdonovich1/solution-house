@@ -230,6 +230,20 @@ body {
   }
 }
 
+/* Mobile battery/heat saver: keep the scroll-reactive neural mesh, but
+   drop its ~100 continuous per-node/edge animations (and pause the
+   ambient drift) on phones. The WebGL trail is already off on touch. */
+@media (max-width: 767px) {
+  .neural-mesh circle,
+  .neural-mesh line {
+    animation: none !important;
+  }
+  .animate-drift,
+  .animate-drift-slow {
+    animation: none !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-marquee,
   .animate-mesh-a,

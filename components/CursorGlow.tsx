@@ -237,7 +237,7 @@ export function CursorGlow() {
         style={{ maskImage: "radial-gradient(0px circle at 50% 40%, black, transparent)" }}
       >
         <svg
-          className="h-full w-full"
+          className="neural-mesh h-full w-full"
           viewBox="0 0 1600 900"
           preserveAspectRatio="xMidYMid slice"
         >
