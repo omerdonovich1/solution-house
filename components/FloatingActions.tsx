@@ -125,6 +125,9 @@ export function FloatingActions() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.96 }}
             transition={{ duration: 0.35, ease: EASE }}
+            /* tell Lenis to ignore wheel events here so the messages list
+               scrolls natively instead of scrolling the page behind it */
+            data-lenis-prevent
             className="liquid-glass fixed bottom-[calc(140px+env(safe-area-inset-bottom))] left-4 sm:bottom-[152px] z-[85] flex h-[min(500px,calc(100svh-190px-env(safe-area-inset-bottom)))] w-[min(380px,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl !bg-[#0C0C0E]/70"
           >
             {/* header */}
