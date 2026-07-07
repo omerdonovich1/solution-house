@@ -6,7 +6,7 @@ import { Bot, Send, X } from "lucide-react";
 import { EASE } from "@/lib/motion";
 import { WHATSAPP_URL } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
-import { useTx } from "@/lib/i18n";
+import { useTx, useLang } from "@/lib/i18n";
 
 interface ChatMessage {
   role: "user" | "assistant";
@@ -32,9 +32,10 @@ function WhatsAppIcon() {
  */
 export function FloatingActions() {
   const tx = useTx();
+  const { lang } = useLang();
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
-    { role: "assistant", content: tx(GREETING) },
+    { role: "assistant", content: GREETING[lang] },
   ]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
@@ -42,14 +43,16 @@ export function FloatingActions() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // keep the greeting in the active language until the user starts chatting
+  // keep the greeting in the active language until the user starts chatting.
+  // depends on the stable `lang` string — NOT `tx` (a fresh fn each render,
+  // which would make this effect loop infinitely).
   useEffect(() => {
     setMessages((m) =>
       m.length === 1 && m[0].role === "assistant"
-        ? [{ role: "assistant", content: tx(GREETING) }]
+        ? [{ role: "assistant", content: GREETING[lang] }]
         : m
     );
-  }, [tx]);
+  }, [lang]);
 
   const QUICK_REPLIES = [
     tx({ he: "ספרו לי על השירותים", en: "Tell me about your services" }),

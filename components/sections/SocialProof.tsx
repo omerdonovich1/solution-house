@@ -195,12 +195,13 @@ export function SocialProof() {
                 >
               <span
                 dir="ltr"
-                className="absolute left-6 top-5 font-black text-[2.4rem] leading-none text-dot/25 transition-colors duration-500 group-hover:text-dot/45"
+                aria-hidden
+                className="pointer-events-none absolute top-5 font-black text-[2.4rem] leading-none text-dot/25 transition-colors duration-500 group-hover:text-dot/45 ltr:right-6 rtl:left-6"
               >
                 {String(i + 1).padStart(2, "0")}
               </span>
 
-              <span className="w-fit rounded-full border border-dot/30 bg-dot/10 px-3 py-1 text-[11px] font-medium text-dot">
+              <span className="w-fit max-w-[calc(100%-3.5rem)] rounded-full border border-dot/30 bg-dot/10 px-3 py-1 text-[11px] font-medium text-dot">
                 {tx(c.type)}
               </span>
               <h3 className="mt-4 text-xl font-black tracking-tight text-ivory">{tx(c.client)}</h3>

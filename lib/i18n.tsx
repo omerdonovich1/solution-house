@@ -30,10 +30,20 @@ const LangCtx = createContext<Ctx>({
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>("he");
 
-  // read the saved choice (set pre-paint by the inline script in <head>)
+  // read the saved choice from localStorage (the source of truth) and
+  // re-assert dir/lang on <html> — React hydration can reconcile those
+  // attributes back to the server-rendered "he"/"rtl", so we can't trust
+  // the DOM attribute here and must re-apply after mount.
   useEffect(() => {
-    const saved = document.documentElement.lang === "en" ? "en" : "he";
+    let saved: Lang = "he";
+    try {
+      if (localStorage.getItem("sh_lang") === "en") saved = "en";
+    } catch {
+      /* ignore */
+    }
     setLangState(saved);
+    document.documentElement.lang = saved;
+    document.documentElement.dir = saved === "he" ? "rtl" : "ltr";
   }, []);
 
   const apply = (l: Lang) => {
