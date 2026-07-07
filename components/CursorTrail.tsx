@@ -323,32 +323,30 @@ export function CursorTrail() {
     };
     syncCanvas();
 
-    // ── electric micro-sparks — subtle, but noticeable on a brisk flick ─
-    type Spark = { pts: [number, number][]; born: number; ttl: number };
+    // ── birthday-sparkler embers — tiny warm twinkling motes; the faster
+    //    the cursor moves, the denser the shower ──────────────────────────
+    type Spark = { x: number; y: number; vx: number; vy: number; born: number; ttl: number; size: number };
     const sparks: Spark[] = [];
-    function spawnSpark(x: number, y: number) {
-      // one or two forked bolts from the discharge point
-      const forks = 1 + (Math.random() < 0.5 ? 1 : 0);
-      const base = Math.random() * Math.PI * 2;
-      for (let f = 0; f < forks; f++) {
-        let ang = base + (Math.random() - 0.5) * 2.2;
-        let sx = x;
-        let sy = y;
-        const pts: [number, number][] = [[sx, sy]];
-        const segs = 3 + Math.floor(Math.random() * 2);
-        for (let i = 0; i < segs; i++) {
-          ang += (Math.random() - 0.5) * 1.5;
-          const len = 6 + Math.random() * 11;
-          sx += Math.cos(ang) * len;
-          sy += Math.sin(ang) * len;
-          pts.push([sx, sy]);
-        }
-        sparks.push({ pts, born: performance.now(), ttl: 260 + Math.random() * 260 });
+    function spawnSparks(x: number, y: number, n: number) {
+      for (let i = 0; i < n; i++) {
+        const ang = Math.random() * Math.PI * 2;
+        const spd = 0.25 + Math.random() * 1.5;
+        sparks.push({
+          x,
+          y,
+          vx: Math.cos(ang) * spd,
+          vy: Math.sin(ang) * spd - 0.3, // slight upward burst
+          born: performance.now(),
+          ttl: 420 + Math.random() * 520,
+          size: 0.5 + Math.random() * 0.9,
+        });
       }
+      while (sparks.length > 130) sparks.shift();
     }
     function renderSparks(now: number) {
       if (!sctx || !sparkC) return;
       sctx.clearRect(0, 0, sparkC.width, sparkC.height);
+      sctx.globalCompositeOperation = "lighter";
       for (let i = sparks.length - 1; i >= 0; i--) {
         const s = sparks[i];
         const t = (now - s.born) / s.ttl;
@@ -356,28 +354,26 @@ export function CursorTrail() {
           sparks.splice(i, 1);
           continue;
         }
-        const a = (1 - t) * 0.62;
+        // ember physics: gentle gravity + drag
+        s.vy += 0.03;
+        s.vx *= 0.965;
+        s.vy *= 0.965;
+        s.x += s.vx;
+        s.y += s.vy;
+        // rapid twinkle, like a real sparkler mote
+        const a = (1 - t) * 0.46 * (0.35 + 0.65 * Math.random());
+        // warm glow halo
+        sctx.fillStyle = `rgba(255,196,110,${(a * 0.4).toFixed(3)})`;
         sctx.beginPath();
-        sctx.moveTo(s.pts[0][0], s.pts[0][1]);
-        for (let j = 1; j < s.pts.length; j++) sctx.lineTo(s.pts[j][0], s.pts[j][1]);
-        // cool halo underlay
-        sctx.strokeStyle = `rgba(125,180,255,${(a * 0.6).toFixed(3)})`;
-        sctx.lineWidth = 2.4;
-        sctx.shadowColor = `rgba(125,180,255,${a.toFixed(3)})`;
-        sctx.shadowBlur = 7;
-        sctx.stroke();
-        // hot white filament
-        sctx.strokeStyle = `rgba(235,245,255,${a.toFixed(3)})`;
-        sctx.lineWidth = 1;
-        sctx.shadowBlur = 2;
-        sctx.stroke();
-        // bright discharge point
-        sctx.fillStyle = `rgba(245,250,255,${a.toFixed(3)})`;
-        sctx.shadowBlur = 6;
+        sctx.arc(s.x, s.y, s.size * 2.6, 0, Math.PI * 2);
+        sctx.fill();
+        // bright core
+        sctx.fillStyle = `rgba(255,240,210,${a.toFixed(3)})`;
         sctx.beginPath();
-        sctx.arc(s.pts[0][0], s.pts[0][1], 1.4, 0, Math.PI * 2);
+        sctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
         sctx.fill();
       }
+      sctx.globalCompositeOperation = "source-over";
     }
 
     const [vw, vh] = simSize(SIM_RES);
@@ -543,9 +539,10 @@ export function CursorTrail() {
           pending.push({ x, y, dx, dy, speed });
           if (pending.length > 24) pending.shift();
         }
-        // a small static discharge on brisk movement — subtle, occasional
-        if (speed * window.innerWidth > 13 && Math.random() < 0.2 && sparks.length < 7) {
-          spawnSpark(e.clientX, e.clientY);
+        // shower of sparkler embers — count scales with cursor speed
+        const moved = speed * window.innerWidth;
+        if (moved > 7) {
+          spawnSparks(e.clientX, e.clientY, Math.min(4, Math.round(moved / 32)));
         }
       }
       px = x;
@@ -571,7 +568,7 @@ export function CursorTrail() {
         aria-hidden
         className="pointer-events-none fixed inset-0 -z-[4] h-full w-full mix-blend-screen"
       />
-      {/* electric micro-sparks, above the vapor, still behind content */}
+      {/* sparkler embers, above the vapor, still behind content */}
       <canvas
         ref={sparkRef}
         aria-hidden
