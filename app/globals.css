@@ -86,7 +86,11 @@ body {
   }
 }
 
-@layer utilities {
+/* .liquid-glass lives in the COMPONENTS layer (not utilities) so that
+   Tailwind position utilities — fixed / sticky / absolute — can override its
+   default `position: relative`. In the utilities layer it was emitted after
+   `.fixed` and silently won, leaving "fixed" panels statically positioned. */
+@layer components {
   /* ── Liquid Glass ─────────────────────────────────────────────────
      Real glass needs three layers:
      1. the slab — translucent fill + heavy backdrop blur with a
@@ -164,7 +168,9 @@ body {
       -webkit-backdrop-filter: blur(16px) saturate(160%) brightness(1.1);
     }
   }
+}
 
+@layer utilities {
   /* 1px neutral hairline — the system's only divider */
   .hairline {
     height: 1px;
