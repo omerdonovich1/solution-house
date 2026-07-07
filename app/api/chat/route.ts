@@ -29,6 +29,11 @@ const SYSTEM = `אתה "סול" — העוזר הדיגיטלי של Solution Ho
 - אל תענה על שאלות שלא קשורות ל-Solution House או לפתרונות טכנולוגיים לעסקים — החזר בעדינות לנושא.
 - ענה תמיד עם התשובה הסופית בלבד, בלי להסביר את תהליך החשיבה שלך.`;
 
+// Swap the model without a redeploy by setting ANTHROPIC_MODEL in the env.
+// Default: Sonnet 4.6 — strong Hebrew + instruction-following, fast and far
+// cheaper than Opus, the right balance for a brand FAQ widget.
+const MODEL = process.env.ANTHROPIC_MODEL ?? "claude-sonnet-4-6";
+
 interface ChatMessage {
   role: "user" | "assistant";
   content: string;
@@ -62,7 +67,7 @@ export async function POST(req: Request) {
   try {
     const client = new Anthropic();
     const response = await client.messages.create({
-      model: "claude-opus-4-8",
+      model: MODEL,
       max_tokens: 600,
       system: [{ type: "text", text: SYSTEM, cache_control: { type: "ephemeral" } }],
       messages: history.slice(-16),
