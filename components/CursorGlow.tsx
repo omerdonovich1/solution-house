@@ -47,9 +47,9 @@ export function CursorGlow() {
     if (!ctx) return;
 
     const coarse = window.matchMedia("(pointer: coarse)").matches;
-    const NODES = coarse ? 30 : 74;
-    const MAX_DIST = coarse ? 118 : 158;
-    const dpr = Math.min(window.devicePixelRatio || 1, coarse ? 1.5 : 1.75);
+    const NODES = coarse ? 26 : 52;
+    const MAX_DIST = coarse ? 118 : 150;
+    const dpr = Math.min(window.devicePixelRatio || 1, coarse ? 1.25 : 1.5);
     const frameStep = coarse ? 2 : 1; // throttle the mobile field to save battery
 
     let w = 0;
@@ -121,6 +121,10 @@ export function CursorGlow() {
     let time = 0;
     const CURSOR_R = 190;
 
+    // on-screen (parallax) node positions — allocated once, not per frame
+    const sx = new Float32Array(NODES);
+    const sy = new Float32Array(NODES);
+
     const draw = () => {
       raf = requestAnimationFrame(draw);
       frame++;
@@ -138,8 +142,6 @@ export function CursorGlow() {
       const scrollShift = coarse ? -(scrollY * 0.06) : 0;
 
       // advance + wrap nodes; compute their on-screen (parallax) positions
-      const sx = new Float32Array(NODES);
-      const sy = new Float32Array(NODES);
       for (let i = 0; i < NODES; i++) {
         const n = nodes[i];
         n.x += n.vx;

@@ -108,8 +108,11 @@ body {
       rgba(255, 255, 255, 0.012) 58%,
       rgba(255, 255, 255, 0.065) 100%
     );
-    backdrop-filter: blur(36px) saturate(200%) brightness(1.15);
-    -webkit-backdrop-filter: blur(36px) saturate(200%) brightness(1.15);
+    /* 22px reads nearly identical to 36px but repaints far cheaper — and with
+       37 glass surfaces over an animated backdrop, blur radius is the single
+       biggest paint cost. */
+    backdrop-filter: blur(22px) saturate(180%) brightness(1.12);
+    -webkit-backdrop-filter: blur(22px) saturate(180%) brightness(1.12);
     box-shadow:
       0 24px 70px -24px rgba(0, 0, 0, 0.72),
       inset 0 -1px 0 rgba(255, 255, 255, 0.045);
@@ -164,8 +167,8 @@ body {
   /* mobile GPUs choke on 32px backdrop blur — lighter material, same look */
   @media (max-width: 640px) {
     .liquid-glass {
-      backdrop-filter: blur(16px) saturate(160%) brightness(1.1);
-      -webkit-backdrop-filter: blur(16px) saturate(160%) brightness(1.1);
+      backdrop-filter: blur(12px) saturate(150%) brightness(1.08);
+      -webkit-backdrop-filter: blur(12px) saturate(150%) brightness(1.08);
     }
   }
 }
