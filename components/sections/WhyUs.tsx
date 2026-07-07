@@ -5,27 +5,40 @@ import { Zap, ShieldCheck, Clock, Code2, type LucideIcon } from "lucide-react";
 import { SectionHeader } from "@/components/SectionHeader";
 import { Magnetic } from "@/components/Magnetic";
 import { fadeUp, stagger, viewportOnce } from "@/lib/motion";
+import { useTx, type Bi } from "@/lib/i18n";
 
-const REASONS: { Icon: LucideIcon; title: string; desc: string }[] = [
+const REASONS: { Icon: LucideIcon; title: Bi; desc: Bi }[] = [
   {
     Icon: Zap,
-    title: "מהירות ביצוע",
-    desc: "פרויקטים באוויר תוך שבועות, לא חודשים. אנחנו מאמינים במהירות בלי פשרות.",
+    title: { he: "מהירות ביצוע", en: "Speed of delivery" },
+    desc: {
+      he: "פרויקטים באוויר תוך שבועות, לא חודשים. אנחנו מאמינים במהירות בלי פשרות.",
+      en: "Projects live in weeks, not months. We believe in speed without compromise.",
+    },
   },
   {
     Icon: ShieldCheck,
-    title: "שקיפות מלאה",
-    desc: "מחיר ברור מראש, עדכונים שבועיים, אין הפתעות. אתם יודעים בדיוק מה קורה.",
+    title: { he: "שקיפות מלאה", en: "Full transparency" },
+    desc: {
+      he: "מחיר ברור מראש, עדכונים שבועיים, אין הפתעות. אתם יודעים בדיוק מה קורה.",
+      en: "A clear price up front, weekly updates, no surprises. You always know exactly what's happening.",
+    },
   },
   {
     Icon: Clock,
-    title: "תמיכה 24/7",
-    desc: "משהו נשבר? אנחנו כאן. לא משנה מתי — הפתרון שלכם תמיד מוגן.",
+    title: { he: "תמיכה 24/7", en: "24/7 support" },
+    desc: {
+      he: "משהו נשבר? אנחנו כאן. לא משנה מתי — הפתרון שלכם תמיד מוגן.",
+      en: "Something broke? We're here. No matter when — your solution is always covered.",
+    },
   },
   {
     Icon: Code2,
-    title: "בנייה גמישה",
-    desc: "נשארים גמישים ולא מקובעים כדי להגיע לתוצאה מצוינת.",
+    title: { he: "בנייה גמישה", en: "Flexible by design" },
+    desc: {
+      he: "נשארים גמישים ולא מקובעים כדי להגיע לתוצאה מצוינת.",
+      en: "We stay flexible and open-minded to reach an excellent result.",
+    },
   },
 ];
 
@@ -33,10 +46,11 @@ const cardHover =
   "transition-[transform,box-shadow] duration-500 ease-out hover:-translate-y-1 hover:shadow-[0_0_0_1px_rgba(217,161,59,0.3),0_24px_60px_-24px_rgba(217,161,59,0.28)]";
 
 export function WhyUs() {
+  const tx = useTx();
   return (
     <section id="why" className="py-16 sm:py-24">
       <div className="shell">
-        <SectionHeader center title="למה דווקא אנחנו?" />
+        <SectionHeader center title={tx({ he: "למה דווקא אנחנו?", en: "Why us?" })} />
 
         <motion.div
           variants={stagger}
@@ -46,7 +60,7 @@ export function WhyUs() {
           className="mt-10 grid gap-4 sm:mt-14 sm:gap-5 md:grid-cols-2"
         >
           {REASONS.map(({ Icon, title, desc }) => (
-            <motion.div key={title} variants={fadeUp}>
+            <motion.div key={title.en} variants={fadeUp}>
               <Magnetic strength={0.14} radius={26}>
                 <div
                   className={`liquid-glass group relative overflow-hidden rounded-3xl p-6 sm:p-8 ${cardHover}`}
@@ -57,10 +71,10 @@ export function WhyUs() {
                 </span>
                 <div>
                   <h3 className="text-xl font-black tracking-tight text-ivory sm:text-2xl">
-                    {title}
+                    {tx(title)}
                   </h3>
                   <p className="mt-2 text-[15px] font-light leading-relaxed text-mist sm:text-base">
-                    {desc}
+                    {tx(desc)}
                   </p>
                 </div>
                   </div>

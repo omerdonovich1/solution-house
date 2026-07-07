@@ -12,6 +12,7 @@ import { ArrowLeft, Check } from "lucide-react";
 import { EASE, blurIn, fadeUp, maskRise } from "@/lib/motion";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { LogoMark } from "@/components/ui/Logo";
+import { useTx } from "@/lib/i18n";
 
 // Instant pacing — no preloader curtain, the laptop lands right away.
 const heroStagger = {
@@ -68,6 +69,7 @@ function BrandLockup() {
  * slowly out of it.
  */
 export function Hero() {
+  const tx = useTx();
   const ref = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
   const { scrollYProgress } = useScroll({
@@ -106,10 +108,10 @@ export function Hero() {
             className="mx-auto max-w-[16ch] text-balance font-black leading-[1.08] tracking-tightest text-[clamp(2.15rem,8vw,8rem)] sm:leading-[1.02]"
           >
             <span className="block text-gradient">
-              <Words text="בונים את התשתית" />
+              <Words text={tx({ he: "בונים את התשתית", en: "We build the" })} />
             </span>
             <span className="block text-gradient">
-              <Words text="להצלחה שלכם." />
+              <Words text={tx({ he: "להצלחה שלכם.", en: "infrastructure for growth." })} />
             </span>
           </motion.h1>
 
@@ -123,9 +125,15 @@ export function Hero() {
               variants={blurIn}
               className="block text-lg font-light leading-[1.75] text-mist sm:text-xl"
             >
-              אנחנו מפתחים מערכות אוטומטיות, סוכני AI ו-SaaS שדוחפים עסקים קדימה.{" "}
+              {tx({
+                he: "אנחנו מפתחים מערכות אוטומטיות, סוכני AI ו-SaaS שדוחפים עסקים קדימה. ",
+                en: "We build automated systems, AI agents and SaaS that move businesses forward. ",
+              })}
               <strong className="font-semibold text-ivory">
-                הפתרון הטכנולוגי הישיר לאתגר שלכם.
+                {tx({
+                  he: "הפתרון הטכנולוגי הישיר לאתגר שלכם.",
+                  en: "The direct technological answer to your challenge.",
+                })}
               </strong>
             </motion.span>
           </motion.p>
@@ -142,13 +150,13 @@ export function Hero() {
                 variant="solid"
                 className="w-full !bg-dot !text-ink hover:!bg-dot hover:shadow-[0_16px_50px_-12px_rgba(217,161,59,0.6)] sm:w-auto"
               >
-                קבעו שיחת אבחון חינם
+                {tx({ he: "קבעו שיחת אבחון חינם", en: "Book a free discovery call" })}
                 <ArrowLeft className="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-1" />
               </MagneticButton>
             </motion.div>
             <motion.div variants={fadeUp} className="w-full sm:w-auto">
               <MagneticButton href="#build" variant="ghost" strength={8} className="w-full sm:w-auto">
-                צפו בפרויקטים שלנו
+                {tx({ he: "צפו בפרויקטים שלנו", en: "See our work" })}
               </MagneticButton>
             </motion.div>
           </motion.div>
@@ -160,10 +168,14 @@ export function Hero() {
             animate="show"
             className="mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-1.5 text-[12.5px] text-mist"
           >
-            {["ללא התחייבות", "תוך 24 שעות", "מסמך פתרונות מותאם אישית"].map((t) => (
-              <span key={t} className="inline-flex items-center gap-1.5">
+            {[
+              { he: "ללא התחייבות", en: "No commitment" },
+              { he: "תוך 24 שעות", en: "Within 24 hours" },
+              { he: "מסמך פתרונות מותאם אישית", en: "A tailored solutions brief" },
+            ].map((t) => (
+              <span key={t.en} className="inline-flex items-center gap-1.5">
                 <Check className="h-3.5 w-3.5 text-dot" strokeWidth={2.4} />
-                {t}
+                {tx(t)}
               </span>
             ))}
           </motion.div>

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { SectionHeader } from "@/components/SectionHeader";
 import { WHATSAPP_URL } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
+import { useTx } from "@/lib/i18n";
 
 const EMAIL = "info@solutionhouse.dev";
 
@@ -16,6 +17,7 @@ const label =
   "mb-1 block font-mono text-[11px] uppercase tracking-[0.18em] text-mist";
 
 export function Contact() {
+  const tx = useTx();
   const [status, setStatus] = useState<Status>("idle");
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -39,21 +41,23 @@ export function Contact() {
 
   const button =
     status === "loading"
-      ? "שולח..."
+      ? tx({ he: "שולח...", en: "Sending…" })
       : status === "done"
-      ? "תודה! נחזור אליכם בקרוב"
+      ? tx({ he: "תודה! נחזור אליכם בקרוב", en: "Thanks! We'll be in touch soon" })
       : status === "error"
-      ? "משהו השתבש — נסו שוב"
-      : "שליחה";
+      ? tx({ he: "משהו השתבש — נסו שוב", en: "Something went wrong — try again" })
+      : tx({ he: "שליחה", en: "Send" });
 
   return (
     <section id="contact" className="mx-auto max-w-3xl py-16 sm:py-24">
       <div className="shell">
         <SectionHeader
           index="03"
-          label="בואו נדבר"
-          title="ספרו לנו על האתגר שלכם."
-          lead="שיחת אבחון אחת, בלי התחייבות: מבינים את האתגר, מציעים כיוון ונותנים הערכת מחיר הוגנת."
+          title={tx({ he: "ספרו לנו על האתגר שלכם.", en: "Tell us about your challenge." })}
+          lead={tx({
+            he: "שיחת אבחון אחת, בלי התחייבות: מבינים את האתגר, מציעים כיוון ונותנים הערכת מחיר הוגנת.",
+            en: "One discovery call, no commitment: we understand the challenge, propose a direction and give a fair price estimate.",
+          })}
         />
 
         {/* urgency */}
@@ -62,25 +66,28 @@ export function Contact() {
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-dot/70" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-dot" />
           </span>
-          מוגבל ל-5 שיחות השבוע — שריינו את המקום שלכם עכשיו
+          {tx({
+            he: "מוגבל ל-5 שיחות השבוע — שריינו את המקום שלכם עכשיו",
+            en: "Limited to 5 calls this week — reserve your spot",
+          })}
         </div>
 
         <form onSubmit={onSubmit} className="mt-10 grid gap-7 sm:grid-cols-2">
           <div>
-            <label className={label} htmlFor="name">שם מלא</label>
-            <input id="name" name="name" required autoComplete="name" placeholder="השם שלך" className={field} />
+            <label className={label} htmlFor="name">{tx({ he: "שם מלא", en: "Full name" })}</label>
+            <input id="name" name="name" required autoComplete="name" placeholder={tx({ he: "השם שלך", en: "Your name" })} className={field} />
           </div>
           <div>
-            <label className={label} htmlFor="phone">טלפון</label>
+            <label className={label} htmlFor="phone">{tx({ he: "טלפון", en: "Phone" })}</label>
             <input id="phone" name="phone" type="tel" inputMode="tel" autoComplete="tel" required placeholder="050-0000000" className={field} />
           </div>
           <div className="sm:col-span-2">
-            <label className={label} htmlFor="email">אימייל</label>
+            <label className={label} htmlFor="email">{tx({ he: "אימייל", en: "Email" })}</label>
             <input id="email" name="email" type="email" inputMode="email" autoComplete="email" placeholder="you@example.com" className={field} />
           </div>
           <div className="sm:col-span-2">
-            <label className={label} htmlFor="message">ספרו לנו על הפרויקט</label>
-            <textarea id="message" name="message" rows={5} autoComplete="off" placeholder="מה האתגר שעומד בפניכם?" className={cn(field, "resize-y")} />
+            <label className={label} htmlFor="message">{tx({ he: "ספרו לנו על הפרויקט", en: "Tell us about the project" })}</label>
+            <textarea id="message" name="message" rows={5} autoComplete="off" placeholder={tx({ he: "מה האתגר שעומד בפניכם?", en: "What challenge are you facing?" })} className={cn(field, "resize-y")} />
           </div>
           <button
             type="submit"
@@ -92,9 +99,9 @@ export function Contact() {
         </form>
 
         <div className="mt-11 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-white/[0.08] pt-8 text-[15px] text-mist">
-          <span>או ישירות:</span>
+          <span>{tx({ he: "או ישירות:", en: "Or directly:" })}</span>
           <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="font-medium text-ivory transition-colors duration-300 hover:text-volt">
-            וואטסאפ ›
+            {tx({ he: "וואטסאפ ›", en: "WhatsApp ›" })}
           </a>
           <a href={`mailto:${EMAIL}`} className="font-medium text-ivory transition-colors duration-300 hover:text-volt">
             {EMAIL} ›

@@ -6,16 +6,16 @@ import { Bot, Send, X } from "lucide-react";
 import { EASE } from "@/lib/motion";
 import { WHATSAPP_URL } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
+import { useTx } from "@/lib/i18n";
 
 interface ChatMessage {
   role: "user" | "assistant";
   content: string;
 }
 
-const GREETING: ChatMessage = {
-  role: "assistant",
-  content:
-    "היי! אני סול, העוזר של Solution House 👋 אפשר לשאול אותי הכול — מה אנחנו בונים, איך התהליך עובד, או פשוט לספר לי על האתגר שלכם.",
+const GREETING = {
+  he: "היי! אני סול, העוזר של Solution House 👋 אפשר לשאול אותי הכול — מה אנחנו בונים, איך התהליך עובד, או פשוט לספר לי על האתגר שלכם.",
+  en: "Hi! I'm Sol, the Solution House assistant 👋 Ask me anything — what we build, how the process works, or just tell me about your challenge.",
 };
 
 function WhatsAppIcon() {
@@ -31,18 +31,30 @@ function WhatsAppIcon() {
  * Claude-powered assistant — in a compact chat panel.
  */
 export function FloatingActions() {
+  const tx = useTx();
   const [open, setOpen] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>([GREETING]);
+  const [messages, setMessages] = useState<ChatMessage[]>([
+    { role: "assistant", content: tx(GREETING) },
+  ]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [tucked, setTucked] = useState(false); // buttons dip away on scroll-down (mobile)
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // keep the greeting in the active language until the user starts chatting
+  useEffect(() => {
+    setMessages((m) =>
+      m.length === 1 && m[0].role === "assistant"
+        ? [{ role: "assistant", content: tx(GREETING) }]
+        : m
+    );
+  }, [tx]);
+
   const QUICK_REPLIES = [
-    "ספרו לי על השירותים",
-    "אני רוצה שיחת ייעוץ",
-    "מה העלות המשוערת?",
+    tx({ he: "ספרו לי על השירותים", en: "Tell me about your services" }),
+    tx({ he: "אני רוצה שיחת ייעוץ", en: "I'd like a consultation call" }),
+    tx({ he: "מה העלות המשוערת?", en: "What's the estimated cost?" }),
   ];
 
   useEffect(() => {
@@ -87,7 +99,13 @@ export function FloatingActions() {
     } catch {
       setMessages((m) => [
         ...m,
-        { role: "assistant", content: "אופס, התקשורת נפלה לרגע. נסו שוב 🙏" },
+        {
+          role: "assistant",
+          content: tx({
+            he: "אופס, התקשורת נפלה לרגע. נסו שוב 🙏",
+            en: "Oops, the connection dropped for a moment. Please try again 🙏",
+          }),
+        },
       ]);
     } finally {
       setBusy(false);
@@ -113,12 +131,12 @@ export function FloatingActions() {
                 <span className="absolute -bottom-0.5 -left-0.5 h-2.5 w-2.5 rounded-full border-2 border-[#0C0C0E] bg-dot" />
               </span>
               <div className="flex-1">
-                <div className="text-[13.5px] font-bold text-ivory">סול · העוזר של Solution House</div>
-                <div className="font-mono text-[10px] tracking-[0.14em] text-mist">מופעל על ידי Claude · עונה מיד</div>
+                <div className="text-[13.5px] font-bold text-ivory">{tx({ he: "סול · העוזר של Solution House", en: "Sol · the Solution House assistant" })}</div>
+                <div className="font-mono text-[10px] tracking-[0.14em] text-mist">{tx({ he: "מופעל על ידי Claude · עונה מיד", en: "Powered by Claude · replies instantly" })}</div>
               </div>
               <button
                 type="button"
-                aria-label="סגירת הצ'אט"
+                aria-label={tx({ he: "סגירת הצ'אט", en: "Close chat" })}
                 onClick={() => setOpen(false)}
                 className="grid h-8 w-8 place-items-center rounded-full text-mist transition-colors hover:bg-white/[0.06] hover:text-ivory"
               >
@@ -183,13 +201,13 @@ export function FloatingActions() {
                 ref={inputRef}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="כתבו לי כל דבר…"
+                placeholder={tx({ he: "כתבו לי כל דבר…", en: "Ask me anything…" })}
                 maxLength={1000}
                 className="flex-1 rounded-full border border-white/[0.1] bg-white/[0.03] px-4 py-2.5 text-base text-ivory outline-none transition-colors placeholder:text-mist/50 focus:border-dot/60 sm:text-[13.5px]"
               />
               <button
                 type="submit"
-                aria-label="שליחה"
+                aria-label={tx({ he: "שליחה", en: "Send" })}
                 disabled={busy || !input.trim()}
                 className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-ivory text-ink transition-all duration-300 hover:bg-dot disabled:opacity-40"
               >
@@ -209,7 +227,7 @@ export function FloatingActions() {
       >
         <motion.button
           type="button"
-          aria-label={open ? "סגירת הצ'אט" : "פתיחת צ'אט עם סול"}
+          aria-label={open ? tx({ he: "סגירת הצ'אט", en: "Close chat" }) : tx({ he: "פתיחת צ'אט עם סול", en: "Open chat with Sol" })}
           onClick={() => setOpen((v) => !v)}
           initial={{ opacity: 0, scale: 0.6 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -238,7 +256,7 @@ export function FloatingActions() {
           href={WHATSAPP_URL}
           target="_blank"
           rel="noopener noreferrer"
-          aria-label="כתבו לנו בוואטסאפ"
+          aria-label={tx({ he: "כתבו לנו בוואטסאפ", en: "Message us on WhatsApp" })}
           initial={{ opacity: 0, scale: 0.6 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 1.45, duration: 0.5, ease: EASE }}

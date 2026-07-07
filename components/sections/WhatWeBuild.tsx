@@ -7,6 +7,7 @@ import { SectionHeader } from "@/components/SectionHeader";
 import { CardStack } from "@/components/ui/CardStack";
 import { EASE } from "@/lib/motion";
 import { cn } from "@/lib/utils";
+import { useTx, type Bi } from "@/lib/i18n";
 
 /**
  * Section 01 — a scroll-stacking deck of what we build. Every category
@@ -27,16 +28,19 @@ interface Example {
 
 interface Category {
   readonly id: string;
-  readonly name: string;
-  readonly blurb: string;
+  readonly name: Bi;
+  readonly blurb: Bi;
   readonly examples: readonly Example[];
 }
 
 const CATEGORIES: readonly Category[] = [
   {
     id: "websites",
-    name: "אתרים",
-    blurb: "אתר מהיר ומדויק שמספר את הסיפור שלכם — ומניע לפעולה.",
+    name: { he: "אתרים", en: "Websites" },
+    blurb: {
+      he: "אתר מהיר ומדויק שמספר את הסיפור שלכם — ומניע לפעולה.",
+      en: "A fast, precise site that tells your story — and drives action.",
+    },
     examples: [
       { name: "SHADIEZ", image: "/proj2.png", href: "https://shadiez-seven.vercel.app", real: true },
       { name: "SPINZ", image: "/proj3.png", href: "https://www.spinzbikes.com", real: true },
@@ -45,16 +49,22 @@ const CATEGORIES: readonly Category[] = [
   },
   {
     id: "dashboards",
-    name: "דשבורדים",
-    blurb: "נתונים חיים, החלטות מהירות — כל העסק במסך אחד.",
+    name: { he: "דשבורדים", en: "Dashboards" },
+    blurb: {
+      he: "נתונים חיים, החלטות מהירות — כל העסק במסך אחד.",
+      en: "Live data, fast decisions — your whole business on one screen.",
+    },
     examples: [
       { name: "DYNAMICA QC", image: "/mockups/shots/qc-real.jpg", href: "/mockups/shots/qc-real.jpg", real: true },
     ],
   },
   {
     id: "systems",
-    name: "מערכות",
-    blurb: "מערכת מותאמת שמחליפה אקסלים ותהליכים ידניים.",
+    name: { he: "מערכות", en: "Systems" },
+    blurb: {
+      he: "מערכת מותאמת שמחליפה אקסלים ותהליכים ידניים.",
+      en: "A tailored system that replaces spreadsheets and manual processes.",
+    },
     examples: [
       { name: "VANGUARD FLEET", image: "/mockups/shots/fleet-real.jpg", href: "/mockups/shots/fleet-real.jpg", real: true },
       { name: "CARMAN S", image: "/proj1.png", href: "https://carman-s.vercel.app", real: true },
@@ -62,24 +72,33 @@ const CATEGORIES: readonly Category[] = [
   },
   {
     id: "landing",
-    name: "דפי נחיתה",
-    blurb: "עמוד אחד עם מטרה אחת: להפוך מבקרים ללקוחות.",
+    name: { he: "דפי נחיתה", en: "Landing pages" },
+    blurb: {
+      he: "עמוד אחד עם מטרה אחת: להפוך מבקרים ללקוחות.",
+      en: "One page with one goal: turning visitors into customers.",
+    },
     examples: [
       { name: "FLOWLY", image: "/mockups/shots/landing.jpg", href: "/mockups/landing.html" },
     ],
   },
   {
     id: "agents",
-    name: "סוכני AI",
-    blurb: "עובדים דיגיטליים שעונים, מסכמים ומבצעים. 24/7.",
+    name: { he: "סוכני AI", en: "AI agents" },
+    blurb: {
+      he: "עובדים דיגיטליים שעונים, מסכמים ומבצעים. 24/7.",
+      en: "Digital workers that answer, summarize and act. 24/7.",
+    },
     examples: [
       { name: "נועה", image: "/mockups/shots/agents.jpg", href: "/mockups/agents.html" },
     ],
   },
   {
     id: "automations",
-    name: "אוטומציות",
-    blurb: "תהליכים שרצים לבד — מהטריגר ועד התוצאה.",
+    name: { he: "אוטומציות", en: "Automations" },
+    blurb: {
+      he: "תהליכים שרצים לבד — מהטריגר ועד התוצאה.",
+      en: "Processes that run on their own — from trigger to result.",
+    },
     examples: [
       { name: "FLOW BUILDER", image: "/mockups/shots/automations.jpg", href: "/mockups/automations.html" },
     ],
@@ -87,6 +106,7 @@ const CATEGORIES: readonly Category[] = [
 ] as const;
 
 function CategoryCard({ cat, index }: { cat: Category; index: number }) {
+  const tx = useTx();
   const [slide, setSlide] = useState(0);
   const [hovered, setHovered] = useState(false);
   const reduced = useReducedMotion();
@@ -113,10 +133,10 @@ function CategoryCard({ cat, index }: { cat: Category; index: number }) {
             {String(index + 1).padStart(2, "0")} / {String(CATEGORIES.length).padStart(2, "0")}
           </span>
           <h3 className="text-gradient text-3xl font-black tracking-tightest sm:text-4xl">
-            {cat.name}
+            {tx(cat.name)}
           </h3>
           <p className="mt-3 max-w-md text-[15px] font-light leading-relaxed text-body sm:text-base">
-            {cat.blurb}
+            {tx(cat.blurb)}
           </p>
           {count > 1 && (
             <div className="mt-5 flex items-center gap-2 lg:mt-auto lg:pt-6">
@@ -124,7 +144,7 @@ function CategoryCard({ cat, index }: { cat: Category; index: number }) {
                 <button
                   key={i}
                   type="button"
-                  aria-label={`דוגמה ${i + 1}`}
+                  aria-label={tx({ he: `דוגמה ${i + 1}`, en: `Example ${i + 1}` })}
                   onClick={() => setSlide(i)}
                   className={cn(
                     "h-1.5 rounded-full transition-all duration-300",
@@ -167,6 +187,7 @@ function CategoryCard({ cat, index }: { cat: Category; index: number }) {
 
 /** Mobile-only: a horizontal swipe carousel (native snap, RTL). */
 function MobileServicesCarousel() {
+  const tx = useTx();
   const railRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
 
@@ -206,7 +227,7 @@ function MobileServicesCarousel() {
     <div className="md:hidden">
       {/* swipe hint */}
       <div className="mb-3 flex items-center justify-center gap-1.5 text-[12px] text-mist/70">
-        <span>החליקו לצדדים</span>
+        <span>{tx({ he: "החליקו לצדדים", en: "Swipe to browse" })}</span>
         <motion.span animate={{ x: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>
           <ChevronLeft className="h-3.5 w-3.5" />
         </motion.span>
@@ -248,8 +269,8 @@ function MobileServicesCarousel() {
                 </span>
               </div>
               <div className="p-5">
-                <h3 className="text-gradient text-2xl font-black tracking-tightest">{cat.name}</h3>
-                <p className="mt-2 text-[14px] font-light leading-relaxed text-body">{cat.blurb}</p>
+                <h3 className="text-gradient text-2xl font-black tracking-tightest">{tx(cat.name)}</h3>
+                <p className="mt-2 text-[14px] font-light leading-relaxed text-body">{tx(cat.blurb)}</p>
               </div>
             </article>
           );
@@ -262,7 +283,7 @@ function MobileServicesCarousel() {
           <button
             key={i}
             type="button"
-            aria-label={`שירות ${i + 1}`}
+            aria-label={tx({ he: `שירות ${i + 1}`, en: `Service ${i + 1}` })}
             onClick={() => goTo(i)}
             className={cn(
               "h-1.5 rounded-full transition-all duration-300",
@@ -276,15 +297,18 @@ function MobileServicesCarousel() {
 }
 
 export function WhatWeBuild() {
+  const tx = useTx();
   return (
     <section id="build" className="py-16 sm:py-24">
       <div className="shell">
         <SectionHeader
           center
           index="01"
-          label="מה אנחנו בונים"
-          title="פתרון טכנולוגי לכל אתגר עסקי."
-          lead="אתר, דף נחיתה, דשבורד, סוכן AI, מערכת או אוטומציה — כל פתרון נבנה בדיוק למידות של העסק שלכם."
+          title={tx({ he: "פתרון טכנולוגי לכל אתגר עסקי.", en: "A technological solution for every business challenge." })}
+          lead={tx({
+            he: "אתר, דף נחיתה, דשבורד, סוכן AI, מערכת או אוטומציה — כל פתרון נבנה בדיוק למידות של העסק שלכם.",
+            en: "A website, landing page, dashboard, AI agent, system or automation — every solution is built to the exact measure of your business.",
+          })}
         />
       </div>
 

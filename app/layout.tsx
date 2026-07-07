@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Rubik, Heebo } from "next/font/google";
 import { cn } from "@/lib/utils";
+import { LanguageProvider, LANG_INIT_SCRIPT } from "@/lib/i18n";
 import "lenis/dist/lenis.css";
 import "./globals.css";
 
@@ -44,6 +45,9 @@ export default function RootLayout({
       dir="rtl"
       className={cn(rubik.variable, heebo.variable, "grain")}
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: LANG_INIT_SCRIPT }} />
+      </head>
       <body className="font-sans antialiased">
         {/* deep-space canvas — a fixed radial wash so nothing sits on flat black */}
         <div
@@ -57,7 +61,7 @@ export default function RootLayout({
           <div className="absolute -right-[12%] top-[34%] h-[60vw] w-[60vw] animate-drift rounded-full bg-[#7d5fd3] opacity-[0.09] blur-[80px] sm:h-[38vw] sm:w-[38vw] sm:blur-[130px]" />
           <div className="absolute -bottom-[16%] left-[26%] h-[66vw] w-[66vw] animate-drift-slow rounded-full bg-[#D9A13B] opacity-[0.06] blur-[90px] sm:h-[42vw] sm:w-[42vw] sm:blur-[140px]" />
         </div>
-        {children}
+        <LanguageProvider>{children}</LanguageProvider>
       </body>
     </html>
   );

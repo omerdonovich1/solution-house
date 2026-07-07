@@ -3,6 +3,8 @@
  * All copy is Hebrew (RTL), professionally proofed.
  */
 
+import type { Bi } from "@/lib/i18n";
+
 export interface ApproachColumn {
   readonly label: string;
   readonly title: string;
@@ -12,9 +14,9 @@ export interface ApproachColumn {
 
 export interface ProcessStep {
   readonly index: string;
-  readonly title: string;
-  readonly description: string;
-  readonly insight: string;
+  readonly title: Bi;
+  readonly description: Bi;
+  readonly insight: Bi;
 }
 
 export type ProjectKind = "SaaS" | "E-commerce" | "Urban";
@@ -54,31 +56,51 @@ export const APPROACH: readonly ApproachColumn[] = [
 export const STEPS: readonly ProcessStep[] = [
   {
     index: "01",
-    title: "מבינים את הבעיה",
-    description:
-      "נפגשים, מקשיבים ושואלים את השאלות הנכונות. לא מחפשים סימפטומים — מחפשים את מה שבאמת עוצר אתכם.",
-    insight: "רוב הפרויקטים נכשלים כי פתרו את הבעיה הלא נכונה.",
+    title: { he: "מבינים את הבעיה", en: "Understand the problem" },
+    description: {
+      he: "נפגשים, מקשיבים ושואלים את השאלות הנכונות. לא מחפשים סימפטומים — מחפשים את מה שבאמת עוצר אתכם.",
+      en: "We meet, listen, and ask the right questions. Not chasing symptoms — finding what's really holding you back.",
+    },
+    insight: {
+      he: "רוב הפרויקטים נכשלים כי פתרו את הבעיה הלא נכונה.",
+      en: "Most projects fail because they solved the wrong problem.",
+    },
   },
   {
     index: "02",
-    title: "מגדירים הצלחה",
-    description:
-      "קובעים יחד מה נחשב הצלחה ואיך מודדים אותה — ככה שנינו יודעים בדיוק לאן הולכים, וכמה זה יעלה.",
-    insight: "מטרה ברורה חוסכת חודשים של פיתוח מיותר.",
+    title: { he: "מגדירים הצלחה", en: "Define success" },
+    description: {
+      he: "קובעים יחד מה נחשב הצלחה ואיך מודדים אותה — ככה שנינו יודעים בדיוק לאן הולכים, וכמה זה יעלה.",
+      en: "Together we set what counts as success and how we measure it — so we both know exactly where we're headed, and what it costs.",
+    },
+    insight: {
+      he: "מטרה ברורה חוסכת חודשים של פיתוח מיותר.",
+      en: "A clear goal saves months of wasted development.",
+    },
   },
   {
     index: "03",
-    title: "בונים בדיוק את מה שצריך",
-    description:
-      "בלי פיצ'רים מיותרים ובלי הפתעות בדרך. אתם רואים התקדמות אמיתית כל שבוע — ויכולים לעצור בכל שלב.",
-    insight: "פחות קוד, יותר תוצאות.",
+    title: { he: "בונים בדיוק את מה שצריך", en: "Build exactly what's needed" },
+    description: {
+      he: "בלי פיצ'רים מיותרים ובלי הפתעות בדרך. אתם רואים התקדמות אמיתית כל שבוע — ויכולים לעצור בכל שלב.",
+      en: "No needless features, no surprises along the way. You see real progress every week — and can stop at any stage.",
+    },
+    insight: {
+      he: "פחות קוד, יותר תוצאות.",
+      en: "Less code, more results.",
+    },
   },
   {
     index: "04",
-    title: "מוכיחים שזה עובד",
-    description:
-      "הפתרון באוויר ואנחנו מודדים: עובד? ממשיכים. צריך כיוון? מתקנים מהר. הנתונים מחליטים — לא האגו.",
-    insight: "התוצאה בשטח היא המדד היחיד שמעניין.",
+    title: { he: "מוכיחים שזה עובד", en: "Prove it works" },
+    description: {
+      he: "הפתרון באוויר ואנחנו מודדים: עובד? ממשיכים. צריך כיוון? מתקנים מהר. הנתונים מחליטים — לא האגו.",
+      en: "The solution is live and we measure: working? We keep going. Needs adjusting? We fix it fast. The data decides — not the ego.",
+    },
+    insight: {
+      he: "התוצאה בשטח היא המדד היחיד שמעניין.",
+      en: "Real-world results are the only metric that matters.",
+    },
   },
 ] as const;
 

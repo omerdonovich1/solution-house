@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
+import { useTx, type Bi } from "@/lib/i18n";
 
 interface Stat {
   /** numeric target to count to */
@@ -9,21 +10,22 @@ interface Stat {
   /** text before/after the number */
   readonly prefix?: string;
   readonly suffix?: string;
-  readonly label: string;
+  readonly label: Bi;
   /** render the number literally instead of counting (e.g. "24/7") */
   readonly literal?: string;
 }
 
 const STATS: readonly Stat[] = [
-  { value: 10, suffix: "+", label: "פרויקטים שהושלמו" },
-  { value: 2000, suffix: "+", label: "שעות חיסכון ללקוחות" },
-  { value: 100, suffix: "%", label: "שביעות רצון" },
-  { value: 0, literal: "24/7", label: "תמיכה טכנית" },
+  { value: 10, suffix: "+", label: { he: "פרויקטים שהושלמו", en: "Projects completed" } },
+  { value: 2000, suffix: "+", label: { he: "שעות חיסכון ללקוחות", en: "Hours saved for clients" } },
+  { value: 100, suffix: "%", label: { he: "שביעות רצון", en: "Client satisfaction" } },
+  { value: 0, literal: "24/7", label: { he: "תמיכה טכנית", en: "Technical support" } },
 ];
 
 const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
 
 function Counter({ stat, run }: { stat: Stat; run: boolean }) {
+  const tx = useTx();
   const [n, setN] = useState(0);
 
   useEffect(() => {
@@ -51,7 +53,7 @@ function Counter({ stat, run }: { stat: Stat; run: boolean }) {
       >
         {shown}
       </div>
-      <div className="mt-2.5 text-[13.5px] font-light text-mist sm:text-[15px]">{stat.label}</div>
+      <div className="mt-2.5 text-[13.5px] font-light text-mist sm:text-[15px]">{tx(stat.label)}</div>
     </div>
   );
 }
@@ -72,7 +74,7 @@ export function Stats() {
           className="liquid-glass grid grid-cols-2 gap-y-8 rounded-3xl px-6 py-9 sm:gap-y-0 sm:px-10 sm:py-11 md:grid-cols-4"
         >
           {STATS.map((s) => (
-            <Counter key={s.label} stat={s} run={inView} />
+            <Counter key={s.label.en} stat={s} run={inView} />
           ))}
         </motion.div>
       </div>
