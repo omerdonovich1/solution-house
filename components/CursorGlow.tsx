@@ -3,279 +3,274 @@
 import { useEffect, useRef } from "react";
 
 /**
- * Spatial lighting + neural reveal.
+ * Living neural field — a canvas backdrop that actually breathes.
  *
- * Two fixed layers trail the cursor on one lerped rAF loop:
- * 1. a soft ambient spotlight (radial gradient), and
- * 2. a hidden NEURAL NETWORK — deterministic constellation of synapses
- *    and pulsing nodes — revealed only inside a radial mask around the
- *    cursor, as if the site's "brain" lights up under the flashlight.
+ * Floating nodes drift on their own organic paths; the synapses between
+ * them are recomputed every frame from distance, so connections stretch,
+ * form and break as the field moves. Signal PULSES hop node-to-node like
+ * a firing brain. Three parallax depth layers (near/mid/far — different
+ * size, brightness and speed) give real dimensionality, and the whole
+ * network wakes up and brightens around the cursor.
  *
- * Zero React re-renders: styles are written straight to the elements.
- * Disabled for touch pointers and reduced-motion users.
+ * One rAF loop, additive blending, zero React re-renders. Reduced to a
+ * lighter, self-drifting version on touch; off for reduced-motion.
  */
 
-/** Seeded LCG — same node field on server and client (hydration-safe). */
-function lcg(seed: number) {
-  let s = seed;
-  return () => (s = (s * 48271) % 2147483647) / 2147483647;
+const CYAN = "125,180,255";
+const AMBER = "217,161,59";
+
+interface Node {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  z: number; // depth 0.35 (far) → 1 (near)
+  amber: boolean;
+  phase: number;
 }
 
-const rand = lcg(7);
-const NODES = Array.from({ length: 64 }, (_, i) => ({
-  x: Math.round(rand() * 1600),
-  y: Math.round(rand() * 900),
-  r: +(1.3 + rand() * 1.7).toFixed(1),
-  amber: i % 9 === 0,
-  dur: +(2.6 + rand() * 3).toFixed(1),
-  delay: +(-rand() * 4).toFixed(1),
-}));
-
-const EDGES: { x1: number; y1: number; x2: number; y2: number; flow: boolean }[] = [];
-for (let i = 0; i < NODES.length; i++) {
-  for (let j = i + 1; j < NODES.length; j++) {
-    const dx = NODES[i].x - NODES[j].x;
-    const dy = NODES[i].y - NODES[j].y;
-    if (Math.hypot(dx, dy) < 185) {
-      EDGES.push({
-        x1: NODES[i].x,
-        y1: NODES[i].y,
-        x2: NODES[j].x,
-        y2: NODES[j].y,
-        flow: EDGES.length % 3 === 0,
-      });
-    }
-  }
-}
-
-/**
- * Easter eggs: faint line-art hardware hiding between the constellations —
- * a server rack, a chip, a database, a terminal, a laptop, a little robot.
- * Only the attentive, flashlight in hand, will ever meet them.
- */
-function Devices() {
-  const stroke = "rgba(154,216,245,0.34)";
-  const led = (x: number, y: number, delay = 0) => (
-    <circle
-      cx={x}
-      cy={y}
-      r="1.6"
-      fill="#D9A13B"
-      stroke="none"
-      style={{ animation: `node-pulse 2.8s ease-in-out ${delay}s infinite` }}
-    />
-  );
-  return (
-    <g fill="none" stroke={stroke} strokeWidth="1.1" opacity="0.9">
-      {/* server rack */}
-      <g transform="translate(196, 168)">
-        <rect x="0" y="0" width="38" height="48" rx="4" />
-        <line x1="0" y1="16" x2="38" y2="16" />
-        <line x1="0" y1="32" x2="38" y2="32" />
-        <line x1="6" y1="8" x2="20" y2="8" />
-        <line x1="6" y1="24" x2="20" y2="24" />
-        <line x1="6" y1="40" x2="20" y2="40" />
-        {led(31, 8, 0)}
-        {led(31, 24, 0.9)}
-        {led(31, 40, 1.7)}
-      </g>
-      {/* chip / CPU */}
-      <g transform="translate(1372, 214)">
-        <rect x="0" y="0" width="32" height="32" rx="5" />
-        <rect x="9" y="9" width="14" height="14" rx="2" />
-        <line x1="8" y1="-6" x2="8" y2="0" />
-        <line x1="16" y1="-6" x2="16" y2="0" />
-        <line x1="24" y1="-6" x2="24" y2="0" />
-        <line x1="8" y1="32" x2="8" y2="38" />
-        <line x1="16" y1="32" x2="16" y2="38" />
-        <line x1="24" y1="32" x2="24" y2="38" />
-        <line x1="-6" y1="8" x2="0" y2="8" />
-        <line x1="-6" y1="24" x2="0" y2="24" />
-        <line x1="32" y1="8" x2="38" y2="8" />
-        <line x1="32" y1="24" x2="38" y2="24" />
-      </g>
-      {/* database */}
-      <g transform="translate(492, 668)">
-        <ellipse cx="18" cy="6" rx="18" ry="6" />
-        <path d="M 0 6 V 34 C 0 37.3 8 40 18 40 C 28 40 36 37.3 36 34 V 6" />
-        <path d="M 0 20 C 0 23.3 8 26 18 26 C 28 26 36 23.3 36 20" />
-        {led(30, 33, 0.4)}
-      </g>
-      {/* terminal window */}
-      <g transform="translate(1150, 682)">
-        <rect x="0" y="0" width="46" height="34" rx="4" />
-        <line x1="0" y1="10" x2="46" y2="10" />
-        <path d="M 7 17 L 12 21 L 7 25" />
-        <line x1="16" y1="25" x2="24" y2="25" />
-      </g>
-      {/* laptop */}
-      <g transform="translate(292, 452)">
-        <rect x="4" y="0" width="36" height="24" rx="2" />
-        <path d="M 0 28 H 44 L 40 24 H 4 Z" />
-      </g>
-      {/* little robot */}
-      <g transform="translate(1452, 528)">
-        <rect x="0" y="10" width="30" height="24" rx="7" />
-        <circle cx="10" cy="22" r="2.4" />
-        <circle cx="20" cy="22" r="2.4" />
-        <line x1="15" y1="10" x2="15" y2="3" />
-        {led(15, 2, 1.2)}
-      </g>
-    </g>
-  );
+interface Pulse {
+  from: number;
+  to: number;
+  t: number;
+  speed: number;
 }
 
 export function CursorGlow() {
-  const glowRef = useRef<HTMLDivElement>(null);
-  const meshRef = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const glow = glowRef.current;
-    const mesh = meshRef.current;
-    if (!glow || !mesh) return;
+    const canvas = ref.current;
+    if (!canvas) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const ctx = canvas.getContext("2d", { alpha: true });
+    if (!ctx) return;
 
     const coarse = window.matchMedia("(pointer: coarse)").matches;
-    const rGlow = coarse ? 420 : 560;
-    const rMask = coarse ? 250 : 375;
+    const NODES = coarse ? 30 : 74;
+    const MAX_DIST = coarse ? 118 : 158;
+    const dpr = Math.min(window.devicePixelRatio || 1, coarse ? 1.5 : 1.75);
+    const frameStep = coarse ? 2 : 1; // throttle the mobile field to save battery
 
-    let targetX = window.innerWidth / 2;
-    let targetY = window.innerHeight * 0.35;
-    let x = targetX;
-    let y = targetY;
-    let rafId = 0;
-
-    const paint = () => {
-      glow.style.background = `radial-gradient(${rGlow}px circle at ${x}px ${y}px, rgba(125,180,255,0.06), rgba(125,180,255,0.022) 42%, transparent 72%)`;
-      const mask = `radial-gradient(${rMask}px circle at ${x}px ${y}px, rgba(0,0,0,1) 26%, rgba(0,0,0,0.5) 58%, transparent 80%)`;
-      mesh.style.webkitMaskImage = mask;
-      mesh.style.maskImage = mask;
+    let w = 0;
+    let h = 0;
+    const resize = () => {
+      w = window.innerWidth;
+      h = window.innerHeight;
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
+    resize();
 
-    // ── touch devices: no cursor — the field is driven by SCROLL ──────
-    // Instead of a spotlight (which, cropped to a narrow phone, looked
-    // like one stuck cluster), the whole mesh is softly visible and
-    // parallaxes as the page scrolls: it drifts upward while you scroll
-    // down, so fresh constellations emerge from the bottom fade.
-    if (coarse) {
-      const svg = mesh.querySelector("svg") as SVGElement | null;
-      // oversize the mesh so there's headroom to travel without exposing
-      // edges, and fade it top & bottom instead of a hard rectangle
-      if (svg) {
-        svg.style.position = "absolute";
-        svg.style.left = "0";
-        svg.style.top = "-50%";
-        svg.style.width = "100%";
-        svg.style.height = "200%";
-      }
-      mesh.style.opacity = "0.55";
-      const softMask =
-        "linear-gradient(to bottom, transparent 0%, #000 15%, #000 85%, transparent 100%)";
-      mesh.style.webkitMaskImage = softMask;
-      mesh.style.maskImage = softMask;
-      // a faint, still ambient wash — the parallax mesh is the star
-      glow.style.background = `radial-gradient(${rGlow}px circle at 50% 32%, rgba(125,180,255,0.05), transparent 70%)`;
-
-      let targetTY = 0;
-      let ty = 0;
-      const readScroll = () => {
-        const max = document.documentElement.scrollHeight - window.innerHeight;
-        const sp = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
-        // svg spans -50%…150% of the viewport; travel ±40% keeps it covering
-        targetTY = (0.4 - sp * 0.8) * window.innerHeight;
+    const rand = (a: number, b: number) => a + Math.random() * (b - a);
+    const nodes: Node[] = Array.from({ length: NODES }, (_, i) => {
+      const z = rand(0.35, 1);
+      return {
+        x: rand(0, w),
+        y: rand(0, h),
+        vx: rand(-0.14, 0.14) * z,
+        vy: rand(-0.14, 0.14) * z,
+        z,
+        amber: i % 11 === 0,
+        phase: rand(0, Math.PI * 2),
       };
-      const loop = (t: number) => {
-        ty += (targetTY - ty) * 0.08;
-        const swayX = Math.sin(t * 0.0004) * 10;
-        if (svg) {
-          svg.style.transform = `translate3d(${swayX.toFixed(1)}px, ${ty.toFixed(1)}px, 0)`;
+    });
+
+    // neighbours cache for pulse routing (rebuilt occasionally)
+    const pulses: Pulse[] = [];
+    const spawnPulse = () => {
+      const from = Math.floor(Math.random() * NODES);
+      // nearest-ish node as target
+      let to = -1;
+      let best = MAX_DIST * MAX_DIST;
+      for (let j = 0; j < NODES; j++) {
+        if (j === from) continue;
+        const dx = nodes[from].x - nodes[j].x;
+        const dy = nodes[from].y - nodes[j].y;
+        const d = dx * dx + dy * dy;
+        if (d < best) {
+          best = d;
+          to = j;
         }
-        rafId = requestAnimationFrame(loop);
-      };
-      readScroll();
-      window.addEventListener("scroll", readScroll, { passive: true });
-      window.addEventListener("resize", readScroll);
-      rafId = requestAnimationFrame(loop);
-      return () => {
-        window.removeEventListener("scroll", readScroll);
-        window.removeEventListener("resize", readScroll);
-        cancelAnimationFrame(rafId);
-      };
-    }
-
-    // ── fine pointers: trail the cursor ──────────────────────────────
-    const step = () => {
-      rafId = 0;
-      x += (targetX - x) * 0.12;
-      y += (targetY - y) * 0.12;
-      paint();
-      if (Math.abs(targetX - x) > 0.5 || Math.abs(targetY - y) > 0.5) {
-        rafId = requestAnimationFrame(step);
       }
+      if (to >= 0) pulses.push({ from, to, t: 0, speed: rand(0.006, 0.014) });
     };
+    for (let i = 0; i < (coarse ? 3 : 6); i++) spawnPulse();
 
+    // pointer (lerped)
+    let tmx = w / 2;
+    let tmy = h / 2;
+    let mx = tmx;
+    let my = tmy;
+    let hasPointer = false;
     const onMove = (e: PointerEvent) => {
-      targetX = e.clientX;
-      targetY = e.clientY;
-      if (!rafId) rafId = requestAnimationFrame(step);
+      tmx = e.clientX;
+      tmy = e.clientY;
+      hasPointer = true;
     };
 
-    paint();
+    // mobile: the field drifts vertically with scroll for parallax
+    let scrollY = window.scrollY;
+    const onScroll = () => {
+      scrollY = window.scrollY;
+    };
+
+    let raf = 0;
+    let frame = 0;
+    let time = 0;
+    const CURSOR_R = 190;
+
+    const draw = () => {
+      raf = requestAnimationFrame(draw);
+      frame++;
+      if (frame % frameStep !== 0) return;
+      time += 0.016 * frameStep;
+      mx += (tmx - mx) * 0.06;
+      my += (tmy - my) * 0.06;
+
+      ctx.clearRect(0, 0, w, h);
+      ctx.globalCompositeOperation = "lighter";
+
+      // parallax: near nodes shift opposite the pointer more than far ones
+      const px = hasPointer ? (mx - w / 2) : 0;
+      const py = hasPointer ? (my - h / 2) : 0;
+      const scrollShift = coarse ? -(scrollY * 0.06) : 0;
+
+      // advance + wrap nodes; compute their on-screen (parallax) positions
+      const sx = new Float32Array(NODES);
+      const sy = new Float32Array(NODES);
+      for (let i = 0; i < NODES; i++) {
+        const n = nodes[i];
+        n.x += n.vx;
+        n.y += n.vy;
+        const m = 60;
+        if (n.x < -m) n.x = w + m;
+        else if (n.x > w + m) n.x = -m;
+        if (n.y < -m) n.y = h + m;
+        else if (n.y > h + m) n.y = -m;
+        sx[i] = n.x - px * n.z * 0.022;
+        sy[i] = n.y - py * n.z * 0.022 + scrollShift * n.z;
+      }
+
+      // synapses — recomputed every frame (they stretch, form and break)
+      for (let i = 0; i < NODES; i++) {
+        for (let j = i + 1; j < NODES; j++) {
+          const dx = sx[i] - sx[j];
+          const dy = sy[i] - sy[j];
+          const dist = Math.hypot(dx, dy);
+          const reach = MAX_DIST * (0.5 + 0.5 * Math.min(nodes[i].z, nodes[j].z));
+          if (dist > reach) continue;
+          let a = (1 - dist / reach) * 0.22 * ((nodes[i].z + nodes[j].z) / 2);
+          // brighten near the cursor
+          if (hasPointer) {
+            const cx = (sx[i] + sx[j]) / 2 - mx;
+            const cy = (sy[i] + sy[j]) / 2 - my;
+            const near = 1 - Math.min(1, Math.hypot(cx, cy) / CURSOR_R);
+            a *= 1 + near * 2.4;
+          }
+          ctx.strokeStyle = `rgba(${CYAN},${a.toFixed(3)})`;
+          ctx.lineWidth = 0.7;
+          ctx.beginPath();
+          ctx.moveTo(sx[i], sy[i]);
+          ctx.lineTo(sx[j], sy[j]);
+          ctx.stroke();
+        }
+      }
+
+      // nodes
+      for (let i = 0; i < NODES; i++) {
+        const n = nodes[i];
+        const breathe = 0.7 + 0.3 * Math.sin(time * 1.4 + n.phase);
+        let a = 0.5 * n.z * breathe;
+        let r = (0.9 + n.z * 1.9) * (0.85 + 0.15 * breathe);
+        if (hasPointer) {
+          const near = 1 - Math.min(1, Math.hypot(sx[i] - mx, sy[i] - my) / CURSOR_R);
+          a *= 1 + near * 1.8;
+          r *= 1 + near * 0.6;
+        }
+        ctx.fillStyle = n.amber
+          ? `rgba(${AMBER},${Math.min(1, a * 1.2).toFixed(3)})`
+          : `rgba(${CYAN},${Math.min(1, a).toFixed(3)})`;
+        ctx.beginPath();
+        ctx.arc(sx[i], sy[i], r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // travelling signal pulses
+      for (let p = pulses.length - 1; p >= 0; p--) {
+        const pulse = pulses[p];
+        pulse.t += pulse.speed;
+        const from = pulse.from;
+        const to = pulse.to;
+        const cx = sx[from] + (sx[to] - sx[from]) * pulse.t;
+        const cy = sy[from] + (sy[to] - sy[from]) * pulse.t;
+        const glow = 0.9 * (1 - Math.abs(pulse.t - 0.5) * 1.2);
+        ctx.fillStyle = `rgba(190,225,255,${Math.max(0, glow).toFixed(3)})`;
+        ctx.beginPath();
+        ctx.arc(cx, cy, 1.7, 0, Math.PI * 2);
+        ctx.fill();
+        if (pulse.t >= 1) {
+          // hop onward to a neighbour of the node we reached
+          let next = -1;
+          let best = MAX_DIST * MAX_DIST;
+          for (let j = 0; j < NODES; j++) {
+            if (j === to || j === from) continue;
+            const ddx = nodes[to].x - nodes[j].x;
+            const ddy = nodes[to].y - nodes[j].y;
+            const d = ddx * ddx + ddy * ddy;
+            if (d < best) {
+              best = d;
+              next = j;
+            }
+          }
+          if (next >= 0 && Math.random() < 0.85) {
+            pulse.from = to;
+            pulse.to = next;
+            pulse.t = 0;
+          } else {
+            pulses.splice(p, 1);
+          }
+        }
+      }
+      while (pulses.length < (coarse ? 3 : 6)) spawnPulse();
+
+      // soft ambient glow around the cursor
+      if (hasPointer) {
+        const g = ctx.createRadialGradient(mx, my, 0, mx, my, 320);
+        g.addColorStop(0, `rgba(${CYAN},0.05)`);
+        g.addColorStop(1, `rgba(${CYAN},0)`);
+        ctx.fillStyle = g;
+        ctx.fillRect(mx - 320, my - 320, 640, 640);
+      }
+
+      ctx.globalCompositeOperation = "source-over";
+    };
+
+    raf = requestAnimationFrame(draw);
     window.addEventListener("pointermove", onMove, { passive: true });
+    window.addEventListener("resize", resize);
+    if (coarse) window.addEventListener("scroll", onScroll, { passive: true });
+    const onVis = () => {
+      if (document.hidden) cancelAnimationFrame(raf);
+      else raf = requestAnimationFrame(draw);
+    };
+    document.addEventListener("visibilitychange", onVis);
+
     return () => {
+      cancelAnimationFrame(raf);
       window.removeEventListener("pointermove", onMove);
-      if (rafId) cancelAnimationFrame(rafId);
+      window.removeEventListener("resize", resize);
+      window.removeEventListener("scroll", onScroll);
+      document.removeEventListener("visibilitychange", onVis);
     };
   }, []);
 
   return (
-    <div aria-hidden className="pointer-events-none fixed inset-0 -z-[5]">
-      {/* the hidden neural field — visible only through the cursor mask */}
-      <div
-        ref={meshRef}
-        className="absolute inset-0 opacity-90"
-        style={{ maskImage: "radial-gradient(0px circle at 50% 40%, black, transparent)" }}
-      >
-        <svg
-          className="neural-mesh h-full w-full"
-          viewBox="0 0 1600 900"
-          preserveAspectRatio="xMidYMid slice"
-        >
-          {EDGES.map((e, i) => (
-            <line
-              key={`e${i}`}
-              x1={e.x1}
-              y1={e.y1}
-              x2={e.x2}
-              y2={e.y2}
-              stroke={e.flow ? "rgba(154,216,245,0.62)" : "rgba(125,180,255,0.32)"}
-              strokeWidth={e.flow ? 1.2 : 0.9}
-              strokeDasharray={e.flow ? "5 16" : undefined}
-              style={
-                e.flow
-                  ? { animation: `dash-flow ${5 + (i % 4)}s linear infinite` }
-                  : undefined
-              }
-            />
-          ))}
-          {NODES.map((n, i) => (
-            <circle
-              key={`n${i}`}
-              cx={n.x}
-              cy={n.y}
-              r={n.amber ? n.r + 0.8 : n.r}
-              fill={n.amber ? "#D9A13B" : "#9AD8F5"}
-              style={{
-                animation: `node-pulse ${n.dur}s ease-in-out ${n.delay}s infinite`,
-              }}
-            />
-          ))}
-          {/* the hidden hardware — for whoever looks closely */}
-          <Devices />
-        </svg>
-      </div>
-      {/* the ambient spotlight itself */}
-      <div ref={glowRef} className="absolute inset-0" />
-    </div>
+    <canvas
+      ref={ref}
+      aria-hidden
+      className="pointer-events-none fixed inset-0 -z-[5] h-full w-full"
+    />
   );
 }
