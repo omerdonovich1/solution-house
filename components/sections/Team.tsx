@@ -28,7 +28,7 @@ const TEAM: readonly Member[] = [
   },
   {
     name: { he: "עומר דונוביץ", en: "Omer Donovich" },
-    role: { he: "מייסד · מהנדס מערכות ו-AI", en: "Founder & AI Systems Engineer" },
+    role: { he: "AI Systems & Agents", en: "AI Systems & Agents" },
     bio: {
       he: "בונה מערכות מותאמות, אוטומציות וסוכני AI לעסקים.",
       en: "Builds tailored systems, automations and AI agents for businesses.",
