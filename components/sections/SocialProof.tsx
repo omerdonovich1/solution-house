@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 import { useTx, type Bi } from "@/lib/i18n";
 
 interface CaseStudy {
-  readonly client: string;
+  readonly client: Bi;
   readonly type: Bi;
   readonly challenge: Bi;
   readonly solution: Bi;
@@ -20,7 +20,7 @@ interface CaseStudy {
 
 const CASES: readonly CaseStudy[] = [
   {
-    client: "SHADIEZ · SPINZ",
+    client: { he: "SHADIEZ · SPINZ", en: "SHADIEZ · SPINZ" },
     type: { he: "אתרים", en: "Websites" },
     challenge: {
       he: "נוכחות דיגיטלית חלשה שלא סיפרה את סיפור המותג ולא המירה מבקרים.",
@@ -37,7 +37,7 @@ const CASES: readonly CaseStudy[] = [
     metric: { he: "אתרים חיים", en: "Sites live" },
   },
   {
-    client: "VANGUARD FLEET",
+    client: { he: "VANGUARD FLEET", en: "VANGUARD FLEET" },
     type: { he: "מערכת לניהול צי רכב", en: "Fleet management system" },
     challenge: {
       he: "מעקב ידני אחרי עשרות רכבים באקסלים מפוזרים.",
@@ -54,7 +54,7 @@ const CASES: readonly CaseStudy[] = [
     metric: { he: "מערכת אמיתית", en: "Real system" },
   },
   {
-    client: "DYNAMICA QC",
+    client: { he: "DYNAMICA QC", en: "DYNAMICA QC" },
     type: { he: "מערכת לניהול בקרת איכות", en: "Quality control system" },
     challenge: {
       he: "בקרת איכות ידנית, ללא מעקב אחרי ליקויים ותהליכים.",
@@ -71,7 +71,7 @@ const CASES: readonly CaseStudy[] = [
     metric: { he: "מערכת אמיתית", en: "Real system" },
   },
   {
-    client: "אוטומציות לעסקים",
+    client: { he: "אוטומציות לעסקים", en: "Business Automations" },
     type: { he: "אוטומציה עסקית", en: "Business automation" },
     challenge: {
       he: "תהליכים ידניים חוזרים שגוזלים שעות יקרות מהצוות.",
@@ -88,7 +88,7 @@ const CASES: readonly CaseStudy[] = [
     metric: { he: "רץ לבד", en: "Runs itself" },
   },
   {
-    client: "AI Agents",
+    client: { he: "AI Agents", en: "AI Agents" },
     type: { he: "סוכני AI", en: "AI agents" },
     challenge: {
       he: "עומס פניות ומשימות חוזרות שדורשות זמינות מסביב לשעון.",
@@ -188,7 +188,7 @@ export function SocialProof() {
           className="mt-10 grid gap-4 sm:mt-14 sm:gap-5 lg:grid-cols-3"
         >
           {CASES.map((c, i) => (
-            <motion.div key={c.client} variants={fadeUp}>
+            <motion.div key={c.client.en} variants={fadeUp}>
               <Magnetic strength={0.12} radius={26} className="h-full">
                 <article
                   className={`liquid-glass group relative flex h-full flex-col overflow-hidden rounded-3xl p-6 sm:p-7 ${cardHover}`}
@@ -203,7 +203,7 @@ export function SocialProof() {
               <span className="w-fit rounded-full border border-dot/30 bg-dot/10 px-3 py-1 text-[11px] font-medium text-dot">
                 {tx(c.type)}
               </span>
-              <h3 className="mt-4 text-xl font-black tracking-tight text-ivory">{c.client}</h3>
+              <h3 className="mt-4 text-xl font-black tracking-tight text-ivory">{tx(c.client)}</h3>
 
               <dl className="mt-4 space-y-2.5 text-[14px] leading-relaxed">
                 <div>
