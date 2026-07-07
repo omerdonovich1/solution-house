@@ -387,7 +387,7 @@ export default function LeadManager() {
         </aside>
 
         {/* ── main ── */}
-        <main className="min-w-0 pb-[96px] lg:flex-1 lg:pb-0">
+        <main id="main-content" className="min-w-0 pb-[96px] lg:flex-1 lg:pb-0">
       {/* ── header ── */}
       <header className="liquid-glass relative overflow-hidden rounded-b-3xl px-6 pb-7 pt-8 lg:rounded-3xl">
         <div className="pointer-events-none absolute -right-10 -top-16 h-40 w-40 rounded-full bg-[radial-gradient(circle,rgba(217,161,59,0.18),transparent_65%)]" />

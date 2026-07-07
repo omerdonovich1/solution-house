@@ -98,6 +98,24 @@ export function Contact() {
           </button>
         </form>
 
+        {/* screen-reader + visible status announcement */}
+        <p
+          role="status"
+          aria-live="polite"
+          className={cn(
+            "mt-4 text-[14px] font-medium",
+            status === "done" && "text-aqua",
+            status === "error" && "text-rose",
+            status !== "done" && status !== "error" && "sr-only"
+          )}
+        >
+          {status === "done"
+            ? tx({ he: "הפנייה נשלחה בהצלחה. נחזור אליכם בקרוב.", en: "Your message was sent successfully. We'll be in touch soon." })
+            : status === "error"
+            ? tx({ he: "שליחת הפנייה נכשלה. אנא נסו שוב או פנו אלינו בוואטסאפ.", en: "Sending failed. Please try again or reach us on WhatsApp." })
+            : ""}
+        </p>
+
         <div className="mt-11 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-white/[0.08] pt-8 text-[15px] text-mist">
           <span>{tx({ he: "או ישירות:", en: "Or directly:" })}</span>
           <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="font-medium text-ivory transition-colors duration-300 hover:text-volt">

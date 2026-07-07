@@ -25,7 +25,7 @@ export default function Home() {
       <SmoothScroll />
 
       <Navbar />
-      <main>
+      <main id="main-content">
         <Hero />
         <WhyUs />
         <WhatWeBuild />

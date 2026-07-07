@@ -50,6 +50,37 @@ const SECTIONS: readonly LegalSection[] = [
     ],
   },
   {
+    heading: { he: "תפריט הנגישות באתר", en: "The accessibility menu on this site" },
+    body: [
+      {
+        he: `בכל עמוד באתר זמין תפריט נגישות (הכפתור בפינה הימנית התחתונה של המסך, מסומן בסמל הנגישות). דרכו ניתן להתאים את חוויית הגלישה לצרכים שלכם:`,
+        en: `An accessibility menu is available on every page (the button in the bottom-right corner of the screen, marked with the accessibility icon). Through it you can tailor the browsing experience to your needs:`,
+      },
+      [
+        {
+          he: "הגדלה והקטנה של גודל הטקסט.",
+          en: "Increasing and decreasing text size.",
+        },
+        {
+          he: "מצב ניגודיות גבוהה ומצב גווני אפור.",
+          en: "High-contrast mode and grayscale mode.",
+        },
+        {
+          he: "הדגשת קישורים וגופן קריא יותר.",
+          en: "Highlighting links and a more readable font.",
+        },
+        {
+          he: "עצירת אנימציות ותנועה, וסימון פוקוס קבוע לניווט במקלדת.",
+          en: "Stopping animations and motion, and a persistent focus outline for keyboard navigation.",
+        },
+      ],
+      {
+        he: `ההעדפות שתבחרו נשמרות בדפדפן שלכם ויישמרו גם בביקורים הבאים. בנוסף, האתר מכבד את הגדרת "צמצום תנועה" (Reduced Motion) של מערכת ההפעלה.`,
+        en: `The preferences you choose are saved in your browser and will persist on future visits. The site also respects your operating system's "Reduced Motion" setting.`,
+      },
+    ],
+  },
+  {
     heading: { he: "מאמץ מתמשך", en: "An ongoing effort" },
     body: [
       {

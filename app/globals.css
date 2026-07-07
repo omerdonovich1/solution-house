@@ -281,3 +281,89 @@ body {
     animation: none !important;
   }
 }
+
+/* ══════════════════════════════════════════════════════════════════════
+   ACCESSIBILITY — toggles driven by the accessibility menu (classes on
+   <html>) + skip link. Built to support WCAG 2.0 AA / IS 5568.
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* skip-to-content — appears on keyboard focus */
+.skip-link {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -130%);
+  z-index: 500;
+  background: theme("colors.dot");
+  color: theme("colors.ink");
+  font-weight: 700;
+  padding: 10px 22px;
+  border-radius: 0 0 14px 14px;
+  transition: transform 0.2s ease;
+}
+.skip-link:focus {
+  transform: translate(-50%, 0);
+  outline: 3px solid #fff;
+  outline-offset: 2px;
+}
+
+/* larger text */
+html[data-a11y-font="1"] { font-size: 112.5%; }
+html[data-a11y-font="2"] { font-size: 125%; }
+html[data-a11y-font="3"] { font-size: 140%; }
+
+/* high contrast */
+html.a11y-contrast body { background: #000 !important; }
+html.a11y-contrast :is(p, span, h1, h2, h3, h4, h5, li, a, button, label, div, dt, dd, strong, em, small, input, textarea, figcaption, blockquote) {
+  color: #fff !important;
+}
+html.a11y-contrast .text-gradient {
+  background: none !important;
+  -webkit-text-fill-color: #fff !important;
+  color: #fff !important;
+}
+html.a11y-contrast :is(.text-dot, .text-volt) {
+  color: #ffe27a !important;
+  -webkit-text-fill-color: #ffe27a !important;
+}
+html.a11y-contrast .liquid-glass {
+  background: #0a0a0a !important;
+  border: 1px solid #fff !important;
+}
+html.a11y-contrast .liquid-glass::before,
+html.a11y-contrast .liquid-glass::after { display: none !important; }
+
+/* grayscale */
+html.a11y-grayscale { filter: grayscale(1); }
+
+/* underline every link */
+html.a11y-links a {
+  text-decoration: underline !important;
+  text-underline-offset: 3px;
+}
+
+/* readable typography */
+html.a11y-readable * {
+  font-family: Arial, Helvetica, "Segoe UI", sans-serif !important;
+  letter-spacing: normal !important;
+  font-style: normal !important;
+}
+html.a11y-readable :is(p, li, dd, blockquote) { line-height: 1.9 !important; }
+
+/* always-visible strong focus ring */
+html.a11y-focus :is(a, button, input, textarea, select, [tabindex]):focus {
+  outline: 3px solid #ffbf00 !important;
+  outline-offset: 2px !important;
+  border-radius: 2px;
+}
+
+/* stop all motion — CSS animations/transitions + the decorative canvases */
+html.a11y-nomotion *,
+html.a11y-nomotion *::before,
+html.a11y-nomotion *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+html.a11y-nomotion canvas.fixed { display: none !important; }

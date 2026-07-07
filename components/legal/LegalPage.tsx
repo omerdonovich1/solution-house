@@ -31,7 +31,7 @@ export function LegalPage({
   const { lang } = useLang();
 
   return (
-    <main className="min-h-svh py-20 sm:py-28">
+    <main id="main-content" className="min-h-svh py-20 sm:py-28">
       <article className="shell mx-auto max-w-3xl">
         <a
           href="/"
