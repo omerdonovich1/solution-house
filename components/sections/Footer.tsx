@@ -1,6 +1,6 @@
 import { WHATSAPP_URL } from "@/lib/whatsapp";
 
-const EMAIL = "hello@solution.house";
+const EMAIL = "info@solutionhouse.dev";
 
 export function Footer() {
   return (

@@ -5,7 +5,7 @@ import { SectionHeader } from "@/components/SectionHeader";
 import { WHATSAPP_URL } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
 
-const EMAIL = "hello@solution.house";
+const EMAIL = "info@solutionhouse.dev";
 
 type Status = "idle" | "loading" | "done" | "error";
 
