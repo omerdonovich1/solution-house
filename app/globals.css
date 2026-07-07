@@ -291,6 +291,17 @@ body {
   }
 }
 
+/* ── Perf: skip rendering work for off-screen sections ─────────────────
+   content-visibility lets the browser skip layout + paint for sections that
+   aren't near the viewport — a big scroll win with no visual change. The
+   pinned scroll-stacking deck (#build) is excluded: its sticky children don't
+   behave under containment. contain-intrinsic-size (with `auto`) keeps the
+   scrollbar stable by remembering each section's real height once rendered. */
+main > section:not(#build) {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 720px;
+}
+
 /* ══════════════════════════════════════════════════════════════════════
    ACCESSIBILITY — toggles driven by the accessibility menu (classes on
    <html>) + skip link. Built to support WCAG 2.0 AA / IS 5568.

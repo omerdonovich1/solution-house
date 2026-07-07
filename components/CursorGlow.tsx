@@ -110,10 +110,22 @@ export function CursorGlow() {
       hasPointer = true;
     };
 
-    // mobile: the field drifts vertically with scroll for parallax
+    // mobile: the field drifts vertically with scroll for parallax.
+    // desktop: freeze the field while the page is actively scrolling — skips
+    // the heavy per-frame redraw during the exact moment scrolling must stay
+    // smooth (the field resumes ~150ms after scrolling stops).
     let scrollY = window.scrollY;
+    let scrolling = false;
+    let scrollTimer = 0;
     const onScroll = () => {
       scrollY = window.scrollY;
+      if (!coarse) {
+        scrolling = true;
+        clearTimeout(scrollTimer);
+        scrollTimer = window.setTimeout(() => {
+          scrolling = false;
+        }, 150);
+      }
     };
 
     let raf = 0;
@@ -129,6 +141,8 @@ export function CursorGlow() {
       raf = requestAnimationFrame(draw);
       frame++;
       if (frame % frameStep !== 0) return;
+      // hold the last frame while scrolling (desktop) — don't clear/redraw
+      if (scrolling) return;
       time += 0.016 * frameStep;
       mx += (tmx - mx) * 0.06;
       my += (tmy - my) * 0.06;
@@ -252,7 +266,7 @@ export function CursorGlow() {
     raf = requestAnimationFrame(draw);
     window.addEventListener("pointermove", onMove, { passive: true });
     window.addEventListener("resize", resize);
-    if (coarse) window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
     const onVis = () => {
       if (document.hidden) cancelAnimationFrame(raf);
       else raf = requestAnimationFrame(draw);
@@ -261,6 +275,7 @@ export function CursorGlow() {
 
     return () => {
       cancelAnimationFrame(raf);
+      clearTimeout(scrollTimer);
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("resize", resize);
       window.removeEventListener("scroll", onScroll);
