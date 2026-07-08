@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useSpring } from "framer-motion";
-import { LayoutGrid, Workflow, MessageSquare, ChevronLeft, type LucideIcon } from "lucide-react";
+import { LayoutGrid, Workflow, MessageSquare, ChevronLeft, Menu, type LucideIcon } from "lucide-react";
 import { EASE } from "@/lib/motion";
 import { LogoMark } from "@/components/ui/Logo";
 import { Magnetic } from "@/components/Magnetic";
@@ -81,28 +81,33 @@ export function Navbar() {
             onClick={() => (show ? setOpen(false) : openNow())}
             aria-label={tx({ he: "פתיחת תפריט ניווט", en: "Open navigation menu" })}
             aria-expanded={show}
-            className="pointer-events-auto absolute right-0 top-1/2 flex h-60 w-10 -translate-y-1/2 items-center justify-end"
+            className="pointer-events-auto absolute right-0 top-1/2 flex h-60 w-14 -translate-y-1/2 items-center justify-end"
           >
+            {/* a real, button-looking tab so it reads as "open me". Fades out
+                once the rail is out. */}
             <motion.span
               aria-hidden
               initial={false}
-              animate={{ opacity: show ? 0 : 1 }}
+              animate={{ opacity: show ? 0 : 1, x: show ? 12 : 0 }}
               transition={{ duration: 0.3, ease: EASE }}
-              className="flex items-center gap-0.5 pe-1"
+              className="relative"
             >
-              {/* chevron gently nudging inward — "pull me out" */}
+              {/* beckon: the tab pokes toward the page every few seconds */}
               <motion.span
-                animate={{ x: [0, -3.5, 0] }}
-                transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-                className="text-dot"
+                animate={{ x: [0, -6, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 2.6, ease: "easeInOut" }}
+                className="flex h-[78px] w-[36px] flex-col items-center justify-center gap-1 rounded-l-2xl border border-r-0 border-dot/45 bg-[#141417]/95 text-dot shadow-[0_0_26px_-2px_rgba(217,161,59,0.55)]"
               >
-                <ChevronLeft className="h-[18px] w-[18px]" strokeWidth={2.4} />
+                <Menu className="h-[18px] w-[18px]" strokeWidth={2} />
+                {/* directional cue — pull it out */}
+                <ChevronLeft className="h-4 w-4" strokeWidth={2.6} />
               </motion.span>
-              {/* glowing pill on the very edge, softly breathing to catch the eye */}
+              {/* soft breathing halo to draw the eye */}
               <motion.span
-                animate={{ opacity: [0.5, 1, 0.5], scaleY: [0.9, 1, 0.9] }}
+                aria-hidden
+                animate={{ opacity: [0.35, 0.75, 0.35] }}
                 transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
-                className="h-16 w-1.5 rounded-full bg-gradient-to-b from-dot/80 via-dot/50 to-dot/80 shadow-[0_0_14px_2px_rgba(217,161,59,0.45)]"
+                className="pointer-events-none absolute inset-0 -z-10 rounded-l-2xl bg-dot/25 blur-md"
               />
             </motion.span>
           </button>
