@@ -126,8 +126,8 @@ export function Hero() {
               className="block text-lg font-light leading-[1.75] text-mist sm:text-xl"
             >
               {tx({
-                he: "אנחנו מפתחים מערכות אוטומטיות, סוכני AI ו-SaaS שדוחפים עסקים קדימה. ",
-                en: "We build automated systems, AI agents and SaaS that move businesses forward. ",
+                he: "אנחנו מפתחים אתרים, דפי נחיתה, מערכות אוטומטיות, סוכני AI ו-SaaS שדוחפים עסקים קדימה. ",
+                en: "We build websites, landing pages, automated systems, AI agents and SaaS that move businesses forward. ",
               })}
               <strong className="font-semibold text-ivory">
                 {tx({
