@@ -30,10 +30,40 @@ export const viewport: Viewport = {
   themeColor: "#050505",
 };
 
+/* ─────────────────────────────────────────────────────────────────────
+   תצוגת הקישור בשיתופים (וואטסאפ / פייסבוק / טלגרם / לינקדאין / טוויטר)
+   נשלטת מכאן. כדי לשנות את מה שמופיע כשמשתפים את הקישור — ערוך את שלושת
+   הקבועים הבאים, ואז דחוף לגיט (git push) כדי שהאתר יתעדכן.
+   הערה: פלטפורמות מטמינות את התצוגה — אחרי שינוי אפשר "לרענן" אותה דרך
+   https://developers.facebook.com/tools/debug/ (מדביקים את הכתובת ולוחצים
+   Scrape Again). וואטסאפ מתעדכן בד"כ תוך זמן קצר לבד.
+   ───────────────────────────────────────────────────────────────────── */
+const SITE_URL = "https://solutionhouse.dev";
+const SITE_TITLE = "Solution House — מהנדסים את התשתית להצלחה שלכם";
+const SITE_DESCRIPTION =
+  "בית פתרונות טכנולוגיים. הנדסת תוכנה ללא פשרות עם אסתטיקה שקובעת סטנדרטים — אתרים, אפליקציות, מערכות, אוטומציות וסוכני AI.";
+
 export const metadata: Metadata = {
-  title: "Solution House — מהנדסים את התשתית להצלחה שלכם",
-  description:
-    "בית פתרונות טכנולוגיים. הנדסת תוכנה ללא פשרות עם אסתטיקה שקובעת סטנדרטים — אתרים, אפליקציות, מערכות, אוטומציות וסוכני AI.",
+  metadataBase: new URL(SITE_URL),
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
+  openGraph: {
+    type: "website",
+    url: SITE_URL,
+    siteName: "Solution House",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    locale: "he_IL",
+    // תמונת התצוגה (1200×630). שים קובץ בשם og.png בתיקיית public/ ואז
+    // בטל את ההערה מהשורה הבאה כדי שהתצוגה תכלול תמונה:
+    // images: [{ url: "/og.png", width: 1200, height: 630, alt: "Solution House" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    // images: ["/og.png"],
+  },
 };
 
 export default function RootLayout({
