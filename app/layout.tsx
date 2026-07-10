@@ -54,15 +54,13 @@ export const metadata: Metadata = {
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
     locale: "he_IL",
-    // תמונת התצוגה (1200×630). שים קובץ בשם og.png בתיקיית public/ ואז
-    // בטל את ההערה מהשורה הבאה כדי שהתצוגה תכלול תמונה:
-    // images: [{ url: "/og.png", width: 1200, height: 630, alt: "Solution House" }],
+    // תמונת התצוגה (1200×630) נוצרת אוטומטית ע"י app/opengraph-image.tsx —
+    // כדי לשנות אותה עורכים את הקובץ ההוא (אין צורך להגדיר images כאן).
   },
   twitter: {
     card: "summary_large_image",
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
-    // images: ["/og.png"],
   },
 };
 
