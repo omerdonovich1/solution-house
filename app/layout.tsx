@@ -39,7 +39,7 @@ export const viewport: Viewport = {
    Scrape Again). וואטסאפ מתעדכן בד"כ תוך זמן קצר לבד.
    ───────────────────────────────────────────────────────────────────── */
 const SITE_URL = "https://solutionhouse.dev";
-const SITE_TITLE = "Solution House — מהנדסים את התשתית להצלחה שלכם";
+const SITE_TITLE = "Solution House — בונים את התשתית להצלחה שלכם";
 const SITE_DESCRIPTION =
   "בית פתרונות טכנולוגיים. הנדסת תוכנה ללא פשרות עם אסתטיקה שקובעת סטנדרטים — אתרים, אפליקציות, מערכות, אוטומציות וסוכני AI.";
 
