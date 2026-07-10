@@ -16,11 +16,11 @@ const ITEMS: { href: string; label: Bi; Icon: LucideIcon }[] = [
 ];
 
 /**
- * A vertical command rail pinned to the right edge. It tucks itself off the
- * side and only slides out when the pointer approaches the edge (or when a
- * child is focused, for keyboard users). A slim amber handle peeks out so the
- * rail is discoverable. On touch devices — where there's no hover — it stays
- * fully visible.
+ * A vertical command rail pinned to the right edge. It stays tucked off the
+ * side and slides out on interaction: hover (desktop), a tap on the peek tab
+ * (any device), or focusing a child (keyboard). A menu tab beckons at the edge
+ * so it's discoverable. On touch it closes again after a nav item is tapped or
+ * the page is scrolled.
  */
 export function Navbar() {
   const tx = useTx();
@@ -33,19 +33,16 @@ export function Navbar() {
   });
 
   const [open, setOpen] = useState(false);
-  const [coarse, setCoarse] = useState(false); // touch / no-hover → always open
+  const [coarse, setCoarse] = useState(false); // touch / no-hover device
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // detect hover capability; on hover devices, briefly reveal then tuck away
-  // so first-time visitors notice the rail is there.
+  // detect hover capability, then briefly reveal the rail and tuck it away so
+  // first-time visitors (desktop AND mobile) notice it's there.
   useEffect(() => {
-    const canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-    setCoarse(!canHover);
-    if (canHover) {
-      setOpen(true);
-      const t = setTimeout(() => setOpen(false), 1600);
-      return () => clearTimeout(t);
-    }
+    setCoarse(!window.matchMedia("(hover: hover) and (pointer: fine)").matches);
+    setOpen(true);
+    const t = setTimeout(() => setOpen(false), 1600);
+    return () => clearTimeout(t);
   }, []);
 
   const openNow = () => {
@@ -56,8 +53,21 @@ export function Navbar() {
     if (closeTimer.current) clearTimeout(closeTimer.current);
     closeTimer.current = setTimeout(() => setOpen(false), 140);
   };
+  const closeMenu = () => setOpen(false);
 
-  const show = open || coarse;
+  // touch has no hover to close the rail — tuck it away when the page scrolls
+  useEffect(() => {
+    if (!coarse || !open) return;
+    const onScroll = () => setOpen(false);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [coarse, open]);
+
+  // hidden by default on every device; opens on hover (desktop), tap, or focus.
+  const show = open;
+  const hoverHandlers = coarse
+    ? {}
+    : { onMouseEnter: openNow, onMouseLeave: closeSoon };
 
   return (
     <>
@@ -73,16 +83,14 @@ export function Navbar() {
         {/* edge hover zone + peek handle. Opens on hover (desktop) and on
             tap/click (touch, or if hover-detection is wrong) so the rail is
             never unreachable. Hidden once the rail is out. */}
-        {!coarse && (
-          <button
-            type="button"
-            onMouseEnter={openNow}
-            onMouseLeave={closeSoon}
-            onClick={() => (show ? setOpen(false) : openNow())}
-            aria-label={tx({ he: "פתיחת תפריט ניווט", en: "Open navigation menu" })}
-            aria-expanded={show}
-            className="pointer-events-auto absolute right-0 top-1/2 flex h-60 w-14 -translate-y-1/2 items-center justify-end"
-          >
+        <button
+          type="button"
+          {...hoverHandlers}
+          onClick={() => (show ? setOpen(false) : openNow())}
+          aria-label={tx({ he: "פתיחת תפריט ניווט", en: "Open navigation menu" })}
+          aria-expanded={show}
+          className="pointer-events-auto absolute right-0 top-1/2 flex h-60 w-14 -translate-y-1/2 items-center justify-end"
+        >
             {/* a real, button-looking tab so it reads as "open me". Fades out
                 once the rail is out. */}
             <motion.span
@@ -110,12 +118,10 @@ export function Navbar() {
                 className="pointer-events-none absolute inset-0 -z-10 rounded-l-2xl bg-dot/25 blur-md"
               />
             </motion.span>
-          </button>
-        )}
+        </button>
 
         <motion.nav
-          onMouseEnter={openNow}
-          onMouseLeave={closeSoon}
+          {...hoverHandlers}
           onFocusCapture={openNow}
           onBlurCapture={closeSoon}
           initial={false}
@@ -129,6 +135,7 @@ export function Navbar() {
             <Magnetic strength={0.4} radius={44}>
               <a
                 href="#top"
+                onClick={closeMenu}
                 aria-label={tx({ he: "לראש הדף", en: "Top of page" })}
                 className="mb-1 grid h-11 place-items-center rounded-2xl transition-colors duration-300 hover:bg-white/[0.06]"
               >
@@ -142,6 +149,7 @@ export function Navbar() {
               <Magnetic key={href} strength={0.4} radius={44}>
                 <a
                   href={href}
+                  onClick={closeMenu}
                   aria-label={tx(label)}
                   title={tx(label)}
                   className="group flex items-center gap-2.5 rounded-2xl p-1.5 text-mist transition-colors duration-300 hover:bg-white/[0.06] hover:text-ivory sm:py-2.5 sm:pe-2.5 sm:ps-3.5"
