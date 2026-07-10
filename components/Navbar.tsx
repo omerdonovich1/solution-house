@@ -96,7 +96,9 @@ export function Navbar() {
             <motion.span
               aria-hidden
               initial={false}
-              animate={{ opacity: show ? 0 : 1, x: show ? 12 : 0 }}
+              // on touch the tab sits smaller and tucked a bit further off the
+              // edge, so it stays discreet (the invisible hit area is unchanged)
+              animate={{ opacity: show ? 0 : coarse ? 0.85 : 1, x: show ? 12 : coarse ? 22 : 0 }}
               transition={{ duration: 0.3, ease: EASE }}
               className="relative"
             >
@@ -104,19 +106,25 @@ export function Navbar() {
               <motion.span
                 animate={{ x: [0, -6, 0] }}
                 transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 2.6, ease: "easeInOut" }}
-                className="flex h-[78px] w-[36px] flex-col items-center justify-center gap-1 rounded-l-2xl border border-r-0 border-dot/45 bg-[#141417]/95 text-dot shadow-[0_0_26px_-2px_rgba(217,161,59,0.55)]"
+                className={
+                  coarse
+                    ? "flex h-[58px] w-[27px] flex-col items-center justify-center gap-0.5 rounded-l-xl border border-r-0 border-dot/25 bg-[#141417]/75 text-dot/90"
+                    : "flex h-[78px] w-[36px] flex-col items-center justify-center gap-1 rounded-l-2xl border border-r-0 border-dot/45 bg-[#141417]/95 text-dot shadow-[0_0_26px_-2px_rgba(217,161,59,0.55)]"
+                }
               >
-                <Menu className="h-[18px] w-[18px]" strokeWidth={2} />
+                <Menu className={coarse ? "h-[14px] w-[14px]" : "h-[18px] w-[18px]"} strokeWidth={2} />
                 {/* directional cue — pull it out */}
-                <ChevronLeft className="h-4 w-4" strokeWidth={2.6} />
+                <ChevronLeft className={coarse ? "h-3 w-3" : "h-4 w-4"} strokeWidth={2.6} />
               </motion.span>
-              {/* soft breathing halo to draw the eye */}
-              <motion.span
-                aria-hidden
-                animate={{ opacity: [0.35, 0.75, 0.35] }}
-                transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
-                className="pointer-events-none absolute inset-0 -z-10 rounded-l-2xl bg-dot/25 blur-md"
-              />
+              {/* soft breathing halo — desktop only, keeps the mobile tab quiet */}
+              {!coarse && (
+                <motion.span
+                  aria-hidden
+                  animate={{ opacity: [0.35, 0.75, 0.35] }}
+                  transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+                  className="pointer-events-none absolute inset-0 -z-10 rounded-l-2xl bg-dot/25 blur-md"
+                />
+              )}
             </motion.span>
         </button>
 
