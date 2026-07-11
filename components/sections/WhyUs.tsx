@@ -57,13 +57,13 @@ export function WhyUs() {
           initial="hidden"
           whileInView="show"
           viewport={viewportOnce}
-          className="mt-10 grid gap-4 sm:mt-14 sm:gap-5 md:grid-cols-2"
+          className="mt-10 grid auto-rows-fr gap-4 sm:mt-14 sm:gap-5 md:grid-cols-2"
         >
           {REASONS.map(({ Icon, title, desc }) => (
-            <motion.div key={title.en} variants={fadeUp}>
-              <Magnetic strength={0.14} radius={26}>
+            <motion.div key={title.en} variants={fadeUp} className="h-full">
+              <Magnetic strength={0.14} radius={26} className="h-full">
                 <div
-                  className={`liquid-glass group relative overflow-hidden rounded-3xl p-6 sm:p-8 ${cardHover}`}
+                  className={`liquid-glass group relative h-full overflow-hidden rounded-3xl p-6 sm:p-8 ${cardHover}`}
                 >
                   <div className="flex items-start gap-5">
                 <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-dot/10 text-dot transition-colors duration-500 group-hover:bg-dot/20">

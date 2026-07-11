@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import type { ReactNode } from "react";
 import { blurIn, fadeUp, maskRise, viewportOnce } from "@/lib/motion";
 import { cn } from "@/lib/utils";
+import { useLang } from "@/lib/i18n";
 
 interface SectionHeaderProps {
   /** Retained in the API for callers; no longer rendered. */
@@ -45,8 +46,13 @@ export function SectionHeader({
   className,
   center,
 }: SectionHeaderProps) {
+  const { lang } = useLang();
   return (
+    // key by language: switching HE⇄EN swaps the title text, which would
+    // otherwise leave the word-by-word mask reveal stuck in its hidden state
+    // (whileInView already fired once). Remounting re-runs the reveal cleanly.
     <motion.div
+      key={lang}
       variants={headStagger}
       initial="hidden"
       whileInView="show"
