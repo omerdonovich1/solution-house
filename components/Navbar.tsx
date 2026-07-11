@@ -16,11 +16,11 @@ const ITEMS: { href: string; label: Bi; Icon: LucideIcon }[] = [
 ];
 
 /**
- * A vertical command rail pinned to the right edge. It stays tucked off the
- * side and slides out on interaction: hover (desktop), a tap on the peek tab
- * (any device), or focusing a child (keyboard). A menu tab beckons at the edge
- * so it's discoverable. On touch it closes again after a nav item is tapped or
- * the page is scrolled.
+ * A vertical command rail pinned to the right edge. It's hidden on the opening
+ * (logo) screen and its menu tab fades in once the visitor scrolls down. The
+ * rail itself stays tucked off the side and slides out on interaction: hover
+ * (desktop), a tap on the tab (any device), or focusing a child (keyboard). On
+ * touch it closes again after a nav item is tapped or the page is scrolled.
  */
 export function Navbar() {
   const tx = useTx();
@@ -34,15 +34,24 @@ export function Navbar() {
 
   const [open, setOpen] = useState(false);
   const [coarse, setCoarse] = useState(false); // touch / no-hover device
+  const [scrolled, setScrolled] = useState(false); // past the opening screen
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // detect hover capability, then briefly reveal the rail and tuck it away so
-  // first-time visitors (desktop AND mobile) notice it's there.
   useEffect(() => {
     setCoarse(!window.matchMedia("(hover: hover) and (pointer: fine)").matches);
-    setOpen(true);
-    const t = setTimeout(() => setOpen(false), 1600);
-    return () => clearTimeout(t);
+  }, []);
+
+  // the rail stays hidden on the opening (logo) screen and reveals once the
+  // visitor starts scrolling down; hidden again — and tucked shut — at the top.
+  useEffect(() => {
+    const onScroll = () => {
+      const past = window.scrollY > window.innerHeight * 0.45;
+      setScrolled(past);
+      if (!past) setOpen(false);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   const openNow = () => {
@@ -85,21 +94,22 @@ export function Navbar() {
             never unreachable. Hidden once the rail is out. */}
         <button
           type="button"
-          {...hoverHandlers}
+          {...(scrolled ? hoverHandlers : {})}
           onClick={() => (show ? setOpen(false) : openNow())}
           aria-label={tx({ he: "פתיחת תפריט ניווט", en: "Open navigation menu" })}
           aria-expanded={show}
-          className="pointer-events-auto absolute right-0 top-1/2 flex h-60 w-14 -translate-y-1/2 items-center justify-end"
+          tabIndex={scrolled ? 0 : -1}
+          className={`absolute right-0 top-1/2 flex h-60 w-14 -translate-y-1/2 items-center justify-end ${scrolled ? "pointer-events-auto" : "pointer-events-none"}`}
         >
-            {/* a real, button-looking tab so it reads as "open me". Fades out
-                once the rail is out. */}
+            {/* a real, button-looking tab so it reads as "open me". Hidden on
+                the opening screen; fades out once the rail is out. */}
             <motion.span
               aria-hidden
               initial={false}
               // on touch the tab sits smaller and tucked a bit further off the
               // edge, so it stays discreet (the invisible hit area is unchanged)
-              animate={{ opacity: show ? 0 : coarse ? 0.85 : 1, x: show ? 12 : coarse ? 22 : 0 }}
-              transition={{ duration: 0.3, ease: EASE }}
+              animate={{ opacity: !scrolled || show ? 0 : coarse ? 0.85 : 1, x: show ? 12 : coarse ? 22 : 0 }}
+              transition={{ duration: 0.35, ease: EASE }}
               className="relative"
             >
               {/* beckon: the tab pokes toward the page every few seconds */}

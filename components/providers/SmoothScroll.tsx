@@ -10,6 +10,11 @@ import Lenis from "lenis";
  */
 export function SmoothScroll() {
   useEffect(() => {
+    // always open on the first (logo) screen — don't let the browser restore a
+    // previous scroll position on reload. Deep links with a #hash are honoured.
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+    if (!window.location.hash) window.scrollTo(0, 0);
+
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const lenis = new Lenis({
