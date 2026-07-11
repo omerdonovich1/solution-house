@@ -26,7 +26,7 @@ function Words({ text, className }: { text: string; className?: string }) {
     <>
       {text.split(" ").map((word, i) => (
         <span key={`${word}-${i}`}>
-          <span className="inline-block overflow-hidden pb-[0.12em] -mb-[0.12em] align-top">
+          <span className="inline-block overflow-hidden pb-[0.24em] -mb-[0.24em] align-top">
             <motion.span variants={maskRise} className={`inline-block ${className ?? ""}`}>
               {word}
             </motion.span>
