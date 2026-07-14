@@ -1,12 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
-import { Star, ChevronRight, ChevronLeft } from "lucide-react";
 import { SectionHeader } from "@/components/SectionHeader";
 import { Magnetic } from "@/components/Magnetic";
-import { fadeUp, stagger, viewportOnce, EASE } from "@/lib/motion";
-import { cn } from "@/lib/utils";
+import { fadeUp, stagger, viewportOnce } from "@/lib/motion";
 import { useTx, type Bi } from "@/lib/i18n";
 
 interface CaseStudy {
@@ -106,66 +103,11 @@ const CASES: readonly CaseStudy[] = [
   },
 ];
 
-interface Testimonial {
-  readonly quote: Bi;
-  readonly name: Bi;
-  readonly role: Bi;
-}
-
-const TESTIMONIALS: readonly Testimonial[] = [
-  {
-    quote: {
-      he: "מערכת ניהול צי הרכב שינתה לנו את היום-יום — מעקב ידני באקסלים הפך למסך אחד. חסכנו עשרות שעות בחודש.",
-      en: "The fleet management system changed our day-to-day — manual spreadsheet tracking became a single screen. We save dozens of hours a month.",
-    },
-    name: { he: "מיכל א׳", en: "Michal A." },
-    role: { he: "מנהלת תפעול, ניהול צי רכב", en: "Operations Manager, Fleet Management" },
-  },
-  {
-    quote: {
-      he: "מערכת בקרת האיכות נתנה לנו שליטה מלאה על הייצור — בלי אקסלים ובלי ניחושים.",
-      en: "The quality control system gave us full control over production — no spreadsheets, no guesswork.",
-    },
-    name: { he: "רון ד׳", en: "Ron D." },
-    role: { he: "מנהל איכות, חברת ייצור", en: "Quality Manager, Manufacturing Company" },
-  },
-  {
-    quote: {
-      he: "האתר החדש מרגיש בדיוק כמו המותג שלנו — מהיר, נקי וממיר הרבה יותר.",
-      en: "The new site feels exactly like our brand — fast, clean, and converting far better.",
-    },
-    name: { he: "יעל כ׳", en: "Yael C." },
-    role: { he: "בעלים, מותג איקומרס", en: "Owner, E-commerce Brand" },
-  },
-  {
-    quote: {
-      he: "סוכן ה-AI עונה לרוב הפניות לבד, מסביב לשעון — הלקוחות מרוצים יותר מאי פעם.",
-      en: "The AI agent handles most inquiries on its own, around the clock — customers are happier than ever.",
-    },
-    name: { he: "אבי מ׳", en: "Avi M." },
-    role: { he: "מנהל שירות לקוחות", en: "Customer Service Manager" },
-  },
-];
-
 const cardHover =
   "transition-[transform,box-shadow] duration-500 ease-out hover:-translate-y-1 hover:shadow-[0_0_0_1px_rgba(217,161,59,0.3),0_24px_60px_-24px_rgba(217,161,59,0.28)]";
 
-function Stars() {
-  const tx = useTx();
-  return (
-    <div className="flex gap-0.5" dir="ltr" aria-label={tx({ he: "5 מתוך 5 כוכבים", en: "5 out of 5 stars" })}>
-      {Array.from({ length: 5 }).map((_, i) => (
-        <Star key={i} className="h-3.5 w-3.5 fill-dot text-dot" />
-      ))}
-    </div>
-  );
-}
-
 export function SocialProof() {
   const tx = useTx();
-  const [page, setPage] = useState(0);
-  const perView = 2; // md+ shows two testimonials; the rail slides in pairs
-  const maxPage = Math.max(0, Math.ceil(TESTIMONIALS.length / perView) - 1);
 
   return (
     <section id="stories" className="py-16 sm:py-24">
@@ -226,71 +168,6 @@ export function SocialProof() {
             </motion.div>
           ))}
         </motion.div>
-
-        {/* testimonials rail */}
-        <div className="mt-8 sm:mt-10">
-          <div className="mb-4 flex items-center justify-between">
-            <h3 className="text-lg font-bold text-ivory sm:text-xl">{tx({ he: "מה אומרים עלינו", en: "What clients say" })}</h3>
-            <div className="flex gap-2">
-              <button
-                type="button"
-                aria-label={tx({ he: "הקודם", en: "Previous" })}
-                onClick={() => setPage((p) => Math.max(0, p - 1))}
-                disabled={page === 0}
-                className="grid h-9 w-9 place-items-center rounded-full border border-white/15 text-ivory transition-all duration-300 hover:border-dot hover:text-dot disabled:opacity-30"
-              >
-                <ChevronRight className="h-4 w-4" />
-              </button>
-              <button
-                type="button"
-                aria-label={tx({ he: "הבא", en: "Next" })}
-                onClick={() => setPage((p) => Math.min(maxPage, p + 1))}
-                disabled={page === maxPage}
-                className="grid h-9 w-9 place-items-center rounded-full border border-white/15 text-ivory transition-all duration-300 hover:border-dot hover:text-dot disabled:opacity-30"
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </button>
-            </div>
-          </div>
-
-          <div className="overflow-hidden">
-            <div
-              className="flex transition-transform duration-500 ease-out"
-              style={{ transform: `translateX(${page * 100}%)` }}
-            >
-              {TESTIMONIALS.map((t) => (
-                <div key={t.name.en} className="w-full shrink-0 px-1.5 sm:w-1/2">
-                  <figure className={`liquid-glass flex h-full flex-col rounded-3xl p-6 ${cardHover}`}>
-                    <Stars />
-                    <blockquote className="mt-3 flex-1 text-[15px] leading-relaxed text-body">
-                      “{tx(t.quote)}”
-                    </blockquote>
-                    <figcaption className="mt-5 border-t border-white/[0.08] pt-4">
-                      <div className="font-bold text-ivory">{tx(t.name)}</div>
-                      <div className="text-[13px] text-mist">{tx(t.role)}</div>
-                    </figcaption>
-                  </figure>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* page dots */}
-          <div className="mt-5 flex justify-center gap-2">
-            {Array.from({ length: maxPage + 1 }).map((_, i) => (
-              <button
-                key={i}
-                type="button"
-                aria-label={tx({ he: `עמוד ${i + 1}`, en: `Page ${i + 1}` })}
-                onClick={() => setPage(i)}
-                className={cn(
-                  "h-1.5 rounded-full transition-all duration-300",
-                  i === page ? "w-6 bg-dot" : "w-1.5 bg-white/20 hover:bg-white/40"
-                )}
-              />
-            ))}
-          </div>
-        </div>
       </div>
     </section>
   );
