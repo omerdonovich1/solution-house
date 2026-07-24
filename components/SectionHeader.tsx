@@ -78,8 +78,11 @@ export function SectionHeader({
         <motion.p
           variants={blurIn}
           className={cn(
-            "mt-5 max-w-2xl text-base font-light leading-relaxed text-mist sm:mt-7 sm:text-xl",
-            center ? "mx-auto" : "ms-auto"
+            // when not centered, the lead shares the title's inline start and
+            // runs to a narrower measure — an editorial column, not a block
+            // pushed to the opposite edge.
+            "mt-5 max-w-xl text-base font-light leading-relaxed text-mist sm:mt-7 sm:text-xl",
+            center && "mx-auto max-w-2xl"
           )}
         >
           {lead}

@@ -51,9 +51,9 @@ export function FAQ() {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="mx-auto max-w-3xl py-16 sm:py-24">
+    <section id="faq" className="mx-auto max-w-3xl py-14 sm:py-20">
       <div className="shell">
-        <SectionHeader center title={tx({ he: "שאלות נפוצות", en: "FAQ" })} />
+        <SectionHeader title={tx({ he: "שאלות נפוצות", en: "FAQ" })} />
 
         <div className="mt-10 space-y-3 sm:mt-14">
           {FAQS.map((f, i) => {
@@ -62,7 +62,7 @@ export function FAQ() {
               <div
                 key={f.q.en}
                 className={cn(
-                  "liquid-glass overflow-hidden rounded-2xl border-r-2 transition-colors duration-300",
+                  "panel overflow-hidden rounded-2xl border-r-2 transition-colors duration-300",
                   isOpen ? "border-r-dot" : "border-r-transparent"
                 )}
               >

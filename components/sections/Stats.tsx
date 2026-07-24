@@ -71,7 +71,7 @@ export function Stats() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-12% 0px" }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="liquid-glass grid grid-cols-2 gap-y-8 rounded-3xl px-6 py-9 sm:gap-y-0 sm:px-10 sm:py-11 md:grid-cols-4"
+          className="panel grid grid-cols-2 gap-y-8 rounded-3xl px-6 py-9 sm:gap-y-0 sm:px-10 sm:py-11 md:grid-cols-4"
         >
           {STATS.map((s) => (
             <Counter key={s.label.en} stat={s} run={inView} />

@@ -1,88 +1,87 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Zap, ShieldCheck, Clock, Code2, type LucideIcon } from "lucide-react";
 import { SectionHeader } from "@/components/SectionHeader";
-import { Magnetic } from "@/components/Magnetic";
 import { fadeUp, stagger, viewportOnce } from "@/lib/motion";
 import { useTx, type Bi } from "@/lib/i18n";
 
-const REASONS: { Icon: LucideIcon; title: Bi; desc: Bi }[] = [
+/**
+ * Deliberately NOT a grid of icon-in-a-rounded-square cards — that module is
+ * the visual signature of a generated landing page, and the icons were literal
+ * (a bolt for "speed", a shield for "transparency"). This is an editorial
+ * spec-sheet instead: a numeral, a claim, and the substance behind it, set on
+ * the bare canvas with hairlines doing the dividing.
+ */
+
+const REASONS: { title: Bi; desc: Bi }[] = [
   {
-    Icon: Zap,
     title: { he: "מהירות ביצוע", en: "Speed of delivery" },
     desc: {
-      he: "פרויקטים באוויר תוך שבועות, לא חודשים. אנחנו מאמינים במהירות בלי פשרות.",
-      en: "Projects live in weeks, not months. We believe in speed without compromise.",
+      he: "רוב הפרויקטים עולים לאוויר תוך 2–6 שבועות. לוח זמנים מדויק אתם מקבלים כבר בשיחה הראשונה.",
+      en: "Most projects go live within 2–6 weeks. You get a precise timeline in the very first call.",
     },
   },
   {
-    Icon: ShieldCheck,
     title: { he: "שקיפות מלאה", en: "Full transparency" },
     desc: {
-      he: "מחיר ברור מראש, עדכונים שבועיים, אין הפתעות. אתם יודעים בדיוק מה קורה.",
-      en: "A clear price up front, weekly updates, no surprises. You always know exactly what's happening.",
+      he: "מחיר סגור מראש, עדכון התקדמות כל שבוע, ואפשרות לעצור בסוף כל שלב. אין עלויות נסתרות.",
+      en: "A price agreed up front, a progress update every week, and the option to stop after any stage. No hidden costs.",
     },
   },
   {
-    Icon: Clock,
-    title: { he: "תמיכה 24/7", en: "24/7 support" },
+    title: { he: "אחריות אחרי העלייה", en: "We stay after launch" },
     desc: {
-      he: "משהו נשבר? אנחנו כאן. לא משנה מתי — הפתרון שלכם תמיד מוגן.",
-      en: "Something broke? We're here. No matter when — your solution is always covered.",
+      he: "תמיכה, תחזוקה והרחבות הן חלק מהחבילה — לא פרויקט נפרד שמתומחר מחדש.",
+      en: "Support, maintenance and enhancements are part of the package — not a separate, re-quoted project.",
     },
   },
   {
-    Icon: Code2,
-    title: { he: "בנייה גמישה", en: "Flexible by design" },
+    title: { he: "פותרים, לא מבצעים", en: "We solve, not just build" },
     desc: {
-      he: "נשארים גמישים ולא מקובעים כדי להגיע לתוצאה מצוינת.",
-      en: "We stay flexible and open-minded to reach an excellent result.",
+      he: "קודם מבינים את שורש הבעיה ורק אז בונים. רוב הפרויקטים נכשלים כי פתרו את הבעיה הלא נכונה.",
+      en: "We understand the root problem before building. Most projects fail because they solved the wrong problem.",
     },
   },
 ];
 
-const cardHover =
-  "transition-[transform,box-shadow] duration-500 ease-out hover:-translate-y-1 hover:shadow-[0_0_0_1px_rgba(217,161,59,0.3),0_24px_60px_-24px_rgba(217,161,59,0.28)]";
-
 export function WhyUs() {
   const tx = useTx();
   return (
-    <section id="why" className="py-16 sm:py-24">
+    <section id="why" className="py-20 sm:py-32">
       <div className="shell">
-        <SectionHeader center title={tx({ he: "למה דווקא אנחנו?", en: "Why us?" })} />
+        <SectionHeader title={tx({ he: "למה דווקא אנחנו?", en: "Why us?" })} />
 
-        <motion.div
+        <motion.ol
           variants={stagger}
           initial="hidden"
           whileInView="show"
           viewport={viewportOnce}
-          className="mt-10 grid auto-rows-fr gap-4 sm:mt-14 sm:gap-5 md:grid-cols-2"
+          className="mt-12 sm:mt-16"
         >
-          {REASONS.map(({ Icon, title, desc }) => (
-            <motion.div key={title.en} variants={fadeUp} className="h-full">
-              <Magnetic strength={0.14} radius={26} className="h-full">
-                <div
-                  className={`liquid-glass group relative h-full overflow-hidden rounded-3xl p-6 sm:p-8 ${cardHover}`}
-                >
-                  <div className="flex items-start gap-5">
-                <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-dot/10 text-dot transition-colors duration-500 group-hover:bg-dot/20">
-                  <Icon className="h-6 w-6" strokeWidth={1.7} />
-                </span>
-                <div>
-                  <h3 className="text-xl font-black tracking-tight text-ivory sm:text-2xl">
-                    {tx(title)}
-                  </h3>
-                  <p className="mt-2 text-[15px] font-light leading-relaxed text-mist sm:text-base">
-                    {tx(desc)}
-                  </p>
-                </div>
-                  </div>
-                </div>
-              </Magnetic>
-            </motion.div>
+          {REASONS.map(({ title, desc }, i) => (
+            <motion.li
+              key={title.en}
+              variants={fadeUp}
+              className="group grid grid-cols-[auto_1fr] items-baseline gap-x-5 gap-y-2 border-t border-white/[0.08] py-7 transition-colors duration-500 last:border-b hover:border-white/20 sm:grid-cols-[4.5rem_minmax(0,15rem)_1fr] sm:gap-x-10 sm:py-9"
+            >
+              <span
+                dir="ltr"
+                aria-hidden
+                className="text-[13px] font-medium tabular-nums text-mist/50 transition-colors duration-500 group-hover:text-dot sm:text-[15px]"
+              >
+                {String(i + 1).padStart(2, "0")}
+              </span>
+
+              <h3 className="text-[1.45rem] font-black leading-tight tracking-tightest text-ivory sm:text-[1.9rem]">
+                {tx(title)}
+              </h3>
+
+              <p className="col-span-2 max-w-xl text-[15px] font-light leading-relaxed text-mist sm:col-span-1 sm:text-base">
+                {tx(desc)}
+              </p>
+            </motion.li>
           ))}
-        </motion.div>
+        </motion.ol>
       </div>
     </section>
   );

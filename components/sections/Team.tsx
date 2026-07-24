@@ -38,16 +38,17 @@ const TEAM: readonly Member[] = [
   },
 ];
 
+// a quiet lift — the panel itself handles the border/fill warm-up. The old
+// gold glow was part of why the accent stopped reading as an accent.
 const cardHover =
-  "transition-[transform,box-shadow] duration-500 ease-out hover:-translate-y-1 hover:shadow-[0_0_0_1px_rgba(217,161,59,0.3),0_24px_60px_-24px_rgba(217,161,59,0.28)]";
+  "transition-transform duration-500 ease-out hover:-translate-y-1";
 
 export function Team() {
   const tx = useTx();
   return (
-    <section id="team" className="py-16 sm:py-24">
+    <section id="team" className="py-14 sm:py-20">
       <div className="shell">
         <SectionHeader
-          center
           title={tx({ he: "הצוות שלנו", en: "Our team" })}
           lead={tx({
             he: "האנשים שבונים את הפתרונות שלכם.",
@@ -66,7 +67,7 @@ export function Team() {
             <motion.div key={m.name.en} variants={fadeUp}>
               <Magnetic strength={0.13} radius={30} className="h-full">
                 <div
-                  className={`liquid-glass group relative flex h-full flex-col items-center rounded-3xl p-7 text-center ${cardHover}`}
+                  className={`panel group relative flex h-full flex-col items-center rounded-3xl p-7 text-center ${cardHover}`}
                 >
               {/* avatar — gold ring, gently floating animated portrait
                   (initials show underneath until the image loads / if missing) */}

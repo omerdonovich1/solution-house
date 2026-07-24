@@ -107,10 +107,10 @@ export function Hero() {
             variants={heroStagger}
             className="mx-auto max-w-[16ch] text-balance font-black leading-[1.08] tracking-tightest text-[clamp(2.15rem,8vw,8rem)] sm:leading-[1.02]"
           >
-            <span className="block text-gradient">
+            <span className="block text-ivory">
               <Words text={tx({ he: "בונים את התשתית", en: "We build the" })} />
             </span>
-            <span className="block text-gradient">
+            <span className="block text-ivory">
               <Words text={tx({ he: "להצלחה שלכם.", en: "infrastructure for growth." })} />
             </span>
           </motion.h1>
@@ -145,17 +145,13 @@ export function Hero() {
             className="mt-9 flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:items-center sm:gap-3.5"
           >
             <motion.div variants={fadeUp} className="w-full sm:w-auto">
-              <MagneticButton
-                href="#contact"
-                variant="solid"
-                className="w-full !bg-dot !text-ink hover:!bg-dot hover:shadow-[0_16px_50px_-12px_rgba(217,161,59,0.6)] sm:w-auto"
-              >
+              <MagneticButton href="#contact" variant="solid" className="w-full sm:w-auto">
                 {tx({ he: "קבעו שיחת אבחון חינם", en: "Book a free discovery call" })}
-                <ArrowLeft className="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-1" />
+                <ArrowLeft className="h-4 w-4 transition-transform duration-500 ease-out group-hover:-translate-x-1.5 ltr:-scale-x-100 ltr:group-hover:translate-x-1.5" />
               </MagneticButton>
             </motion.div>
             <motion.div variants={fadeUp} className="w-full sm:w-auto">
-              <MagneticButton href="#build" variant="ghost" strength={8} className="w-full sm:w-auto">
+              <MagneticButton href="#build" variant="ghost" className="w-full sm:w-auto">
                 {tx({ he: "צפו בפרויקטים שלנו", en: "See our work" })}
               </MagneticButton>
             </motion.div>

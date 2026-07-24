@@ -103,17 +103,18 @@ const CASES: readonly CaseStudy[] = [
   },
 ];
 
+// a quiet lift — the panel itself handles the border/fill warm-up. The old
+// gold glow was part of why the accent stopped reading as an accent.
 const cardHover =
-  "transition-[transform,box-shadow] duration-500 ease-out hover:-translate-y-1 hover:shadow-[0_0_0_1px_rgba(217,161,59,0.3),0_24px_60px_-24px_rgba(217,161,59,0.28)]";
+  "transition-transform duration-500 ease-out hover:-translate-y-1";
 
 export function SocialProof() {
   const tx = useTx();
 
   return (
-    <section id="stories" className="py-16 sm:py-24">
+    <section id="stories" className="py-20 sm:py-32">
       <div className="shell">
         <SectionHeader
-          center
           title={tx({ he: "סיפורי הצלחה.", en: "Success stories." })}
           lead={tx({
             he: "לא מבטיחים — מראים. הנה כמה מהעסקים שכבר עובדים אחרת.",
@@ -133,7 +134,7 @@ export function SocialProof() {
             <motion.div key={c.client.en} variants={fadeUp}>
               <Magnetic strength={0.12} radius={26} className="h-full">
                 <article
-                  className={`liquid-glass group relative flex h-full flex-col overflow-hidden rounded-3xl p-6 sm:p-7 ${cardHover}`}
+                  className={`panel group relative flex h-full flex-col overflow-hidden rounded-3xl p-6 sm:p-7 ${cardHover}`}
                 >
               <span
                 dir="ltr"

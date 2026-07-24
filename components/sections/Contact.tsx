@@ -49,7 +49,7 @@ export function Contact() {
       : tx({ he: "שליחה", en: "Send" });
 
   return (
-    <section id="contact" className="mx-auto max-w-3xl py-16 sm:py-24">
+    <section id="contact" className="mx-auto max-w-3xl py-20 sm:py-32">
       <div className="shell">
         <SectionHeader
           index="03"
@@ -92,7 +92,7 @@ export function Contact() {
           <button
             type="submit"
             disabled={status === "loading"}
-            className="sm:col-span-2 mt-2 rounded-pill bg-ivory px-6 py-4 text-base font-bold text-ink transition-[transform,background-color] duration-300 hover:-translate-y-0.5 hover:bg-dot disabled:opacity-60"
+            className="sm:col-span-2 mt-2 rounded-[10px] bg-dot px-6 py-4 text-base font-bold text-ink transition-shadow duration-500 hover:shadow-[0_18px_50px_-14px_rgba(217,161,59,0.55)] disabled:opacity-60"
           >
             {button}
           </button>

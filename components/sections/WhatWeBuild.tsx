@@ -11,7 +11,7 @@ import { useTx, type Bi } from "@/lib/i18n";
 
 /**
  * Section 01 — a scroll-stacking deck of what we build. Every category
- * is a full-width liquid-glass card (design shells + real, sensitive-
+ * is a full-width panel card (design shells + real, sensitive-
  * data-blurred client work) that pins and gets covered by the next.
  * Cards with several examples crossfade through them; hover pauses.
  */
@@ -124,7 +124,7 @@ function CategoryCard({ cat, index }: { cat: Category; index: number }) {
     <div
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="liquid-glass group relative overflow-hidden rounded-3xl p-5 sm:p-7 lg:p-8"
+      className="panel group relative overflow-hidden rounded-3xl p-5 sm:p-7 lg:p-8"
     >
       <div className="grid gap-5 lg:grid-cols-[0.8fr_1.35fr] lg:items-center lg:gap-10">
         {/* words */}
@@ -132,7 +132,7 @@ function CategoryCard({ cat, index }: { cat: Category; index: number }) {
           <span dir="ltr" className="mb-3 hidden text-[12px] tracking-[0.2em] text-mist/70 lg:block">
             {String(index + 1).padStart(2, "0")} / {String(CATEGORIES.length).padStart(2, "0")}
           </span>
-          <h3 className="text-gradient text-3xl font-black tracking-tightest sm:text-4xl">
+          <h3 className="text-ivory text-3xl font-black tracking-tightest sm:text-4xl">
             {tx(cat.name)}
           </h3>
           <p className="mt-3 max-w-md text-[15px] font-light leading-relaxed text-body sm:text-base">
@@ -250,7 +250,7 @@ function MobileServicesCarousel() {
             <article
               key={cat.id}
               data-card
-              className="liquid-glass w-[82vw] max-w-[340px] shrink-0 snap-center overflow-hidden rounded-3xl"
+              className="panel w-[82vw] max-w-[340px] shrink-0 snap-center overflow-hidden rounded-3xl"
             >
               <div className="relative h-[185px] border-b border-white/[0.08]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -269,7 +269,7 @@ function MobileServicesCarousel() {
                 </span>
               </div>
               <div className="p-5">
-                <h3 className="text-gradient text-2xl font-black tracking-tightest">{tx(cat.name)}</h3>
+                <h3 className="text-ivory text-2xl font-black tracking-tightest">{tx(cat.name)}</h3>
                 <p className="mt-2 text-[14px] font-light leading-relaxed text-body">{tx(cat.blurb)}</p>
               </div>
             </article>
@@ -302,7 +302,6 @@ export function WhatWeBuild() {
     <section id="build" className="py-16 sm:py-24">
       <div className="shell">
         <SectionHeader
-          center
           index="01"
           title={tx({ he: "פתרון טכנולוגי לכל אתגר עסקי.", en: "A technological solution for every business challenge." })}
           lead={tx({

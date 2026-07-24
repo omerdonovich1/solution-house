@@ -85,13 +85,10 @@ export default function RootLayout({
           aria-hidden
           className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(120%_90%_at_50%_-10%,#151515_0%,#0B0B0B_45%,#050505_100%)]"
         />
-        {/* ambient color field — soft drifting light the Liquid Glass
-            panels refract; without it, backdrop-blur has nothing to bend */}
-        <div aria-hidden className="pointer-events-none fixed inset-0 -z-[8] overflow-hidden">
-          <div className="absolute -top-[12%] left-[6%] h-[74vw] w-[74vw] animate-drift-slow rounded-full bg-[#3b6fb8] opacity-[0.11] blur-[80px] sm:h-[46vw] sm:w-[46vw] sm:blur-[130px]" />
-          <div className="absolute -right-[12%] top-[34%] h-[60vw] w-[60vw] animate-drift rounded-full bg-[#7d5fd3] opacity-[0.09] blur-[80px] sm:h-[38vw] sm:w-[38vw] sm:blur-[130px]" />
-          <div className="absolute -bottom-[16%] left-[26%] h-[66vw] w-[66vw] animate-drift-slow rounded-full bg-[#D9A13B] opacity-[0.06] blur-[90px] sm:h-[42vw] sm:w-[42vw] sm:blur-[140px]" />
-        </div>
+        {/* The drifting blue/purple/gold blobs that used to live here were
+            removed: they muddied the black, fought the monochrome thesis of
+            the palette, and were one of six ambient systems running at once.
+            The canvas is now the radial wash above plus the neural field. */}
         <LanguageProvider>
           <SkipLink />
           {children}

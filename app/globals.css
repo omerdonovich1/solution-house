@@ -91,6 +91,23 @@ body {
    default `position: relative`. In the utilities layer it was emitted after
    `.fixed` and silently won, leaving "fixed" panels statically positioned. */
 @layer components {
+  /* ── Panel ────────────────────────────────────────────────────────
+     The quiet content surface. Glass is reserved for things that FLOAT
+     over the page (nav rail, chat, a11y menu, cookie notice); everything
+     in the document flow uses this instead — a hairline and a whisper of
+     fill, no blur, no rim light, no specular. When every surface was
+     glass, the material stopped meaning anything.                     */
+  .panel {
+    position: relative;
+    border: 1px solid rgba(233, 233, 229, 0.07);
+    background: rgba(233, 233, 229, 0.014);
+    transition: border-color 0.5s ease, background-color 0.5s ease;
+  }
+  .panel:hover {
+    border-color: rgba(233, 233, 229, 0.13);
+    background: rgba(233, 233, 229, 0.025);
+  }
+
   /* ── Liquid Glass ─────────────────────────────────────────────────
      Real glass needs three layers:
      1. the slab — translucent fill + heavy backdrop blur with a
