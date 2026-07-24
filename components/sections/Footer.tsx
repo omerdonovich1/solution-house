@@ -35,6 +35,9 @@ export function Footer() {
           <a href="/terms" className="transition-colors duration-300 hover:text-ivory">
             {tx({ he: "תנאי שימוש", en: "Terms" })}
           </a>
+          <a href="/cookies" className="transition-colors duration-300 hover:text-ivory">
+            {tx({ he: "מדיניות עוגיות", en: "Cookies" })}
+          </a>
           <a href="/accessibility" className="transition-colors duration-300 hover:text-ivory">
             {tx({ he: "הצהרת נגישות", en: "Accessibility" })}
           </a>

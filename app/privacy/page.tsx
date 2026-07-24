@@ -60,11 +60,11 @@ const SECTIONS: readonly LegalSection[] = [
     ],
   },
   {
-    heading: { he: "עוגיות (Cookies)", en: "Cookies" },
+    heading: { he: "עוגיות ואחסון מקומי", en: "Cookies and local storage" },
     body: [
       {
-        he: `האתר עושה שימוש בעוגייה פונקציונלית אחת בלבד לצורך תפעול שער הכניסה לאתר. איננו משתמשים בעוגיות מעקב, אנליטיקה או פרסום.`,
-        en: `The site uses only a single functional cookie required to operate the site's entry gate. We do not use tracking, analytics or advertising cookies.`,
+        he: `האתר שומר בדפדפן אחסון פונקציונלי בלבד: העדפת השפה שבחרתם, הגדרות הנגישות שלכם, סימון שקראתם את ההודעה על העוגיות, ובעת שהאתר במצב תצוגה מקדימה פרטית — עוגיית גישה אחת. איננו משתמשים בעוגיות מעקב, אנליטיקה, פרסום או צד שלישי. פירוט מלא — כולל שמות, מטרות, משכי שמירה והוראות מחיקה — מופיע במדיניות העוגיות שלנו בכתובת solutionhouse.dev/cookies.`,
+        en: `The site stores functional data only in your browser: your chosen language, your accessibility settings, a flag noting you've seen the cookie notice, and — when the site is in private-preview mode — a single access cookie. We use no tracking, analytics, advertising or third-party cookies. Full details — names, purposes, retention and deletion instructions — appear in our Cookie Policy at solutionhouse.dev/cookies.`,
       },
     ],
   },

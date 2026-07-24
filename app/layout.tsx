@@ -3,6 +3,7 @@ import { Rubik, Heebo } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { LanguageProvider, LANG_INIT_SCRIPT } from "@/lib/i18n";
 import { AccessibilityMenu } from "@/components/AccessibilityMenu";
+import { CookieNotice } from "@/components/CookieNotice";
 import { SkipLink } from "@/components/SkipLink";
 import "lenis/dist/lenis.css";
 import "./globals.css";
@@ -95,6 +96,7 @@ export default function RootLayout({
           <SkipLink />
           {children}
           <AccessibilityMenu />
+          <CookieNotice />
         </LanguageProvider>
       </body>
     </html>
