@@ -124,7 +124,9 @@ function CategoryCard({ cat, index }: { cat: Category; index: number }) {
     <div
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="panel group relative overflow-hidden rounded-3xl p-5 sm:p-7 lg:p-8"
+      // panel-solid: these cards pin and stack on top of each other, so they
+      // must occlude the card underneath rather than let it read through.
+      className="panel panel-solid group relative overflow-hidden rounded-3xl p-5 sm:p-7 lg:p-8"
     >
       <div className="grid gap-5 lg:grid-cols-[0.8fr_1.35fr] lg:items-center lg:gap-10">
         {/* words */}

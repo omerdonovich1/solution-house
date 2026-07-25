@@ -9,7 +9,9 @@ import { useTx } from "@/lib/i18n";
 function StepBlock({ step }: { step: ProcessStep }) {
   const tx = useTx();
   return (
-    <div className="panel relative grid grid-cols-[auto_1fr] gap-5 overflow-hidden rounded-3xl px-4 py-6 sm:gap-12 sm:px-7 sm:py-8">
+    // panel-solid: the steps pin and stack too, so each must occlude the one
+    // underneath rather than let it read through.
+    <div className="panel panel-solid relative grid grid-cols-[auto_1fr] gap-5 overflow-hidden rounded-3xl px-4 py-6 sm:gap-12 sm:px-7 sm:py-8">
       {/* oversized numeral + amber spine */}
       <div className="relative flex w-[58px] flex-col items-center sm:w-[110px]">
         <span className="font-mono text-[clamp(2.6rem,6vw,4.5rem)] font-bold leading-none text-volt">

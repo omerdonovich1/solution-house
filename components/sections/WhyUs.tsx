@@ -49,7 +49,7 @@ export function WhyUs() {
   return (
     <section id="why" className="py-20 sm:py-32">
       <div className="shell">
-        <SectionHeader title={tx({ he: "למה דווקא אנחנו?", en: "Why us?" })} />
+        <SectionHeader center title={tx({ he: "למה דווקא אנחנו?", en: "Why us?" })} />
 
         <motion.ol
           variants={stagger}

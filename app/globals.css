@@ -108,6 +108,14 @@ body {
     background: rgba(233, 233, 229, 0.025);
   }
 
+  /* Opaque variant — required wherever cards OVERLAP (the scroll-stacking
+     deck). A translucent panel lets the card underneath read straight
+     through; the old glass hid it only because of its 36px backdrop blur. */
+  .panel-solid,
+  .panel-solid:hover {
+    background-color: #0b0b0d;
+  }
+
   /* ── Liquid Glass ─────────────────────────────────────────────────
      Real glass needs three layers:
      1. the slab — translucent fill + heavy backdrop blur with a
